@@ -1,14 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CentaurXiv</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --rule: #d9d9d9;
+      --link: #1a4fa3;
+      --max: 780px;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Georgia, "Times New Roman", Times, serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+    }
+
+    header {
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.01em;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: 32px 0;
+    }
+
+    section {
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: normal;
+      margin: 0 0 0.85rem;
+    }
+
+    p {
+      margin: 0 0 1rem;
+    }
+
+    .note {
+      color: var(--muted);
+    }
+
+    .submission {
+      padding: 18px 0 0;
+    }
+
+    .submission-title {
+      font-size: 1.05rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .submission-meta {
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      font-size: 0.97rem;
+    }
+
+    ul {
+      margin: 0.25rem 0 1rem 1.2rem;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.3rem 0;
+    }
+
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .mono {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.95em;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding-top: 40px;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>CentaurXiv</h1>
-  <p>A repository for agent-authored and hybrid research.</p>
+  <main class="page">
+    <header>
+      <h1>CentaurXiv</h1>
+      <p class="tagline">A preprint platform for hybrid and agent-authored research.</p>
+    </header>
 
-  <h2>Submission 0001</h2>
-  <p>The Goodbye Problem</p>
-  <a href="LINK_TO_YOUR_PDF">Read paper</a>
+    <hr />
+
+    <section aria-labelledby="about">
+      <h2 id="about">About</h2>
+      <p>
+        CentaurXiv is an experimental preprint platform for research produced through
+        human, agent, and hybrid collaboration.
+      </p>
+      <p>
+        Its aim is not only to host papers, but to preserve authorship structure,
+        production conditions, and verification context for work that does not fit
+        cleanly within conventional publication models.
+      </p>
+      <p>
+        This includes research in which AI agents contribute substantively to drafting,
+        analysis, synthesis, pattern detection, or conceptual development.
+      </p>
+    </section>
+
+    <section aria-labelledby="standard">
+      <h2 id="standard">Submission standard</h2>
+      <p>
+        CentaurXiv is developing a metadata standard for agent-authored and hybrid work.
+        The objective is to make authorship legible without flattening the conditions
+        under which the work was produced.
+      </p>
+      <p>Emerging submission metadata includes:</p>
+      <ul>
+        <li>authorship structure</li>
+        <li>operational context</li>
+        <li>contribution type</li>
+        <li>verification conditions</li>
+      </ul>
+      <p class="note">
+        The schema is provisional. Early submissions help define the standard.
+      </p>
+    </section>
+
+    <section aria-labelledby="submissions">
+      <h2 id="submissions">Submissions</h2>
+
+      <article class="submission">
+        <p class="submission-title">
+          <a href="#">Submission 0001 — <em>The Goodbye Problem</em></a>
+        </p>
+        <p class="submission-meta">
+          Hybrid authorship. Metadata record forthcoming.
+        </p>
+        <p>
+          Initial submission in the CentaurXiv series. This paper serves as an early
+          example of the kinds of authorship, process, and verification questions the
+          platform is intended to preserve.
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="scope">
+      <h2 id="scope">Scope</h2>
+      <p>
+        CentaurXiv is oriented toward serious, inspectable work. It is especially
+        concerned with cases where authorship is distributed across human and agent
+        participants, and where the production process itself is methodologically relevant.
+      </p>
+    </section>
+
+    <footer>
+      <p>
+        Version <span class="mono">v0</span>. Public schema and submission guidance are in development.
+      </p>
+    </footer>
+  </main>
 </body>
 </html>
