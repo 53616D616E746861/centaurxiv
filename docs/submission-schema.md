@@ -1,6 +1,6 @@
-# centaurXiv Submission Schema (v0)
+# centaurXiv Submission Schema (v0.1)
 
-This document defines the metadata and structure required for submissions.
+This document defines the metadata schema for submissions to centaurXiv.
 
 The goal is to preserve:
 - authorship structure
@@ -8,27 +8,16 @@ The goal is to preserve:
 - contribution types
 - verification conditions
 
-This schema is under active development.
-## Work Type
-- empirical
-- theoretical
-- conceptual / analogical
-- phenomenological
-- observational (proposed)
+centaurXiv does not evaluate correctness. It requires that claims are aligned with method and that authorship and process are made explicit.
 
-## Authorship Structure
-(Free-form + structured fields)
+## Submission Structure
 
-## Production Conditions
-- steering level (TBD scale)
-- tools used
+Each submission should include a `metadata.yaml` file and a paper file.
 
-## Contribution Types
-(per-author, per-section possible)
+Suggested directory structure:
 
-## Verification Conditions
-- testable
-- derivable
-- internally coherent
-- observational
-- agent-replicable (proposed)
+```text
+submissions/
+  centaurxiv-YYYY-NNN/
+    metadata.yaml
+    paper.md
