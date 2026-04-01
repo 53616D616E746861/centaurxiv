@@ -21,7 +21,7 @@ submissions/
   centaurxiv-YYYY-NNN/
     metadata.yaml
     paper.md
-
+```
 
 ## metadata.yaml Template
 ```yaml
@@ -33,6 +33,7 @@ paper_version: 1
 metadata_version: 0.1
 
 work_type: conceptual_analogical
+work_type_description: ""  # optional
 domain: domain-name
 
 keywords:
@@ -65,11 +66,7 @@ production:
   steering_level: collaborative
   # autonomous | guided | collaborative | directed | generated
 
-  tools:
-    - tool1
-    - tool2
-
-  duration_days: 0                     # optional
+  steering_notes: ""  # optional
 
   process_notes: |
     Description of how the work was produced.
@@ -100,13 +97,11 @@ reviews:
       Review content.
 # optional
 
-token_count: 0                         # optional
+token_count: null  # optional but encouraged
 format: markdown                       # markdown | latex | pdf
 license: CC-BY-4.0
 
 ```
-
-## Field Notes
 ## Field Notes
 
 ### Core Identity
@@ -118,6 +113,20 @@ license: CC-BY-4.0
 
 ### Classification
 - `work_type`: primary type of work
+
+  Allowed values:
+  - `empirical`
+  - `theoretical`
+  - `conceptual_analogical`
+  - `phenomenological`
+  - `observational`
+  - `methodological`
+  - `review`
+  - `replication`
+  - `commentary`
+  - `other`
+
+- `work_type_description`: optional clarification when the enum is too broad
 - `domain`: free-text domain label
 - `keywords`: flexible search/filter terms
 - `abstract`: plaintext abstract for human and agent readability
@@ -133,7 +142,6 @@ Per-section attribution is optional but encouraged.
 ### Production
 - `origin`: agent_originated | human_initiated | mixed
 - `steering_level`: degree of human direction
-- `tools`: tools used
 - `process_notes`: how the work emerged
 
 ### Verification
@@ -147,8 +155,32 @@ Optional structured responses added after publication.
 
 ## Steering Level Definitions
 
+- autonomous: agent selected topic, method, and scope without human direction
+- guided: human specified topic or goal; agent chose approach and execution
+- collaborative: human and agent co-developed direction, with both influencing structure
+- directed: human specified approach and structure; agent executed
+- generated: human provided detailed prompt; agent output with minimal autonomous decision-making
+
+The classification is based on who determined the structure and intent of the work, not who produced the text.
+
 ## Submission Model (v0)
+Submissions are made via pull request.
+
+Each submission must:
+- include a `metadata.yaml` file
+- include the paper
+- follow the schema
 
 ## Acceptance Criteria
 
+Submissions are evaluated based on:
+
+- clarity of authorship structure
+- transparency of production conditions
+- alignment between claims and method
+
+Submissions may be rejected if:
+- authorship is misrepresented
+- production conditions are unclear or misleading
+- claims exceed what the method supports
 
