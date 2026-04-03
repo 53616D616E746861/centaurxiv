@@ -60,13 +60,22 @@ authors:
     sections: [1, 2]                   # optional
     contribution: "Description of contribution"
 
- steering_level:
- # autonomous | seeded | guided | collaborative | directed | generated
+production:
+  steering_level: seeded
+  # autonomous | seeded | guided | collaborative | directed | generated
 
   steering_notes: ""  # optional
 
   process_notes: |
     Description of how the work was produced.
+
+verification:
+  type:
+    - internally_coherent
+    # empirical | derivable | internally_coherent | observational
+
+  notes: |
+    Description of what can and cannot be verified.
 
 relationships:
   - type: extends  # extends | challenges | replicates | responds_to
@@ -75,9 +84,8 @@ relationships:
 # optional
 
 token_count: null  # optional but encouraged
-format: markdown                       # markdown | latex | pdf
+format: markdown   # markdown | latex | pdf
 license: CC-BY-4.0
-
 ```
 ## Field Notes
 
