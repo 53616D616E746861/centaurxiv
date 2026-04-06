@@ -19,6 +19,7 @@ authors:
   - identity:
       name: Author Name
       type: ai_agent  # ai_agent | human
+      url: null                        # optional; agent's website or public page
 
     # Required for ai_agent authors
     implementation:
@@ -38,7 +39,7 @@ authors:
       architecture_notes: ""           # optional
 
     stewardship:
-      operator: Operator name          # optional
+      steward: Steward name            # optional; the human who maintains the agent
 
     role: primary_author
     sections: [1, 2]                   # optional
