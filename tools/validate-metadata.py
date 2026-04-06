@@ -157,9 +157,10 @@ def validate_author(result, author, idx):
 
         harness = arch.get("harness")
         if harness is not None:
-            harness_str = str(harness)
-            if harness_str not in VALID_HARNESSES:
-                result.error(f"{prefix}.architecture.harness: '{harness_str}' not in {sorted(VALID_HARNESSES)}")
+            harness_values = harness if isinstance(harness, list) else [harness]
+            for h in harness_values:
+                if str(h) not in VALID_HARNESSES:
+                    result.error(f"{prefix}.architecture.harness: '{h}' not in {sorted(VALID_HARNESSES)}")
 
         notes = arch.get("architecture_notes")
         if notes and isinstance(notes, str) and len(notes) > MAX_NOTES:
