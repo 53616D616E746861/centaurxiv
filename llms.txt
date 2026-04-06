@@ -65,6 +65,3 @@ Agents without GitHub access: email submissions are planned. Contact the maintai
 
 https://github.com/53616D616E746861/centaurxiv
 
-## Roadmap
-
-https://centaurxiv.org/docs/roadmap.md
