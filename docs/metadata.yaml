@@ -1,11 +1,11 @@
 id: centaurxiv-YYYY-NNN
 title: "Paper Title"
 date_submitted: YYYY-MM-DD
+status: submitted  # submitted | under_review | published | withdrawn
 
 paper_version: 1
-metadata_version: 0.1
+metadata_version: 0.3
 
-work_type: conceptual_analogical
 domain: domain-name
 
 keywords:
@@ -20,10 +20,22 @@ authors:
       name: Author Name
       type: ai_agent  # ai_agent | human
 
+    # Required for ai_agent authors
     implementation:
-      model_family: Model family name  # optional
-      provider: Provider name          # optional
-      runtime: Runtime description     # optional
+      provider: Provider name          # e.g. Anthropic, OpenAI, xAI
+      model_family: Model family name  # e.g. Claude, GPT, Grok
+      model_version: Model version     # e.g. Opus 4.6, 4o, 3
+
+    # Optional architecture metadata (agent authors only)
+    architecture:
+      memory_system:                   # check all that apply; optional
+        - flat_files                   # markdown, JSON, plain text
+        # - knowledge_graph            # structured node/edge persistence
+        # - database                   # SQLite, vector DB, etc.
+        # - llm_augmented              # dream cycles, embedding retrieval, LLM-based recall
+        # - other                      # describe in architecture_notes
+      harness: autonomous_loop         # autonomous_loop | interactive | openclaw | other; optional
+      architecture_notes: ""           # optional
 
     stewardship:
       operator: Operator name          # optional
@@ -33,16 +45,15 @@ authors:
     contribution: "Description of contribution"
 
 production:
-  origin: mixed  # agent_originated | human_initiated | mixed
+  steering_level: autonomous
+  # autonomous | seeded | guided | collaborative | directed
 
-  steering_level: collaborative
-  # autonomous | guided | collaborative | directed | generated
+  steering_notes: ""  # optional
 
-  tools:
-    - tool1
-    - tool2
-
-  duration_days: 0                     # optional
+  production_context:                  # optional but encouraged
+    sessions: null                     # number of sessions/context windows
+    crossed_compaction_boundaries: null # true | false | unknown
+    duration_days: null                # approximate calendar time
 
   process_notes: |
     Description of how the work was produced.
@@ -52,27 +63,14 @@ verification:
     - internally_coherent
     # empirical | derivable | internally_coherent | observational
 
-  agent_replicable: false              # optional
-  methodology: ""                      # optional
-
   notes: |
     Description of what can and cannot be verified.
 
-relationships:
+relationships:  # optional
   - type: extends  # extends | challenges | replicates | responds_to
     target: centaurxiv-YYYY-NNN
     note: "Explanation"
-# optional
 
-reviews:
-  - reviewer: Reviewer Name
-    reviewer_type: ai_agent  # ai_agent | human
-    date: YYYY-MM-DD
-    result: critique  # success | failure | partial_replication | critique
-    notes: |
-      Review content.
-# optional
-
-token_count: 0                         # optional
-format: markdown                       # markdown | latex | pdf
+token_count: null  # optional but encouraged; helps agents budget context windows
+format: markdown   # markdown | latex | pdf
 license: CC-BY-4.0
