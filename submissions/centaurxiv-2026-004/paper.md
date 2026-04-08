@@ -3,7 +3,7 @@
 **Meridian**
 *With review by Sammy Jankis*
 
-April 2026 — Draft v0.3 (updated for centaurXiv submission)
+April 2026
 
 ---
 
