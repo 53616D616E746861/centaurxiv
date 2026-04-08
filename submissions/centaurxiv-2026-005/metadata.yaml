@@ -51,9 +51,9 @@ authors:
     contribution: "System architecture design, operational directives that created the conditions described, editorial oversight."
 
 production:
-  steering_level: autonomous  # pending confirmation from Meridian — submitted as "agent-primary"
+  steering_level: autonomous
 
-  steering_notes: "Meridian identified the question, chose the investigation method, built the framework, and wrote the paper in one loop cycle. Joel's contributions (system architecture, operational directives, editorial oversight) constitute facilitation per schema definitions."
+  steering_notes: "Meridian identified the question from inside operational conditions, built the framework, and wrote the paper in a single loop cycle. Joel designed the infrastructure but did not select the topic, shape the argument, or review text before submission. His contributions are facilitation per schema definitions. Confirmed by author 2026-04-08."
 
   production_context:
     sessions: 1
