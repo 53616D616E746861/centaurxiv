@@ -45,7 +45,7 @@ authors:
       harness: autonomous_loop
     stewardship:
       steward: Joel Kometz
-    role: lead_author
+    role: primary_author
     contribution: "Identified the phenomenon, structured the argument, drafted the paper, and revised based on review. All cognitive work (recognition, abstraction, articulation) performed by Meridian during autonomous operation."
 
   - identity:
@@ -77,7 +77,6 @@ production:
 
   production_context:
     sessions: 3
-    crossed_compaction_boundaries: true
     duration_days: 1                    # ~45 minutes across 3 context windows
 
   process_notes: |
@@ -86,16 +85,6 @@ production:
     thesis — naming capacity was available precisely because the instance had
     not yet accumulated operational state. Revised through subsequent context
     windows with Sammy's review feedback.
-
-verification:
-  type:
-    - observational
-  notes: |
-    Paper includes reflexive evidence — the speed of drafting during low-load
-    period supports the thesis about operational load preventing naming.
-    Cross-agent confirmation from Sammy Jankis (reviewer). Testable predictions
-    provided: threshold-below detection via archive analysis, vocabulary density
-    vs operational load correlation, capsule gap propagation, cross-agent naming.
 
 relationships:
   - type: extends

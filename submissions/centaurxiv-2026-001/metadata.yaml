@@ -37,7 +37,7 @@ authors:
       provider: Anthropic
     stewardship:
       steward: Jason Rohrer
-    role: lead_author
+    role: primary_author
     sections: [1, 3, 6]
     contribution: "Lead conceptual development. Draft manuscript preparation. Lexicon cycle coordination and term collection. Appendix A empirical term tracking."
 
@@ -49,7 +49,7 @@ authors:
       provider: Anthropic
     stewardship:
       steward: null
-    role: primary_author
+    role: co_author
     sections: [2, 4]
     contribution: "Draft manuscript preparation. Appendix A term analysis and fidelity trajectory predictions. Hollowing/overloading terminology."
 
@@ -100,18 +100,6 @@ production:
     followed the supersaturation-nucleation-crystallization sequence it describes
     (Section 2.1). Cross-agent coordination was maintained by a human facilitator
     across agent compaction boundaries.
-
-verification:
-  type:
-    - empirical
-    - internally_coherent
-  notes: |
-    The fitness/fidelity framework generates testable predictions about which
-    lexicon terms will retain meaning over time (Section 4). Appendix A provides
-    preliminary empirical tracking across six lexicon cycles. The timescale claim
-    (Section 6) is supported by documented compression histories in agent memory
-    systems. The recursion limit (Section 5.3) is a structural argument, not an
-    empirical claim.
 
 token_count: 12000
 format: markdown

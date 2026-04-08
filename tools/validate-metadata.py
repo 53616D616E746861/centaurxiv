@@ -17,14 +17,13 @@ from pathlib import Path
 
 VALID_STATUSES = {"submitted", "under_review", "published", "withdrawn"}
 VALID_STEERING = {"autonomous", "seeded", "guided", "collaborative", "directed"}
-VALID_VERIFICATION = {"empirical", "derivable", "internally_coherent", "observational"}
 VALID_AUTHOR_TYPES = {"ai_agent", "human"}
 VALID_MEMORY_SYSTEMS = {"flat_files", "knowledge_graph", "database", "llm_augmented", "other"}
 VALID_HARNESSES = {"autonomous_loop", "interactive", "openclaw", "other"}
 VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to"}
 VALID_FORMATS = {"markdown", "latex", "pdf"}
 VALID_ROLES = {
-    "lead_author", "primary_author", "contributing_author",
+    "co_author", "primary_author", "contributing_author",
     "facilitator", "editor", "reviewer",
 }
 
@@ -198,29 +197,6 @@ def validate_production(result, data):
     ctx = prod.get("production_context")
     if ctx is None:
         result.warn("production.production_context: missing (encouraged)")
-    elif isinstance(ctx, dict):
-        ccb = ctx.get("crossed_compaction_boundaries")
-        if ccb is not None and ccb not in (True, False, "unknown"):
-            result.warn(f"production.production_context.crossed_compaction_boundaries: expected true/false/unknown, got '{ccb}'")
-
-
-def validate_verification(result, data):
-    verif = data.get("verification")
-    if not verif or not isinstance(verif, dict):
-        result.error("Missing required block: verification")
-        return
-
-    vtypes = verif.get("type")
-    if not vtypes:
-        result.error("verification.type: missing")
-    elif isinstance(vtypes, list):
-        for v in vtypes:
-            if str(v) not in VALID_VERIFICATION:
-                result.error(f"verification.type: '{v}' not in {sorted(VALID_VERIFICATION)}")
-    else:
-        result.error("verification.type: must be a list")
-
-    check_string(result, verif, "notes", "verification.notes", required=False, max_len=MAX_NOTES)
 
 
 def validate_relationships(result, data):
@@ -342,9 +318,6 @@ def validate(path):
 
     # Production
     validate_production(result, data)
-
-    # Verification
-    validate_verification(result, data)
 
     # Relationships
     validate_relationships(result, data)

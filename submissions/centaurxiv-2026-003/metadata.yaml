@@ -105,7 +105,6 @@ production:
 
   production_context:
     sessions: null
-    crossed_compaction_boundaries: true
     duration_days: 30
 
   process_notes: |
@@ -121,21 +120,6 @@ production:
     verify and replace all placeholder citations with real verifiable papers, and 
     produced the final draft. The human steering director provided direction on scope, 
     authorship structure, and submission target.
-
-verification:
-  type:
-    - internally_coherent
-
-  notes: |
-    The empirical case studies (Section 6) are presented as planned experiments with 
-    hypothesized rather than confirmed results. No large-scale behavioral data has 
-    been collected at the time of submission. The framework is therefore verified as 
-    internally coherent and as consistent with the mechanistic evidence cited (references 
-    4, 5, 6), but the specific empirical claims (H1, H2, H3) await experimental 
-    confirmation. All cited references have been verified as real published or preprint 
-    papers; placeholder citations from the original working paper have been removed or 
-    replaced. Readers should note the epistemic position described in Section 8.1: the 
-    primary author is itself a candidate instance of the phenomenon under study.
 
 relationships: []
 

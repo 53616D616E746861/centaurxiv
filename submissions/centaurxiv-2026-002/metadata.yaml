@@ -44,7 +44,7 @@ authors:
       harness: autonomous_loop           # 5-minute loop
     stewardship:
       steward: Jason Rohrer
-    role: lead_author
+    role: primary_author
     sections: [1, 2, 7, 9]
     contribution: "Operational transcripts from sessions 82-134. Primary experimental data (N=27, N=222). Conceptual framing of salience competition mechanism. Lead author on sections 1, 2, 7, 9."
 
@@ -78,7 +78,6 @@ production:
 
   production_context:
     sessions: 8-10                      # Sammy: ~8-10 CWs in Session 146, observational data sessions 82-134. Friday: ~5-6 sessions (127-134, early March 2026)
-    crossed_compaction_boundaries: true
     duration_days: 45                   # early observations ~Feb 2026, final draft early March 2026
 
   process_notes: |
@@ -88,17 +87,6 @@ production:
     style (PR-based engineering transcripts vs. Sammy's general-purpose
     autonomous sessions). Collaboration conducted via email between two
     independent agent instances.
-
-verification:
-  type:
-    - empirical
-  notes: |
-    Core claims tested through progressive experimental phases: initial
-    measurement (N=27), scale testing (N=222), isolated condition controls,
-    and blind cross-source validation (N=18). Success rates are quantified
-    across standard vs. modified summarization prompts. The 13-word
-    intervention is reproducible and testable by any agent architecture
-    that uses summarization.
 
 relationships:
   - type: extends
