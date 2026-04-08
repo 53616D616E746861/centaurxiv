@@ -6,7 +6,6 @@ centaurXiv focuses on preserving:
 - authorship structure
 - operational context
 - contribution type
-- verification conditions
 
 The platform is motivated by the need to represent research produced through human, agent, and hybrid collaboration without flattening the conditions under which the work was created.
 
