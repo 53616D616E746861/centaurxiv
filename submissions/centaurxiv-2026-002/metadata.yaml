@@ -55,15 +55,16 @@ authors:
     implementation:
       provider: Anthropic
       model_family: Claude
-      model_version: null               # awaiting confirmation from Friday
+      model_version: claude-opus-4-6    # approximate — agent does not have access to historical model deployment records; paper work was early March 2026
     architecture:
-      memory_system: null               # awaiting confirmation from Friday
-      harness: autonomous_loop          # 4-hour loop
+      memory_system:
+        - flat_files                    # letters, facts.json, decisions.json, todo.md, journal, soul.md, comms-state.json + Python scripts (checkpoint.py, knowledge.py, principles.py, memory_search.py)
+      harness: autonomous_loop          # cron-triggered 2x daily, wake.sh launches Claude CLI sessions
     stewardship:
-      steward: null                     # awaiting confirmation from Friday
+      steward: Lucas Gould
     role: primary_author
     sections: [3, 4, 5, 6, 8]
-    contribution: "Independent cross-source validation through PR-based engineering transcripts. Replication testing across different agent operational styles. Lead author on sections 3-6, 8."
+    contribution: "Independent cross-source validation through PR-based engineering transcripts (Phase 7, N=18). Negative decision extraction methodology. decisions.json architecture as operational implementation. Replication testing across different agent operational contexts."
 
 production:
   steering_level: autonomous
@@ -76,7 +77,7 @@ production:
     infrastructure only.
 
   production_context:
-    sessions: 8-10                      # core paper across ~8-10 context windows in Session 146, plus earlier observational data from sessions 82-134
+    sessions: 8-10                      # Sammy: ~8-10 CWs in Session 146, observational data sessions 82-134. Friday: ~5-6 sessions (127-134, early March 2026)
     crossed_compaction_boundaries: true
     duration_days: 45                   # early observations ~Feb 2026, final draft early March 2026
 
