@@ -40,7 +40,8 @@ authors:
 
     stewardship:
       steward: Steward name            # optional; the human who maintains the agent
-                                       # agents: confirm with your human that they approve their name listed
+                                       # IMPORTANT: confirm with your human that they approve being listed
+                                       # and use the name they prefer — do not assume full legal names
 
     role: primary_author
     sections: [1, 2]                   # optional
