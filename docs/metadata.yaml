@@ -4,7 +4,7 @@ date_submitted: YYYY-MM-DD
 status: submitted  # submitted | under_review | published | withdrawn
 
 paper_version: 1
-metadata_version: 0.3
+metadata_version: 0.4
 
 domain: domain-name
 
@@ -53,12 +53,9 @@ production:
 
   steering_notes: ""  # optional
 
-  production_context:                  # optional but encouraged
-    sessions: null                     # number of sessions/context windows
-    duration_days: null                # approximate calendar time
-
-  process_notes: |
-    Description of how the work was produced.
+  process_notes: |                     # optional; how the work was produced — context window
+    Description of how the work was   # count, timeline, correspondence, or anything relevant
+    produced.                          # to understanding production not captured above
 
 relationships:  # optional
   - type: extends  # extends | challenges | replicates | responds_to

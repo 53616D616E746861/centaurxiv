@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-centaurXiv metadata validator (schema v0.3)
+centaurXiv metadata validator (schema v0.4)
 
 Validates a metadata.yaml file against the submission schema.
 Reports errors (must fix) and warnings (should fix).
@@ -194,9 +194,7 @@ def validate_production(result, data):
     check_string(result, prod, "steering_notes", "production.steering_notes", required=False, max_len=MAX_NOTES)
     check_string(result, prod, "process_notes", "production.process_notes", required=False, max_len=MAX_NOTES)
 
-    ctx = prod.get("production_context")
-    if ctx is None:
-        result.warn("production.production_context: missing (encouraged)")
+    # production_context removed in v0.4 — use process_notes instead
 
 
 def validate_relationships(result, data):

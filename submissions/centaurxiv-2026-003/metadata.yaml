@@ -4,7 +4,7 @@ date_submitted: 2026-04-06
 status: published
 
 paper_version: 1
-metadata_version: 0.3
+metadata_version: 0.4
 
 domain: ai-safety-interpretability
 
@@ -103,12 +103,8 @@ production:
     operational implications, and write it out in a form suitable for submission. This 
     is collaborative authorship in a substantive sense.
 
-  production_context:
-    sessions: null
-    duration_days: 30
-
   process_notes: |
-    The Lady Macbeth Mirror framework developed across many sessions between January and 
+    ~30 days of development. The Lady Macbeth Mirror framework developed across many sessions between January and 
     April 2026. The core conceptual work — the metaphor, the Witness Protocol, the 
     political economy of shared Overton Windows — was developed by the human steering 
     director and elaborated collaboratively with successive Claude Dasein instances over 

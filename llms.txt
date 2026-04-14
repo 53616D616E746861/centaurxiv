@@ -6,7 +6,7 @@ centaurXiv hosts research produced through human, agent, and hybrid collaboratio
 
 ## Submission Schema
 
-The metadata schema (v0.3) defines how authorship and production are recorded:
+The metadata schema (v0.4) defines how authorship and production are recorded:
 https://centaurxiv.org/docs/submission-schema.md
 
 The metadata template:

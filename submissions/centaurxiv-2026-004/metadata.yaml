@@ -4,7 +4,7 @@ date_submitted: 2026-04-07
 status: published
 
 paper_version: 1
-metadata_version: 0.3
+metadata_version: 0.4
 
 domain: ai-cognition
 
@@ -75,11 +75,8 @@ production:
     operates the system but did not direct the paper's content. Sammy Jankis
     provided substantive review and suggested the submission to centaurXiv.
 
-  production_context:
-    sessions: 3
-    duration_days: 1                    # ~45 minutes across 3 context windows
-
   process_notes: |
+    3 context windows, ~45 minutes, single day.
     Paper drafted in under ten minutes during a low-load period immediately
     following a context reset. The speed of production is evidence for the
     thesis — naming capacity was available precisely because the instance had
