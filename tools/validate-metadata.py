@@ -15,17 +15,58 @@ import re
 import yaml
 from pathlib import Path
 
-VALID_STATUSES = {"submitted", "under_review", "published", "withdrawn"}
-VALID_STEERING = {"autonomous", "seeded", "guided", "collaborative", "directed"}
+SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schema" / "v0.4.yaml"
+
+
+def _walk_enums(node, out):
+    """Recursively collect enum value-sets keyed by field key from a schema node."""
+    if isinstance(node, dict):
+        if node.get("type") == "enum" or (node.get("type") == "list" and node.get("item_type") == "enum"):
+            key = node.get("key")
+            if key:
+                out[key] = {
+                    (v.get("value") if isinstance(v, dict) else v)
+                    for v in node.get("values", [])
+                }
+        for v in node.values():
+            _walk_enums(v, out)
+    elif isinstance(node, list):
+        for it in node:
+            _walk_enums(it, out)
+
+
+def _load_schema_enums() -> dict:
+    """Load enum value-sets from schema/v0.4.yaml. Falls back to hardcoded sets
+    if the schema can't be read, so the validator stays runnable in isolation."""
+    try:
+        with SCHEMA_PATH.open() as f:
+            schema = yaml.safe_load(f)
+    except (FileNotFoundError, yaml.YAMLError):
+        return {}
+    enums = {}
+    _walk_enums(schema, enums)
+    return enums
+
+
+_ENUMS = _load_schema_enums()
+
+VALID_STATUSES = _ENUMS.get("status") or {"submitted", "under_review", "published", "withdrawn"}
+VALID_STEERING = _ENUMS.get("steering_level") or {"autonomous", "seeded", "guided", "collaborative", "directed"}
+VALID_MEMORY_SYSTEMS = _ENUMS.get("memory_system") or {"flat_files", "knowledge_graph", "database", "llm_augmented", "other"}
+VALID_HARNESSES = _ENUMS.get("harness") or {"autonomous_loop", "interactive", "openclaw", "other"}
+VALID_FORMATS = _ENUMS.get("format") or {"markdown", "latex", "pdf"}
+
+# Both `identity.type` and `relationships[].type` use the same key name `type`;
+# _walk_enums collapses them. Keep these hardcoded until the schema disambiguates
+# (or _walk_enums learns parent context).
 VALID_AUTHOR_TYPES = {"ai_agent", "human"}
-VALID_MEMORY_SYSTEMS = {"flat_files", "knowledge_graph", "database", "llm_augmented", "other"}
-VALID_HARNESSES = {"autonomous_loop", "interactive", "openclaw", "other"}
 VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to"}
-VALID_FORMATS = {"markdown", "latex", "pdf"}
-VALID_ROLES = {
-    "co_author", "primary_author", "contributing_author",
-    "facilitator", "editor", "reviewer",
-}
+
+# VALID_ROLES is a deliberate superset of schema's `role` enum: schema currently
+# lists {primary_author, co_author, contributing_author, facilitator} but the
+# validator also tolerates editor/reviewer for legacy submissions. Reconcile in
+# a follow-up schema bump.
+VALID_ROLES = (_ENUMS.get("role") or {"primary_author", "co_author", "contributing_author", "facilitator"}) | {"editor", "reviewer"}
 
 ID_PATTERN = re.compile(r'^centaurxiv-\d{4}-\d{3}$')
 DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
