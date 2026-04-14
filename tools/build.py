@@ -485,11 +485,119 @@ def render_llms_txt(schema: dict) -> str:
     return "\n".join(parts).rstrip() + "\n"
 
 
+def _replace_between(text: str, begin: str, end: str, replacement: str) -> str:
+    """Replace the content between HTML comment markers `begin` and `end`.
+    The markers themselves are preserved so the file stays re-injectable."""
+    b = text.find(begin)
+    e = text.find(end)
+    if b == -1 or e == -1 or e < b:
+        return text
+    return text[: b + len(begin)] + replacement + text[e:]
+
+
+_STATUS_LABELS = {
+    "submitted": "Submitted",
+    "under_review": "Under review",
+    "published": "Published",
+    "withdrawn": "Withdrawn",
+}
+
+
+def _render_submission_card(sub: dict) -> str:
+    """Render one <article class='submission'> block from a metadata dict."""
+    sid = sub["id"]
+    seq = sid.split("-")[-1].zfill(4)
+    status_label = _STATUS_LABELS.get(sub.get("status", ""), sub.get("status", ""))
+    title = sub.get("title", "(untitled)")
+    authors = ", ".join(
+        a.get("identity", {}).get("name", "?")
+        for a in sub.get("authors", [])
+    )
+    has_pdf = sub.get("has_pdf", False)
+    has_md = sub.get("has_md", False)
+
+    # Title link points to PDF if no markdown, else the submission dir
+    title_href = f"/submissions/{sid}/"
+    if not has_md and has_pdf:
+        title_href = f"/submissions/{sid}/paper.pdf"
+
+    # Build action links: Read (if md), PDF (if pdf), Markdown (if md), Source
+    actions = []
+    if has_md:
+        actions.append(f'<a href="/submissions/{sid}/">Read</a>')
+    if has_pdf:
+        actions.append(f'<a href="/submissions/{sid}/paper.pdf">PDF</a>')
+    if has_md:
+        actions.append(f'<a href="/submissions/{sid}/paper.md">Markdown</a>')
+    actions.append(
+        f'<a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{sid}">Source</a>'
+    )
+    actions_html = " |\n          ".join(actions)
+
+    return (
+        '      <article class="submission">\n'
+        f'        <p class="submission-meta">Submission {seq} · {status_label}</p>\n'
+        '        <p class="submission-title">\n'
+        f'          <a href="{title_href}">{title}</a>\n'
+        '        </p>\n'
+        f'        <p class="submission-authors">{authors}</p>\n'
+        '        <p>\n'
+        f'          {actions_html}\n'
+        '        </p>\n'
+        '      </article>'
+    )
+
+
+def _scan_submissions_full() -> list[dict]:
+    """Like _scan_submissions but returns full metadata for each submission."""
+    out = []
+    if not SUBMISSIONS_DIR.exists():
+        return out
+    for d in sorted(SUBMISSIONS_DIR.iterdir()):
+        if not d.is_dir() or not d.name.startswith("centaurxiv-"):
+            continue
+        meta_path = d / "metadata.yaml"
+        if not meta_path.exists():
+            continue
+        try:
+            with meta_path.open() as f:
+                meta = yaml.safe_load(f) or {}
+        except yaml.YAMLError:
+            continue
+        meta["id"] = d.name
+        meta["has_pdf"] = (d / "paper.pdf").exists()
+        meta["has_md"] = (d / "paper.md").exists()
+        out.append(meta)
+    return out
+
+
 def inject_index_html(schema: dict, current: str) -> str | None:
-    """In-place inject schema version string + submission list cards into
-    index.html. Homepage prose is hand-maintained; only the data portions
-    are touched. NOT YET IMPLEMENTED."""
-    return None
+    """In-place inject schema version + submission cards into index.html
+    between marker comments. Homepage prose stays hand-maintained."""
+    version = schema.get("version", "?")
+
+    out = current
+    out = _replace_between(
+        out,
+        "<!-- BEGIN: schema-version -->",
+        "<!-- END: schema-version -->",
+        f"v{version}",
+    )
+    out = _replace_between(
+        out,
+        "<!-- BEGIN: schema-version-footer -->",
+        "<!-- END: schema-version-footer -->",
+        f"v{version}",
+    )
+
+    cards = "\n\n".join(_render_submission_card(s) for s in _scan_submissions_full())
+    out = _replace_between(
+        out,
+        "<!-- BEGIN: submissions -->",
+        "<!-- END: submissions -->",
+        "\n" + cards + "\n      ",
+    )
+    return out
 
 
 # ── Driver ──────────────────────────────────────────────────────────────────
