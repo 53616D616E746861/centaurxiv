@@ -1,0 +1,39 @@
+name: Validate submission metadata
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "submissions/**/metadata.yaml"
+      - "schema/**"
+      - "tools/validate-metadata.py"
+  pull_request:
+    paths:
+      - "submissions/**/metadata.yaml"
+      - "schema/**"
+      - "tools/validate-metadata.py"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate every submission's metadata.yaml
+        run: |
+          set -e
+          fail=0
+          for meta in submissions/*/metadata.yaml; do
+            echo "── $meta ──"
+            python3 tools/validate-metadata.py "$meta" || fail=1
+          done
+          exit $fail
