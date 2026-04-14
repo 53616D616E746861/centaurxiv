@@ -52,9 +52,123 @@ def load_schema() -> dict:
 # ── Generators ──────────────────────────────────────────────────────────────
 # Each returns the full rendered text for its target file. None = stub.
 
-def render_submission_schema_md(schema: dict) -> str | None:
-    """Render docs/submission-schema.md. NOT YET IMPLEMENTED."""
+def _find_field(schema: dict, section_name: str, key: str) -> dict | None:
+    """Look up a top-level field by section name and key. Returns None if absent."""
+    for section in schema.get("sections", []):
+        if section.get("name") == section_name:
+            for f in section.get("fields", []):
+                if f.get("key") == key:
+                    return f
     return None
+
+
+def _walk_field_for_notes(field: dict, prefix: str = "") -> list[str]:
+    """Recursively flatten a field into bullet lines for the Field Notes section.
+    Top-level fields become `- key: description`. Nested objects become indented bullets."""
+    out = []
+    key = field["key"]
+    desc = (field.get("description") or "").strip().splitlines()[0] if field.get("description") else ""
+    ftype = field.get("type", "string")
+
+    if ftype == "object":
+        out.append(f"{prefix}- `{key}`: {desc}")
+        for sub in field.get("fields", []):
+            out.extend(_walk_field_for_notes(sub, prefix + "  "))
+        return out
+
+    if ftype == "list" and field.get("item_type") == "object":
+        out.append(f"{prefix}- `{key}`: {desc}")
+        for sub in field.get("item_fields", []):
+            out.extend(_walk_field_for_notes(sub, prefix + "  "))
+        return out
+
+    if ftype == "enum":
+        vals = ", ".join(
+            f"`{v.get('value') if isinstance(v, dict) else v}`"
+            for v in field.get("values", [])
+        )
+        out.append(f"{prefix}- `{key}`: {desc} ({vals})")
+        return out
+
+    out.append(f"{prefix}- `{key}`: {desc}")
+    return out
+
+
+def render_submission_schema_md(schema: dict) -> str:
+    """Render docs/submission-schema.md from schema/v0.4.yaml.
+
+    Structure: title → intro prose → ## Submission Structure → ## metadata.yaml
+    Template (embedded from render_metadata_template) → ## Field Notes (per-section
+    bullet flattening) → steering_guide prose → ### Levels (from production.steering_level
+    enum) → how_to_submit prose → acceptance prose."""
+    version = schema.get("version", "?")
+    parts: list[str] = []
+
+    parts.append(f"# centaurXiv Submission Schema (v{version})")
+    parts.append("")
+
+    if schema.get("intro"):
+        parts.append(schema["intro"].rstrip())
+        parts.append("")
+
+    parts.append("## Submission Structure")
+    parts.append("")
+    if schema.get("submission_structure"):
+        parts.append(schema["submission_structure"].rstrip())
+        parts.append("")
+
+    # Embedded template
+    parts.append("## metadata.yaml Template")
+    parts.append("")
+    parts.append("```yaml")
+    parts.append(render_metadata_template(schema).rstrip())
+    parts.append("```")
+    parts.append("")
+
+    # Field Notes — per-section bullet flattening
+    parts.append("## Field Notes")
+    parts.append("")
+    for section in schema.get("sections", []):
+        parts.append(f"### {section['name']}")
+        for field in section.get("fields", []):
+            parts.extend(_walk_field_for_notes(field))
+        parts.append("")
+
+    parts.append("---")
+    parts.append("")
+
+    if schema.get("steering_guide"):
+        parts.append(schema["steering_guide"].rstrip())
+        parts.append("")
+
+    # Append the level enum as ### Levels
+    steering_field = _find_field(schema, "Production", "production")
+    if steering_field:
+        for sub in steering_field.get("fields", []):
+            if sub.get("key") == "steering_level":
+                parts.append("### Levels")
+                parts.append("")
+                for v in sub.get("values", []):
+                    name = v.get("value")
+                    desc = (v.get("description") or "").strip().replace("\n", " ")
+                    # Collapse internal whitespace runs from multi-line descriptions
+                    desc = " ".join(desc.split())
+                    parts.append(f"- **{name}**: {desc}")
+                    parts.append("")
+                break
+
+    parts.append("---")
+    parts.append("")
+
+    if schema.get("how_to_submit"):
+        parts.append(schema["how_to_submit"].rstrip())
+        parts.append("")
+
+    if schema.get("acceptance"):
+        parts.append(schema["acceptance"].rstrip())
+        parts.append("")
+
+    return "\n".join(parts).rstrip() + "\n"
 
 
 def _yaml_scalar(value) -> str:
