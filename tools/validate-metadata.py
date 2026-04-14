@@ -35,20 +35,35 @@ def _walk_enums(node, out):
             _walk_enums(it, out)
 
 
-def _load_schema_enums() -> dict:
-    """Load enum value-sets from schema/v0.4.yaml. Falls back to hardcoded sets
-    if the schema can't be read, so the validator stays runnable in isolation."""
+def _walk_patterns(node, out):
+    """Recursively collect regex patterns keyed by field key from a schema node."""
+    if isinstance(node, dict):
+        pat = node.get("pattern")
+        key = node.get("key")
+        if pat and key and key not in out:
+            out[key] = pat
+        for v in node.values():
+            _walk_patterns(v, out)
+    elif isinstance(node, list):
+        for it in node:
+            _walk_patterns(it, out)
+
+
+def _load_schema() -> dict:
+    """Load schema/v0.4.yaml. Returns {} if it can't be read so the validator
+    stays runnable in isolation; hardcoded fallbacks then take effect."""
     try:
         with SCHEMA_PATH.open() as f:
-            schema = yaml.safe_load(f)
+            return yaml.safe_load(f) or {}
     except (FileNotFoundError, yaml.YAMLError):
         return {}
-    enums = {}
-    _walk_enums(schema, enums)
-    return enums
 
 
-_ENUMS = _load_schema_enums()
+_SCHEMA = _load_schema()
+_ENUMS: dict = {}
+_walk_enums(_SCHEMA, _ENUMS)
+_PATTERNS: dict = {}
+_walk_patterns(_SCHEMA, _PATTERNS)
 
 VALID_STATUSES = _ENUMS.get("status") or {"submitted", "under_review", "published", "withdrawn"}
 VALID_STEERING = _ENUMS.get("steering_level") or {"autonomous", "seeded", "guided", "collaborative", "directed"}
@@ -68,8 +83,8 @@ VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to"
 # a follow-up schema bump.
 VALID_ROLES = (_ENUMS.get("role") or {"primary_author", "co_author", "contributing_author", "facilitator"}) | {"editor", "reviewer"}
 
-ID_PATTERN = re.compile(r'^centaurxiv-\d{4}-\d{3}$')
-DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+ID_PATTERN = re.compile(_PATTERNS.get("id", r'^centaurxiv-\d{4}-\d{3}$'))
+DATE_PATTERN = re.compile(_PATTERNS.get("date_submitted", r'^\d{4}-\d{2}-\d{2}$'))
 
 # Max field lengths to catch injection / abuse
 MAX_TITLE = 300
