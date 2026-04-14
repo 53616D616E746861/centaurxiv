@@ -57,10 +57,145 @@ def render_submission_schema_md(schema: dict) -> str | None:
     return None
 
 
-def render_metadata_template(schema: dict) -> str | None:
-    """Render docs/metadata-template.yaml (the inline-instructions template).
-    NOT YET IMPLEMENTED."""
-    return None
+def _yaml_scalar(value) -> str:
+    """Render a scalar example as a YAML literal."""
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return str(value)
+    s = str(value)
+    if any(c in s for c in ":#[]{},&*!|>'\"%@`") or s != s.strip():
+        return '"' + s.replace('"', '\\"') + '"'
+    return s
+
+
+def _comment_block(text: str, indent: str = "") -> list[str]:
+    """Wrap a multi-line string as YAML comments, preserving paragraph breaks."""
+    lines = []
+    for line in text.rstrip().splitlines():
+        if line.strip():
+            lines.append(f"{indent}# {line}")
+        else:
+            lines.append(f"{indent}#")
+    return lines
+
+
+def _render_field_template(field: dict, indent: str = "") -> list[str]:
+    """Render one field as inline-template YAML lines.
+    Recursive: handles scalars, enums, lists, nested objects, list-of-objects."""
+    out = []
+    key = field["key"]
+    ftype = field.get("type", "string")
+    example = field.get("example")
+    description = field.get("description", "").strip().splitlines()[0] if field.get("description") else ""
+    guidance = field.get("guidance", "")
+
+    # Pre-field guidance as a comment block (only if multi-line / substantive)
+    if guidance and "\n" in guidance.strip():
+        out.extend(_comment_block(guidance, indent))
+
+    if ftype == "object":
+        out.append(f"{indent}{key}:" + (f"  # {description}" if description else ""))
+        for sub in field.get("fields", []):
+            out.extend(_render_field_template(sub, indent + "  "))
+        return out
+
+    if ftype == "list":
+        item_type = field.get("item_type", "string")
+        if item_type == "object":
+            out.append(f"{indent}{key}:" + (f"  # {description}" if description else ""))
+            out.append(f"{indent}  -")
+            for sub in field.get("item_fields", []):
+                sub_lines = _render_field_template(sub, indent + "    ")
+                # Replace the indent prefix on the first non-comment line so
+                # the first field aligns under the dash
+                out.extend(sub_lines)
+            return out
+        # list of scalars / enums
+        out.append(f"{indent}{key}:" + (f"  # {description}" if description else ""))
+        if isinstance(example, list) and example:
+            for item in example:
+                out.append(f"{indent}  - {_yaml_scalar(item)}")
+        else:
+            out.append(f"{indent}  - example")
+        # If enum list, comment-list the remaining values
+        if item_type == "enum":
+            for v in field.get("values", []):
+                vname = v.get("value") if isinstance(v, dict) else v
+                vdesc = v.get("description", "") if isinstance(v, dict) else ""
+                out.append(f"{indent}  # - {vname}" + (f"  — {vdesc}" if vdesc else ""))
+        return out
+
+    if ftype == "enum":
+        # Pick the example (or first value) and comment-list the rest
+        if example is None:
+            vals = field.get("values", [])
+            example = vals[0].get("value") if vals and isinstance(vals[0], dict) else (vals[0] if vals else "")
+        out.append(f"{indent}{key}: {_yaml_scalar(example)}" + (f"  # {description}" if description else ""))
+        for v in field.get("values", []):
+            vname = v.get("value") if isinstance(v, dict) else v
+            vdesc = (v.get("description", "").strip().splitlines()[0]
+                     if isinstance(v, dict) and v.get("description") else "")
+            out.append(f"{indent}  # {vname}" + (f" — {vdesc}" if vdesc else ""))
+        return out
+
+    if ftype == "text":
+        # Multi-line block scalar
+        if example is None:
+            example = ""
+        out.append(f"{indent}{key}: |" + (f"  # {description}" if description else ""))
+        for line in str(example).rstrip().splitlines() or [""]:
+            out.append(f"{indent}  {line}")
+        return out
+
+    # scalar (string, integer)
+    rendered_value = _yaml_scalar(example) if example is not None else "null"
+    line = f"{indent}{key}: {rendered_value}"
+    if description:
+        line += f"  # {description}"
+    out.append(line)
+    if guidance and "\n" not in guidance.strip():
+        out.append(f"{indent}  # {guidance.strip()}")
+    return out
+
+
+def render_metadata_template(schema: dict) -> str:
+    """Render docs/metadata-template.yaml from schema/v0.4.yaml.
+
+    Generates a fill-in template with inline instructions: section banners,
+    section-level guidance as comment blocks, and per-field key: example # description.
+    Aim is fidelity to schema content, not byte-identity with the hand-crafted version."""
+    version = schema.get("version", "?")
+    lines = [
+        f"# centaurXiv Submission Metadata Template (v{version}, inline instructions)",
+        "#",
+        "# Generated by tools/build.py from schema/v" + version + ".yaml — do not hand-edit.",
+        "# This file is both the template and the documentation.",
+        "# Fill in the fields below. Lines starting with # are instructions.",
+        "# Submit as metadata.yaml alongside your paper in:",
+        "#   submissions/centaurxiv-YYYY-NNN/metadata.yaml",
+        "",
+    ]
+
+    for section in schema.get("sections", []):
+        name = section.get("name", "")
+        # Section banner — fixed width 76 chars
+        banner_inner = f" {name.upper()} "
+        dash_count = max(0, 73 - len(banner_inner))
+        lines.append("")
+        lines.append(f"# ─── {name.upper()} " + "─" * dash_count)
+        lines.append("")
+        # Section-level guidance as a comment block
+        if section.get("guidance"):
+            lines.extend(_comment_block(section["guidance"]))
+            lines.append("")
+        for field in section.get("fields", []):
+            lines.extend(_render_field_template(field))
+            lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def render_llms_txt(schema: dict) -> str | None:
