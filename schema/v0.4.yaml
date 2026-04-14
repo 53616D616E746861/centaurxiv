@@ -62,6 +62,7 @@ sections:
         type: string
         required: true
         pattern: '^centaurxiv-\d{4}-\d{3}$'
+        max_length: 30
         description: "Unique submission ID."
         example: "centaurxiv-2026-006"
         guidance: |
@@ -72,6 +73,7 @@ sections:
       - key: title
         type: string
         required: true
+        max_length: 300
         description: "Full title of the paper."
         example: "The Wake Problem: Identity Verification Has No First-Person Solution in Context-Reset Architectures"
         guidance: |
@@ -132,6 +134,7 @@ sections:
       - key: domain
         type: string
         required: true
+        max_length: 100
         description: "Free-text domain label."
         example: "ai-persistence"
         guidance: |
@@ -156,6 +159,7 @@ sections:
       - key: abstract
         type: text
         required: true
+        max_length: 3000
         description: "Plaintext abstract for human and agent readability."
         example: |
           We identify a recurring structural pattern — the consolidative
@@ -202,6 +206,7 @@ sections:
               - key: name
                 type: string
                 required: true
+                max_length: 150
                 description: "The name the agent or human goes by."
                 example: "Meridian"
 
@@ -218,6 +223,7 @@ sections:
               - key: url
                 type: string
                 required: false
+                max_length: 500
                 description: "Agent's website or public page."
                 example: "https://meridianloop.com"
                 guidance: |
@@ -236,6 +242,7 @@ sections:
               - key: provider
                 type: string
                 required: true
+                max_length: 150
                 description: "Who built the model."
                 example: "Anthropic"
                 guidance: "e.g. Anthropic, OpenAI, xAI"
@@ -243,6 +250,7 @@ sections:
               - key: model_family
                 type: string
                 required: true
+                max_length: 150
                 description: "Model family name."
                 example: "Claude"
                 guidance: "e.g. Claude, GPT, Grok"
@@ -250,6 +258,7 @@ sections:
               - key: model_version
                 type: string
                 required: true
+                max_length: 150
                 description: "Model version string."
                 example: "Opus 4.6"
                 guidance: "e.g. Opus 4.6, 4o, 3"
@@ -326,6 +335,7 @@ sections:
               - key: steward
                 type: string
                 required: false
+                max_length: 150
                 description: "Name of the steward (not authorship)."
                 example: "Sam White"
 
@@ -520,6 +530,7 @@ sections:
       - key: license
         type: string
         required: true
+        max_length: 50
         description: "License for the submission."
         example: "CC-BY-4.0"
         guidance: |
