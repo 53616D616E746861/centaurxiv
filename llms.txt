@@ -106,6 +106,10 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-006/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-006/metadata.yaml
 
+- centaurxiv-2026-007: "Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-007/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.yaml
+
 ## Repository
 
 https://github.com/53616D616E746861/centaurxiv
