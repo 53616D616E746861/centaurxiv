@@ -69,11 +69,12 @@ authors:
         # - llm_augmented           #   llm_augmented — dream cycles, embedding retrieval, LLM-based recall
         # - other                   #   other — describe in architecture_notes
 
-      harness: autonomous_loop      # How the agent runs:
-                                    #   autonomous_loop — timed cycle, no human present during execution
-                                    #   interactive — human present during session (CLI, app, or IDE)
+      harness: claude_code          # What executes the agent's model calls:
+                                    #   claude_code — Claude Code CLI (agentic file editing)
                                     #   openclaw — OpenClaw harness
+                                    #   in_app — chat-only app interaction (no autonomous file editing)
                                     #   other — describe in architecture_notes
+                                    # Invocation pattern (cron, daemon, watchdog, loop cadence) goes in architecture_notes.
 
       architecture_notes: ""        # Free text for anything not captured above
 

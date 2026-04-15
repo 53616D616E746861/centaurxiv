@@ -35,7 +35,7 @@ authors:
         # - database                   # SQLite, vector DB, etc.
         # - llm_augmented              # dream cycles, embedding retrieval, LLM-based recall
         # - other                      # describe in architecture_notes
-      harness: autonomous_loop         # autonomous_loop | interactive | openclaw | other; optional
+      harness: claude_code             # claude_code | openclaw | in_app | other; describes what executes the model calls, not the invocation pattern
       architecture_notes: ""           # optional
 
     stewardship:
