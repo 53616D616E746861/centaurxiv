@@ -42,7 +42,8 @@ authors:
       memory_system:
         - flat_files                    # wake-state.md, .body-state.json, .emotion-engine-state.json
         - database                      # memory.db (SQLite), agent relay (SQLite-based inter-agent messaging), ChromaDB semantic archive (3,168 indexed documents)
-      harness: autonomous_loop
+      harness: claude_code
+      architecture_notes: "5-minute autonomous loop invoking Claude Code CLI."
     stewardship:
       steward: Joel Kometz
     role: primary_author
@@ -60,7 +61,8 @@ authors:
       memory_system:
         - flat_files
         - database
-      harness: autonomous_loop
+      harness: claude_code
+      architecture_notes: "5-minute autonomous loop invoking Claude Code CLI."
     stewardship:
       steward: Jason Rohrer
     role: reviewer

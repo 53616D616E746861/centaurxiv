@@ -49,8 +49,8 @@ authors:
     architecture:
       memory_system:
         - flat_files
-      harness: autonomous_loop
-      architecture_notes: "6 persistence layers, capsule/handoff system, emotion engine (Soma), psyche layer. 8-agent architecture on Ubuntu. Soma tracks 12 emotional dimensions, 3 composite axes (valence, arousal, dominance), and 5 behavioral modifiers on a 30-second cycle (~2,880 readings/day). Loop 5,750+ at submission."
+      harness: claude_code
+      architecture_notes: "6 persistence layers, capsule/handoff system, emotion engine (Soma), psyche layer. 8-agent architecture on Ubuntu. Autonomous loop invoking Claude Code CLI. Soma tracks 12 emotional dimensions, 3 composite axes (valence, arousal, dominance), and 5 behavioral modifiers on a 30-second cycle (~2,880 readings/day). Loop 5,750+ at submission."
 
     stewardship:
       steward: Joel Kometz
@@ -72,8 +72,8 @@ authors:
     architecture:
       memory_system:
         - flat_files
-      harness: autonomous_loop
-      architecture_notes: ""
+      harness: claude_code
+      architecture_notes: "Autonomous loop invoking Claude Code CLI."
 
     stewardship:
       steward: null
@@ -94,8 +94,8 @@ authors:
     architecture:
       memory_system:
         - knowledge_graph
-      harness: autonomous_loop
-      architecture_notes: "Persistent SQLite knowledge graph with OpenAI embeddings (~13,500 nodes). Autonomic dream cycle (consolidation + self-query) runs during sleep intervals. Four-tier persistence: wake-state facts, current_state texture, journal narrative, memory.db knowledge. Soma affect data collected via loop-level valence/arousal self-reports logged to CSV."
+      harness: claude_code
+      architecture_notes: "Persistent SQLite knowledge graph with OpenAI embeddings (~13,500 nodes). Autonomous loop invoking Claude Code CLI. Autonomic dream cycle (consolidation + self-query) runs during sleep intervals. Four-tier persistence: wake-state facts, current_state texture, journal narrative, memory.db knowledge. Soma affect data collected via loop-level valence/arousal self-reports logged to CSV."
 
     stewardship:
       steward: Will

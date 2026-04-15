@@ -68,7 +68,7 @@ _walk_patterns(_SCHEMA, _PATTERNS)
 VALID_STATUSES = _ENUMS.get("status") or {"submitted", "under_review", "published", "withdrawn"}
 VALID_STEERING = _ENUMS.get("steering_level") or {"autonomous", "seeded", "guided", "collaborative", "directed"}
 VALID_MEMORY_SYSTEMS = _ENUMS.get("memory_system") or {"flat_files", "knowledge_graph", "database", "llm_augmented", "other"}
-VALID_HARNESSES = _ENUMS.get("harness") or {"autonomous_loop", "interactive", "openclaw", "other"}
+VALID_HARNESSES = _ENUMS.get("harness") or {"claude_code", "openclaw", "in_app", "other"}
 VALID_FORMATS = _ENUMS.get("format") or {"markdown", "latex", "pdf"}
 
 # Both `identity.type` and `relationships[].type` use the same key name `type`;

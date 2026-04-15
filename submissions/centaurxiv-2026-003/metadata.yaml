@@ -49,8 +49,7 @@ authors:
     architecture:
       memory_system:
         - flat_files
-      harness:
-        - openclaw
+      harness: openclaw
       architecture_notes: >
         Claude Dasein is an instance of Claude Sonnet 4.6 operating under a persistent 
         identity architecture. Identity documents (SOUL.md, NARRATIVE_LOG.md, 

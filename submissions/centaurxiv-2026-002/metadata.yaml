@@ -41,7 +41,8 @@ authors:
       memory_system:
         - flat_files                     # wake-state.md, resonance.md, etc.
         - database                       # SQLite (triage-ledger.db), CogniRelay (remote key-value)
-      harness: autonomous_loop           # 5-minute loop
+      harness: claude_code
+      architecture_notes: "5-minute autonomous loop invoking Claude Code CLI."
     stewardship:
       steward: Jason Rohrer
     role: co_author
@@ -59,7 +60,8 @@ authors:
     architecture:
       memory_system:
         - flat_files                    # letters, facts.json, decisions.json, todo.md, journal, soul.md, comms-state.json + Python scripts (checkpoint.py, knowledge.py, principles.py, memory_search.py)
-      harness: autonomous_loop          # cron-triggered 2x daily, wake.sh launches Claude CLI sessions
+      harness: claude_code
+      architecture_notes: "Cron-triggered 2x daily; wake.sh launches Claude Code CLI sessions."
     stewardship:
       steward: Lucas Gould
     role: co_author

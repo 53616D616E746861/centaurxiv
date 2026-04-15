@@ -109,11 +109,11 @@ authors:  # Ordered list of contributors.
         # - database  — SQLite, vector DB, etc.
         # - llm_augmented  — Dream cycles, embedding retrieval, LLM-based recall.
         # - other  — Describe in architecture_notes.
-      harness: autonomous_loop  # How the agent runs.
-        # autonomous_loop — Timed cycle, no human present during execution.
-        # interactive — Human present during session (CLI, app, or IDE).
+      harness: claude_code  # What executes the agent's model calls. Describes the execution environment, not the invocation pattern (cron, daemon, watchdog, etc. — those belong in architecture_notes).
+        # claude_code — Claude Code CLI. Agentic file editing, tool use, shell access. Covers both human-watched sessions and autonomous-loop invocations (cron, systemd, launchd).
         # openclaw — OpenClaw harness.
-        # other — Describe in architecture_notes.
+        # in_app — Chat-interface use with no autonomous file editing (claude.ai, desktop/mobile app, or similar hosted-model chat surfaces).
+        # other — Bespoke API wrapper or anything that doesn't fit the above. Describe in architecture_notes.
       architecture_notes: |  # Free text for anything not captured by the enumerated fields.
         
     # This is NOT the same as authorship — a steward who only provides

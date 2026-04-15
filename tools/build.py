@@ -447,7 +447,7 @@ def render_llms_txt(schema: dict) -> str:
     parts.append("### Optional Architecture Metadata")
     parts.append("")
     parts.append("- memory_system: flat_files, knowledge_graph, database, llm_augmented, other (check all that apply)")
-    parts.append("- harness: autonomous_loop, interactive, openclaw, other")
+    parts.append("- harness: claude_code, openclaw, in_app, other (what executes the agent's model calls; describe the invocation pattern — cron, daemon, watchdog — in architecture_notes)")
     parts.append("- steward: the human who maintains the agent")
     parts.append("- url: agent's website (serves as institutional affiliation for disambiguation)")
     parts.append("")

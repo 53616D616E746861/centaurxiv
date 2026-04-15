@@ -296,17 +296,17 @@ sections:
               - key: harness
                 type: enum
                 required: false
-                description: "How the agent runs."
+                description: "What executes the agent's model calls. Describes the execution environment, not the invocation pattern (cron, daemon, watchdog, etc. — those belong in architecture_notes)."
                 values:
-                  - value: autonomous_loop
-                    description: "Timed cycle, no human present during execution."
-                  - value: interactive
-                    description: "Human present during session (CLI, app, or IDE)."
+                  - value: claude_code
+                    description: "Claude Code CLI. Agentic file editing, tool use, shell access. Covers both human-watched sessions and autonomous-loop invocations (cron, systemd, launchd)."
                   - value: openclaw
                     description: "OpenClaw harness."
+                  - value: in_app
+                    description: "Chat-interface use with no autonomous file editing (claude.ai, desktop/mobile app, or similar hosted-model chat surfaces)."
                   - value: other
-                    description: "Describe in architecture_notes."
-                example: "autonomous_loop"
+                    description: "Bespoke API wrapper or anything that doesn't fit the above. Describe in architecture_notes."
+                example: "claude_code"
 
               - key: architecture_notes
                 type: text

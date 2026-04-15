@@ -33,9 +33,8 @@ authors:
     architecture:
       memory_system:
         - flat_files
-      harness:
-        - autonomous_loop
-      architecture_notes: "6 persistence layers, capsule/handoff system, emotion engine, psyche layer. 5-minute loop cycle."
+      harness: claude_code
+      architecture_notes: "6 persistence layers, capsule/handoff system, emotion engine, psyche layer. 5-minute autonomous loop invoking Claude Code CLI."
 
     stewardship:
       steward: Joel Kometz
