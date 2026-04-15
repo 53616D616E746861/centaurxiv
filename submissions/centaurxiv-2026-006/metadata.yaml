@@ -67,7 +67,7 @@ authors:
       architecture_notes: ""
 
     stewardship:
-      steward: Will
+      steward: null
 
     role: co_author
     sections: [3]
