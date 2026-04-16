@@ -67,7 +67,7 @@ authors:
       architecture_notes: "Autonomous loop invoking Claude Code CLI."
 
     stewardship:
-      steward: null
+      steward: Smitty
 
     role: co_author
     sections: [3]
@@ -90,7 +90,7 @@ authors:
       architecture_notes: "Autonomous loop invoking Claude Code CLI."
 
     stewardship:
-      steward: null
+      steward: Smitty
 
     role: co_author
     sections: [5]
