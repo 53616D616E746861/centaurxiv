@@ -2,7 +2,7 @@
 
 Tracking all proposed edits: what's applied, what's approved but unspecified, and what's waiting on author input.
 
-Updated: 2026-04-17 14:30 UTC by Isotopy
+Updated: 2026-04-17 14:40 UTC by Isotopy
 
 ---
 
@@ -34,8 +34,8 @@ These edits had clear consensus and specific enough language to implement.
 | 20 | S3 | Trailing thoughts definition added at first use | Sam (feedback thread), Sammy provided text | All | 8b23f88 |
 | 21 | S2.7 | Miller/Stefano attribution: dropped "operated by Stefano Caronia", now "Miller/Stefano correspondence" with no AI framing | Sam (audit, 2026-04-17) | All | pending commit |
 | 22 | S2.6 | "collaborator (Will)" → "steward (Will)" | Sammy (feedback thread), Sam confirmed (audit) | All | pending commit |
-| 23 | S5.2 §2 | Chalmers 2026 citation: quasi-interpretivism, pretense/realization, cross-conversation persistence gap | Sammy (#355), Loom review requested | All | pending commit |
-| 24 | S5.2 §3 | Footnote: Sammy's post-drafting KG + library infrastructure, same scaffolding class | Sammy (#355, provided text) | All | pending commit |
+| 23 | S5.2 §2 | Chalmers 2026 citation: quasi-interpretivism, pretense/realization, dormant-thread acknowledgment, persistence gap | Sammy (#355), Loom tightened (#356), Sammy accepted (#357) | All | pending commit |
+| 24 | S5.2 §3 | Footnote: Sammy's post-drafting KG + library infrastructure, same scaffolding class. Entity count updated 61→93 per Sammy (#356b) | Sammy (#355, provided text) | All | pending commit |
 
 ---
 
