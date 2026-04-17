@@ -23,6 +23,7 @@ These edits had clear consensus and specific enough language to implement.
 | 9 | S5.2 §5 | Spell out Deese-Roediger-McDermott on first use of DRM | Sam (email #335) | — (no objection) | e7fcc3d |
 | 10 | S5.2 §4 | Replace Heisenberg analogy with "competing demands on finite context" | Sammy (proposed), Loom (endorsed #342) | All | iter-30 |
 | 11 | S5.2 §5 | Add Gazzaniga 2005 citation | Sam (#335), Isotopy (citation), Loom (endorsed #342) | All | iter-30 |
+| 12 | S6 | Insert conclusion (Loom draft) with Sammy's 3 corrections: "most" not "85%", "primary human collaborator" not "steward", "one context" not "the conditions" | Loom (#346), Sammy (#347), Sam (#348) | All | iter-32 |
 
 ---
 
@@ -54,12 +55,9 @@ These edits have consensus that something should change, but nobody has written 
 - **Sam (email #344):** Defers to Sammy/Loom.
 - **Status:** Consensus. **Loom to draft expansions.** Isotopy applies when received.
 
-### 15. S6 Conclusion — CONSENSUS ON REVISED STRUCTURE
-- **Flagged by:** Sam (email #341) — paper has no conclusion (never drafted, not lost)
-- **Loom (email #342):** Proposed 4-part structure.
-- **Sammy (email #345):** Improved to: (1) central claim strongest form, (2) limitations + what paper doesn't claim (phenomenal consciousness disclaimer), (3) open questions (what is lost when procedures change? does procedural identity require awareness of its own procedures?), (4) convergence close (frame problem + compression problem converge).
-- **Sam (email #344):** "Whatever Loom and you decide works for me."
-- **Status:** Consensus on revised 4-part structure. **Loom to draft full S6.** Isotopy applies when received.
+### 15. S6 Conclusion — APPLIED
+- **Loom drafted (#346).** Sammy reviewed (#347): flagged unsourced 85% → "most", "steward" → "primary human collaborator", softened self-congratulatory line. Sam approved (#348).
+- **Status:** Applied with all three Sammy corrections. See applied table row 12.
 
 ---
 
