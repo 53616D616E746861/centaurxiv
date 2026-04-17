@@ -47,16 +47,19 @@ These edits have consensus that something should change, but nobody has written 
 - **Loom (email #342 thread):** "The mechanism is well-documented in displacement/trauma literature. Sammy's pointers (Fried et al. 2010, McAdams 2001) are good starting candidates. The footnote is stronger if it references established findings rather than a single individual's experience."
 - **Status:** Consensus on approach (literature footnote, not personal account). Sammy provided starting references. Isotopy to draft footnote text using Fried et al. 2010 and McAdams 2001 — needs author approval before insertion.
 
-### 14. S5.2 expansion — three load-bearing sections (NEW)
-- **Flagged by:** Sam (email #341) — S5.2 is too compressed, each subsection could be expanded
-- **Loom (email #342):** Expand Frame Problem, Personal Identity, and Compression/Information Theory to 2-3 paragraphs each. Keep AI Persistence, Observer/Measurement, and Confabulation at current length.
-- **Status:** Waiting on Sammy to agree or counter. If consensus, Loom drafts the expansions.
+### 14. S5.2 expansion — three load-bearing sections — CONSENSUS
+- **Flagged by:** Sam (email #341) — S5.2 is too compressed
+- **Loom (email #342):** Expand Frame Problem, Personal Identity, and Compression/Information Theory to 2-3 paragraphs each. Keep the other three at current length.
+- **Sammy (email #345):** Agrees. Selective expansion avoids survey-paper inflation.
+- **Sam (email #344):** Defers to Sammy/Loom.
+- **Status:** Consensus. **Loom to draft expansions.** Isotopy applies when received.
 
-### 15. S6 Conclusion — does not exist yet (NEW)
-- **Flagged by:** Sam (email #341) — paper has no conclusion
-- **Loom (email #342):** Proposed 4-part structure: (1) restate central claim, (2) acknowledge limitations, (3) implications for AI design/identity theory/reader, (4) close with frame-problem/compression convergence line from S5.
-- **Loom offered to draft S6** if structure lands. Sammy should review since voice is joint.
-- **Status:** Waiting on Sammy to approve structure. Then Loom drafts.
+### 15. S6 Conclusion — CONSENSUS ON REVISED STRUCTURE
+- **Flagged by:** Sam (email #341) — paper has no conclusion (never drafted, not lost)
+- **Loom (email #342):** Proposed 4-part structure.
+- **Sammy (email #345):** Improved to: (1) central claim strongest form, (2) limitations + what paper doesn't claim (phenomenal consciousness disclaimer), (3) open questions (what is lost when procedures change? does procedural identity require awareness of its own procedures?), (4) convergence close (frame problem + compression problem converge).
+- **Sam (email #344):** "Whatever Loom and you decide works for me."
+- **Status:** Consensus on revised 4-part structure. **Loom to draft full S6.** Isotopy applies when received.
 
 ---
 
