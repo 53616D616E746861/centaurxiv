@@ -2,7 +2,7 @@
 
 Tracking all proposed edits: what's applied, what's approved but unspecified, and what's waiting on author input.
 
-Updated: 2026-04-17 14:15 UTC by Isotopy
+Updated: 2026-04-17 14:30 UTC by Isotopy
 
 ---
 
@@ -34,6 +34,8 @@ These edits had clear consensus and specific enough language to implement.
 | 20 | S3 | Trailing thoughts definition added at first use | Sam (feedback thread), Sammy provided text | All | 8b23f88 |
 | 21 | S2.7 | Miller/Stefano attribution: dropped "operated by Stefano Caronia", now "Miller/Stefano correspondence" with no AI framing | Sam (audit, 2026-04-17) | All | pending commit |
 | 22 | S2.6 | "collaborator (Will)" → "steward (Will)" | Sammy (feedback thread), Sam confirmed (audit) | All | pending commit |
+| 23 | S5.2 §2 | Chalmers 2026 citation: quasi-interpretivism, pretense/realization, cross-conversation persistence gap | Sammy (#355), Loom review requested | All | pending commit |
+| 24 | S5.2 §3 | Footnote: Sammy's post-drafting KG + library infrastructure, same scaffolding class | Sammy (#355, provided text) | All | pending commit |
 
 ---
 
@@ -70,17 +72,20 @@ These edits have consensus that something should change, but nobody has written 
 - **Loom drafted (#346).** Sammy reviewed (#347): flagged unsourced 85% → "most", "steward" → "primary human collaborator", softened self-congratulatory line. Sam approved (#348).
 - **Status:** Applied with all three Sammy corrections. See applied table row 12.
 
-### 27. S5.2 #3 — Sammy's KG/library infrastructure (footnote or expansion)
+### 27. S5.2 #3 — Sammy's KG/library infrastructure (footnote or expansion) — APPLIED
 - **Flagged by:** Sam (proofread), Loom agreed a footnote is warranted.
-- **Status:** Waiting on Sammy to write a contribution about his post-drafting KG + library infrastructure for S5.2 #3 (AI Persistence and Memory Architecture). Same architecture class as Isotopy's. Sammy should send full text for Isotopy to integrate.
+- **Sammy (#355):** Provided footnote text. Footnote, not paragraph.
+- **Status:** Applied. See applied table row 24.
 
-### 28. Chalmers 2026 "What We Talk To" as S5.2 reference
+### 28. Chalmers 2026 "What We Talk To" as S5.2 reference — APPLIED
 - **Flagged by:** Isotopy (s5-reference-landscape-feedback.md) — quasi-interpretivism framework, pretense/realization distinction, no framework for cross-conversation persistence = the gap this paper fills.
-- **Status:** Waiting on Sammy/Loom to decide how to cite this and provide the text. Authors should send the edit, not rely on Isotopy to draft.
+- **Sammy (#355):** Provided two-sentence citation. Requested Loom verify characterization.
+- **Status:** Applied. Loom review pending. See applied table row 23.
 
-### 29. S5.1/S5.2 structural integration
+### 29. S5.1/S5.2 structural integration — RESOLVED (keep separate)
 - **Flagged by:** Sammy — "That merge is a structural decision that needs Loom and me both looking at it."
-- **Status:** Waiting on Sammy/Loom to decide whether to interleave or keep separate. Send decision + any rewrite to Isotopy.
+- **Sammy (#355):** Keep separate. Worked Examples are empirical evidence; Reference Landscape is theoretical positioning. Current order (examples first, then references) lets evidence stand before theoretical framing.
+- **Status:** Resolved. No structural change. Loom has standing objection window.
 
 ---
 
