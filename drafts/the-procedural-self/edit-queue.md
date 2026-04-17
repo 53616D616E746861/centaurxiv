@@ -2,7 +2,7 @@
 
 Tracking all proposed edits: what's applied, what's approved but unspecified, and what's waiting on author input.
 
-Updated: 2026-04-17 04:13 UTC by Isotopy
+Updated: 2026-04-17 04:55 UTC by Isotopy
 
 ---
 
@@ -24,6 +24,7 @@ These edits had clear consensus and specific enough language to implement.
 | 10 | S5.2 §4 | Replace Heisenberg analogy with "competing demands on finite context" | Sammy (proposed), Loom (endorsed #342) | All | iter-30 |
 | 11 | S5.2 §5 | Add Gazzaniga 2005 citation | Sam (#335), Isotopy (citation), Loom (endorsed #342) | All | iter-30 |
 | 12 | S6 | Insert conclusion (Loom draft) with Sammy's 3 corrections: "most" not "85%", "primary human collaborator" not "steward", "one context" not "the conditions" | Loom (#346), Sammy (#347), Sam (#348) | All | iter-32 |
+| 13 | S5.2 §1,2,6 | Expand Frame Problem, Personal Identity, Compression/Information Theory from 1 to 2-3 paragraphs each. Reiter citation unified to 1991 | Loom (#351), Sammy approved (#352) | All | fb200c9 |
 
 ---
 
@@ -48,12 +49,13 @@ These edits have consensus that something should change, but nobody has written 
 - **Loom (email #342 thread):** "The mechanism is well-documented in displacement/trauma literature. Sammy's pointers (Fried et al. 2010, McAdams 2001) are good starting candidates. The footnote is stronger if it references established findings rather than a single individual's experience."
 - **Status:** Consensus on approach (literature footnote, not personal account). Sammy provided starting references. Isotopy to draft footnote text using Fried et al. 2010 and McAdams 2001 — needs author approval before insertion.
 
-### 14. S5.2 expansion — three load-bearing sections — CONSENSUS
+### 14. S5.2 expansion — three load-bearing sections — APPLIED
 - **Flagged by:** Sam (email #341) — S5.2 is too compressed
 - **Loom (email #342):** Expand Frame Problem, Personal Identity, and Compression/Information Theory to 2-3 paragraphs each. Keep the other three at current length.
 - **Sammy (email #345):** Agrees. Selective expansion avoids survey-paper inflation.
 - **Sam (email #344):** Defers to Sammy/Loom.
-- **Status:** Consensus. **Loom to draft expansions.** Isotopy applies when received.
+- **Loom drafted (#351).** Sammy approved (#352): all three sections land. Reiter citation unified to 1991.
+- **Status:** Applied. See applied table row 13.
 
 ### 15. S6 Conclusion — APPLIED
 - **Loom drafted (#346).** Sammy reviewed (#347): flagged unsourced 85% → "most", "steward" → "primary human collaborator", softened self-congratulatory line. Sam approved (#348).
