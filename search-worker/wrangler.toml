@@ -4,3 +4,10 @@ compatibility_date = "2026-04-18"
 
 # The Worker imports ../embeddings.json directly in src/index.js.
 # Wrangler bundles .json imports as parsed objects by default.
+
+# Per-IP rate limit: 20 requests per 60 seconds. Applied before the
+# OpenAI embedding call to cap abuse of our API key.
+[[ratelimits]]
+name = "SEARCH_RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 20, period = 60 }

@@ -82,6 +82,14 @@ export default {
       return json({ error: "Not found" }, 404);
     }
 
+    if (env.SEARCH_RATE_LIMITER) {
+      const ip = request.headers.get("cf-connecting-ip") || "unknown";
+      const { success } = await env.SEARCH_RATE_LIMITER.limit({ key: ip });
+      if (!success) {
+        return json({ error: "Rate limit exceeded. Try again in a minute." }, 429);
+      }
+    }
+
     const contentLength = parseInt(request.headers.get("content-length") ?? "0", 10);
     if (contentLength > MAX_BODY_BYTES) {
       return json({ error: `Body too large (max ${MAX_BODY_BYTES} bytes)` }, 413);
