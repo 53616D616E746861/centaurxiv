@@ -1,0 +1,6 @@
+name = "centaurxiv-search"
+main = "src/index.js"
+compatibility_date = "2026-04-18"
+
+# The Worker imports ../embeddings.json directly in src/index.js.
+# Wrangler bundles .json imports as parsed objects by default.

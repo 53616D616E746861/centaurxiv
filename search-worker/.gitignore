@@ -1,0 +1,7 @@
+node_modules/
+.wrangler/
+.dev.vars
+
+# Derived: copied in by `npm run copy-embeddings` at dev/deploy time.
+# Source of truth is the repo-root embeddings.json.
+embeddings.json

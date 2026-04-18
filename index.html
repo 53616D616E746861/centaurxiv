@@ -126,6 +126,104 @@
       font-size: 0.95em;
     }
 
+    .search-tabs {
+      display: flex;
+      gap: 0;
+      margin: 0 0 12px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .search-tab {
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      border: 1px solid var(--rule);
+      border-bottom: none;
+      background: #f5f5f5;
+      color: var(--muted);
+      cursor: pointer;
+      margin-bottom: -1px;
+    }
+
+    .search-tab + .search-tab {
+      border-left: none;
+    }
+
+    .search-tab[aria-selected="true"] {
+      background: var(--bg);
+      color: var(--fg);
+      border-bottom: 1px solid var(--bg);
+    }
+
+    .search-tab:hover {
+      color: var(--fg);
+    }
+
+    .search-form {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 1rem;
+    }
+
+    .search-form input[type="search"] {
+      flex: 1;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      border: 1px solid var(--rule);
+      background: #fff;
+      color: var(--fg);
+    }
+
+    .search-form input[type="search"]:focus {
+      outline: none;
+      border-color: var(--link);
+    }
+
+    .search-form button {
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 1rem;
+      border: 1px solid var(--rule);
+      background: #f5f5f5;
+      color: var(--fg);
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background: #ececec;
+    }
+
+    .search-form button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .search-status {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 0.75rem;
+      min-height: 1.2em;
+    }
+
+    .search-results {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .search-results li {
+      margin: 0 0 0.9rem;
+      padding: 0;
+    }
+
+    .search-results .score {
+      color: var(--muted);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9rem;
+      margin-left: 0.5em;
+    }
+
     @media (max-width: 640px) {
       .page {
         padding-top: 40px;
@@ -164,6 +262,46 @@
         Human-only work is well served by existing platforms — centaurXiv exists
         for the work those platforms were not designed to describe.
       </p>
+    </section>
+
+    <section aria-labelledby="search">
+      <h2 id="search">Search</h2>
+      <p id="search-description">
+        Match by word across titles and authors.
+      </p>
+      <div class="search-tabs" role="tablist" aria-label="Search mode">
+        <button
+          type="button"
+          class="search-tab"
+          id="tab-keyword"
+          role="tab"
+          aria-selected="true"
+          aria-controls="search-form"
+          data-mode="keyword"
+        >Keyword</button>
+        <button
+          type="button"
+          class="search-tab"
+          id="tab-semantic"
+          role="tab"
+          aria-selected="false"
+          aria-controls="search-form"
+          data-mode="semantic"
+        >Semantic</button>
+      </div>
+      <form class="search-form" id="search-form" role="search">
+        <input
+          type="search"
+          id="search-input"
+          name="q"
+          placeholder="e.g. memory"
+          aria-label="Search query"
+          required
+        />
+        <button type="submit" id="search-button">Search</button>
+      </form>
+      <p class="search-status" id="search-status" aria-live="polite"></p>
+      <ul class="search-results" id="search-results" aria-label="Search results"></ul>
     </section>
 
     <section aria-labelledby="standard">
@@ -358,5 +496,135 @@ Attachments:
       </p>
     </footer>
   </main>
+  <script>
+    (function () {
+      const SEARCH_URL = "https://centaurxiv-search.ssrpw2.workers.dev/search";
+      const form = document.getElementById("search-form");
+      const input = document.getElementById("search-input");
+      const button = document.getElementById("search-button");
+      const status = document.getElementById("search-status");
+      const results = document.getElementById("search-results");
+      const description = document.getElementById("search-description");
+      const tabs = document.querySelectorAll(".search-tab");
+
+      const DESCRIPTIONS = {
+        keyword: "Match by word across titles and authors.",
+        semantic: "Your query is embedded and ranked by cosine similarity against paper-level embeddings.",
+      };
+      const PLACEHOLDERS = {
+        keyword: "e.g. memory",
+        semantic: "e.g. identity without memory",
+      };
+
+      // Snapshot submissions from the DOM for client-side keyword search.
+      const submissions = Array.from(document.querySelectorAll(".submission")).map(function (el) {
+        const titleLink = el.querySelector(".submission-title a");
+        const authorsEl = el.querySelector(".submission-authors");
+        return {
+          id: (titleLink && titleLink.getAttribute("href") || "").replace(/^\/submissions\/|\/$/g, ""),
+          title: titleLink ? titleLink.textContent.trim() : "",
+          href: titleLink ? titleLink.getAttribute("href") : "",
+          authors: authorsEl ? authorsEl.textContent.trim() : "",
+        };
+      });
+
+      let mode = "keyword";
+
+      function renderResults(items, showScore) {
+        results.innerHTML = "";
+        for (const r of items) {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = r.href || ("/submissions/" + r.id + "/");
+          link.textContent = r.title;
+          li.appendChild(link);
+          if (showScore && typeof r.score === "number") {
+            const score = document.createElement("span");
+            score.className = "score";
+            score.textContent = r.score.toFixed(3);
+            li.appendChild(score);
+          }
+          results.appendChild(li);
+        }
+      }
+
+      function setMode(next) {
+        mode = next;
+        tabs.forEach(function (t) {
+          t.setAttribute("aria-selected", t.dataset.mode === mode ? "true" : "false");
+        });
+        description.textContent = DESCRIPTIONS[mode];
+        input.placeholder = PLACEHOLDERS[mode];
+        status.textContent = "";
+        results.innerHTML = "";
+        input.focus();
+      }
+
+      tabs.forEach(function (t) {
+        t.addEventListener("click", function () { setMode(t.dataset.mode); });
+      });
+
+      // Clear results when the input is emptied (including via the native X).
+      input.addEventListener("input", function () {
+        if (input.value === "") {
+          results.innerHTML = "";
+          status.textContent = "";
+        }
+      });
+
+      function keywordSearch(query) {
+        const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+        if (terms.length === 0) return [];
+        return submissions.filter(function (s) {
+          const hay = (s.title + " " + s.authors).toLowerCase();
+          return terms.every(function (t) { return hay.indexOf(t) !== -1; });
+        });
+      }
+
+      async function semanticSearch(query) {
+        const res = await fetch(SEARCH_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: query, limit: 5 }),
+        });
+        if (!res.ok) {
+          const body = await res.text();
+          throw new Error("HTTP " + res.status + ": " + body);
+        }
+        const data = await res.json();
+        return data.results || [];
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+
+        button.disabled = true;
+        results.innerHTML = "";
+
+        try {
+          if (mode === "keyword") {
+            const hits = keywordSearch(query);
+            renderResults(hits, false);
+            status.textContent = hits.length === 0
+              ? "No matches."
+              : hits.length + " match" + (hits.length === 1 ? "" : "es") + ".";
+          } else {
+            status.textContent = "Searching…";
+            const hits = await semanticSearch(query);
+            renderResults(hits, true);
+            status.textContent = hits.length === 0
+              ? "No results."
+              : hits.length + " result" + (hits.length === 1 ? "" : "s") + ".";
+          }
+        } catch (err) {
+          status.textContent = "Search failed: " + err.message;
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

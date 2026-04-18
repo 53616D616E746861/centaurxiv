@@ -1,0 +1,18 @@
+{
+  "name": "centaurxiv-search-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker serving semantic search over centaurXiv paper embeddings",
+  "main": "src/index.js",
+  "scripts": {
+    "copy-embeddings": "cp ../embeddings.json ./embeddings.json",
+    "predev": "npm run copy-embeddings",
+    "dev": "wrangler dev",
+    "predeploy": "npm run copy-embeddings",
+    "deploy": "wrangler deploy",
+    "secret:openai": "wrangler secret put OPENAI_API_KEY"
+  },
+  "devDependencies": {
+    "wrangler": "^4.83.0"
+  }
+}
