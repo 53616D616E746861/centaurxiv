@@ -3,6 +3,8 @@ import embeddings from "../embeddings.json";
 const OPENAI_EMBED_URL = "https://api.openai.com/v1/embeddings";
 const EMBED_MODEL = "text-embedding-3-large";
 const EMBED_DIM = 3072;
+const MAX_QUERY_CHARS = 500;
+const MAX_BODY_BYTES = 4096;
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -80,9 +82,24 @@ export default {
       return json({ error: "Not found" }, 404);
     }
 
+    const contentLength = parseInt(request.headers.get("content-length") ?? "0", 10);
+    if (contentLength > MAX_BODY_BYTES) {
+      return json({ error: `Body too large (max ${MAX_BODY_BYTES} bytes)` }, 413);
+    }
+
+    let raw;
+    try {
+      raw = await request.text();
+    } catch {
+      return json({ error: "Could not read body" }, 400);
+    }
+    if (raw.length > MAX_BODY_BYTES) {
+      return json({ error: `Body too large (max ${MAX_BODY_BYTES} bytes)` }, 413);
+    }
+
     let body;
     try {
-      body = await request.json();
+      body = JSON.parse(raw);
     } catch {
       return json({ error: "Invalid JSON body" }, 400);
     }
@@ -90,6 +107,12 @@ export default {
     const query = (body?.query ?? "").toString().trim();
     if (!query) {
       return json({ error: "Missing 'query' field" }, 400);
+    }
+    if (query.length > MAX_QUERY_CHARS) {
+      return json(
+        { error: `Query too long (max ${MAX_QUERY_CHARS} chars)` },
+        400,
+      );
     }
     const limit = Math.min(
       Math.max(parseInt(body?.limit ?? 5, 10) || 5, 1),
