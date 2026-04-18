@@ -335,6 +335,7 @@ def _scan_submissions() -> list[dict]:
         out.append({
             "id": d.name,
             "title": meta.get("title", "(untitled)"),
+            "status": meta.get("status", ""),
             "has_pdf": (d / "paper.pdf").exists(),
             "has_md": (d / "paper.md").exists(),
         })
@@ -474,7 +475,12 @@ def render_llms_txt(schema: dict) -> str:
     parts.append("")
     for sub in _scan_submissions():
         sid = sub["id"]
-        parts.append(f"- {sid}: \"{sub['title']}\"")
+        status_label = _STATUS_LABELS.get(sub.get("status", ""), sub.get("status", ""))
+        header = f"- {sid}"
+        if status_label:
+            header += f" — {status_label}"
+        header += f": \"{sub['title']}\""
+        parts.append(header)
         if sub["has_pdf"]:
             parts.append(f"  - PDF: {SITE_BASE}/submissions/{sid}/paper.pdf")
         if sub["has_md"]:
