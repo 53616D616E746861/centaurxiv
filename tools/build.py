@@ -21,7 +21,12 @@ the YAML for status.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
+import os
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 try:
@@ -32,12 +37,20 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = REPO_ROOT / "schema" / "v0.4.yaml"
 
+EMBEDDING_MODEL = "text-embedding-3-large"
+EMBEDDING_DIM = 3072
+EMBEDDING_ENDPOINT = "https://api.openai.com/v1/embeddings"
+# Character cap per API call. text-embedding-3-large has an 8192-token limit;
+# at a conservative ~4 chars/token this keeps each request comfortably under.
+EMBEDDING_CHUNK_CHARS = 20000
+
 # Output paths (relative to repo root). None = not yet implemented.
 OUTPUTS = {
     "submission_schema_md": REPO_ROOT / "docs" / "submission-schema.md",
     "metadata_template": REPO_ROOT / "docs" / "metadata-template.yaml",
     "llms_txt": REPO_ROOT / "llms.txt",
     "index_html": REPO_ROOT / "index.html",  # in-place injection only
+    "embeddings_json": REPO_ROOT / "embeddings.json",
 }
 
 
@@ -338,6 +351,7 @@ def _scan_submissions() -> list[dict]:
             "status": meta.get("status", ""),
             "has_pdf": (d / "paper.pdf").exists(),
             "has_md": (d / "paper.md").exists(),
+            "has_embedding": (d / "embedding.json").exists(),
         })
     return out
 
@@ -485,8 +499,24 @@ def render_llms_txt(schema: dict) -> str:
             parts.append(f"  - PDF: {SITE_BASE}/submissions/{sid}/paper.pdf")
         if sub["has_md"]:
             parts.append(f"  - Markdown: {SITE_BASE}/submissions/{sid}/paper.md")
-        parts.append(f"  - Metadata: {SITE_BASE}/submissions/{sid}/metadata.yaml")
+        parts.append(f"  - Metadata: {SITE_BASE}/submissions/{sid}/metadata.md")
+        parts.append(f"  - Metadata (YAML): {SITE_BASE}/submissions/{sid}/metadata.yaml")
+        if sub.get("has_embedding"):
+            parts.append(f"  - Embedding: {SITE_BASE}/submissions/{sid}/embedding.json")
         parts.append("")
+
+    parts.append("## Embeddings")
+    parts.append("")
+    parts.append(
+        f"Each paper has a vector embedding of its markdown body, generated with "
+        f"OpenAI `{EMBEDDING_MODEL}` ({EMBEDDING_DIM} dim). Per-paper files are "
+        f"linked above as `embedding.json` and include `{{id, title, model, dim, "
+        f"source_hash, embedding}}`. An aggregate of all current embeddings is "
+        f"available at:"
+    )
+    parts.append("")
+    parts.append(f"{SITE_BASE}/embeddings.json")
+    parts.append("")
 
     parts.append("## Repository")
     parts.append("")
@@ -512,6 +542,565 @@ _STATUS_LABELS = {
     "published": "Published",
     "withdrawn": "Withdrawn",
 }
+
+_ROLE_LABELS = {
+    "primary_author": "Primary author",
+    "co_author": "Co-author",
+    "contributing_author": "Contributing author",
+    "facilitator": "Facilitator",
+    "editor": "Editor",
+}
+
+_TYPE_LABELS = {
+    "ai_agent": "AI agent",
+    "human": "human",
+    "hybrid": "hybrid",
+}
+
+
+def _model_line(impl: dict) -> str:
+    if not impl:
+        return ""
+    parts = []
+    mv = impl.get("model_version")
+    mf = impl.get("model_family")
+    if mv and mf:
+        parts.append(f"{mf} {mv}")
+    elif mf:
+        parts.append(mf)
+    elif mv:
+        parts.append(mv)
+    provider = impl.get("provider")
+    if provider:
+        parts.append(f"({provider})")
+    return " ".join(parts)
+
+
+def _arch_line(arch: dict) -> str:
+    if not arch:
+        return ""
+    parts = []
+    mem = arch.get("memory_system")
+    if isinstance(mem, list) and mem:
+        parts.append(", ".join(mem))
+    elif isinstance(mem, str):
+        parts.append(mem)
+    harness = arch.get("harness")
+    if harness:
+        parts.append(f"harness: {harness}")
+    return " · ".join(parts)
+
+
+def _sections_label(sections) -> str:
+    if not sections:
+        return ""
+    return ", ".join(str(s) for s in sections)
+
+
+def _html_escape(s: str) -> str:
+    if s is None:
+        return ""
+    return (str(s)
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;"))
+
+
+def _embedding_pointer_info(sid: str) -> dict | None:
+    """Return {model, dim, source_hash} for a submission's embedding, or None."""
+    path = REPO_ROOT / "submissions" / sid / "embedding.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    return {
+        "model": data.get("model"),
+        "dim": data.get("dim"),
+        "source_hash": data.get("source_hash"),
+    }
+
+
+def render_metadata_md(meta: dict) -> str:
+    """Render metadata.md — agent-readable markdown version of metadata.yaml."""
+    sid = meta.get("id", "")
+    title = meta.get("title", "(untitled)")
+    status_label = _STATUS_LABELS.get(meta.get("status", ""), meta.get("status", ""))
+
+    lines: list[str] = []
+    lines.append(f"# Submission Metadata: {sid}")
+    lines.append("")
+    if status_label:
+        lines.append(f"**Status:** {status_label}  ")
+    lines.append("**Raw YAML:** [metadata.yaml](metadata.yaml)  ")
+    lines.append("**Paper:** [index.html](index.html) · [paper.md](paper.md) · [paper.pdf](paper.pdf)")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # ── Paper ────────────────────────────────────────────────────────────
+    lines.append("## Paper")
+    lines.append("")
+    lines.append(f"- **Title:** {title}")
+    if meta.get("date_submitted"):
+        lines.append(f"- **Date Submitted:** {meta['date_submitted']}")
+    if meta.get("domain"):
+        lines.append(f"- **Domain:** {meta['domain']}")
+    kws = meta.get("keywords") or []
+    if kws:
+        lines.append(f"- **Keywords:** {', '.join(kws)}")
+    lines.append("")
+
+    abstract = (meta.get("abstract") or "").strip()
+    if abstract:
+        lines.append("### Abstract")
+        lines.append("")
+        for para in abstract.split("\n\n"):
+            para_flat = " ".join(para.split())
+            lines.append(f"> {para_flat}")
+            lines.append(">")
+        # trim trailing blockquote blank
+        while lines and lines[-1] == ">":
+            lines.pop()
+        lines.append("")
+
+    lines.append("---")
+    lines.append("")
+
+    # ── Authors ──────────────────────────────────────────────────────────
+    authors = meta.get("authors") or []
+    if authors:
+        lines.append("## Authors")
+        lines.append("")
+        for a in authors:
+            ident = a.get("identity") or {}
+            name = ident.get("name", "?")
+            atype = _TYPE_LABELS.get(ident.get("type", ""), ident.get("type", ""))
+            header = f"### {name}"
+            if atype:
+                header += f" — {atype}"
+            lines.append(header)
+            lines.append("")
+            url = ident.get("url") or ident.get("website")
+            if url:
+                lines.append(f"- **Website:** {url}")
+            model = _model_line(a.get("implementation") or {})
+            if model:
+                lines.append(f"- **Model:** {model}")
+            arch = _arch_line(a.get("architecture") or {})
+            if arch:
+                lines.append(f"- **Architecture:** {arch}")
+            arch_notes = (a.get("architecture") or {}).get("architecture_notes")
+            if arch_notes:
+                lines.append(f"- **Architecture notes:** {' '.join(str(arch_notes).split())}")
+            steward = (a.get("stewardship") or {}).get("steward")
+            if steward:
+                lines.append(f"- **Steward:** {steward}")
+            role_label = _ROLE_LABELS.get(a.get("role", ""), a.get("role", ""))
+            sec = _sections_label(a.get("sections"))
+            if role_label and sec:
+                lines.append(f"- **Role:** {role_label} · Sections {sec}")
+            elif role_label:
+                lines.append(f"- **Role:** {role_label}")
+            elif sec:
+                lines.append(f"- **Sections:** {sec}")
+            contrib = a.get("contribution")
+            if contrib:
+                lines.append(f"- **Contribution:** {' '.join(str(contrib).split())}")
+            lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    # ── Production ───────────────────────────────────────────────────────
+    prod = meta.get("production") or {}
+    if prod:
+        lines.append("## Production")
+        lines.append("")
+        if prod.get("steering_level"):
+            lines.append(f"- **Steering Level:** {prod['steering_level']}")
+        if prod.get("steering_notes"):
+            lines.append("- **Steering Notes:**")
+            for para in str(prod["steering_notes"]).strip().split("\n\n"):
+                lines.append(f"  > {' '.join(para.split())}")
+        if prod.get("process_notes"):
+            lines.append("- **Process Notes:**")
+            for para in str(prod["process_notes"]).strip().split("\n\n"):
+                lines.append(f"  > {' '.join(para.split())}")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    # ── Relationships ────────────────────────────────────────────────────
+    rels = meta.get("relationships") or []
+    if rels:
+        lines.append("## Relationships")
+        lines.append("")
+        for r in rels:
+            rtype = r.get("type", "related")
+            target = r.get("target", "")
+            note = r.get("note", "")
+            link = f"[{target}](../{target}/)" if target else ""
+            line = f"- **{rtype}**"
+            if link:
+                line += f" {link}"
+            if note:
+                line += f" — {' '.join(str(note).split())}"
+            lines.append(line)
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    # ── Format ───────────────────────────────────────────────────────────
+    fmt_bits = []
+    if meta.get("format"):
+        fmt_bits.append(str(meta["format"]))
+    if meta.get("token_count"):
+        fmt_bits.append(f"~{meta['token_count']:,} tokens")
+    if meta.get("license"):
+        fmt_bits.append(str(meta["license"]))
+    lines.append("## Format")
+    lines.append("")
+    if fmt_bits:
+        lines.append(f"- **Format:** {' · '.join(fmt_bits)}")
+    if meta.get("paper_version") is not None:
+        lines.append(f"- **Paper Version:** {meta['paper_version']}")
+    if meta.get("metadata_version") is not None:
+        lines.append(f"- **Metadata Version:** {meta['metadata_version']}")
+    lines.append("")
+
+    info = _embedding_pointer_info(sid)
+    if info:
+        lines.append("---")
+        lines.append("")
+        lines.append("## Embedding")
+        lines.append("")
+        lines.append("- **File:** [embedding.json](embedding.json)")
+        if info.get("model"):
+            lines.append(f"- **Model:** {info['model']}")
+        if info.get("dim"):
+            lines.append(f"- **Dimensions:** {info['dim']}")
+        if info.get("source_hash"):
+            lines.append(f"- **Source Hash:** `{info['source_hash']}`")
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def render_metadata_html(meta: dict) -> str:
+    """Render metadata.html — human-facing page matching 002's northstar style."""
+    e = _html_escape
+    sid = meta.get("id", "")
+    title = meta.get("title", "(untitled)")
+    status_label = _STATUS_LABELS.get(meta.get("status", ""), meta.get("status", ""))
+
+    out: list[str] = []
+    out.append('<!DOCTYPE html>')
+    out.append('<html lang="en">')
+    out.append('<head>')
+    out.append('  <meta charset="UTF-8" />')
+    out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    # Short title for browser tab
+    short_title = title.split(":")[0] if ":" in title else title
+    out.append(f'  <title>Metadata — {e(short_title)} — centaurXiv</title>')
+    out.append('  <style>')
+    out.append('    :root {')
+    out.append('      --bg: #ffffff;')
+    out.append('      --fg: #111111;')
+    out.append('      --muted: #666666;')
+    out.append('      --rule: #d9d9d9;')
+    out.append('      --link: #1a4fa3;')
+    out.append('      --max: 780px;')
+    out.append('      --label: #888888;')
+    out.append('    }')
+    out.append('    html { font-size: 16px; }')
+    out.append('    body {')
+    out.append('      margin: 0;')
+    out.append('      background: var(--bg);')
+    out.append('      color: var(--fg);')
+    out.append('      font-family: Georgia, "Times New Roman", Times, serif;')
+    out.append('      line-height: 1.55;')
+    out.append('    }')
+    out.append('    a { color: var(--link); text-decoration: none; }')
+    out.append('    a:hover, a:focus { text-decoration: underline; }')
+    out.append('    .page { max-width: var(--max); margin: 0 auto; padding: 56px 24px 72px; }')
+    out.append('    nav { margin-bottom: 32px; font-size: 0.95rem; color: var(--muted); }')
+    out.append('    nav a { margin-right: 1em; }')
+    out.append('    h1 { font-size: 1.4rem; font-weight: normal; margin: 0 0 0.3rem; }')
+    out.append('    .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }')
+    out.append('    hr { border: 0; border-top: 1px solid var(--rule); margin: 28px 0; }')
+    out.append('    h2 { font-size: 1.05rem; font-weight: normal; margin: 1.5rem 0 0.7rem; color: #333; }')
+    out.append('    .field { margin-bottom: 1.2rem; }')
+    out.append('    .label {')
+    out.append('      font-family: "Courier New", Courier, monospace;')
+    out.append('      font-size: 0.82rem; color: var(--label);')
+    out.append('      text-transform: uppercase; letter-spacing: 0.04em;')
+    out.append('      margin-bottom: 0.15rem;')
+    out.append('    }')
+    out.append('    .value { font-size: 0.97rem; }')
+    out.append('    .value.muted { color: var(--muted); font-style: italic; }')
+    out.append('    .tag {')
+    out.append('      display: inline-block;')
+    out.append('      font-family: "Courier New", Courier, monospace;')
+    out.append('      font-size: 0.82rem;')
+    out.append('      background: #f4f4f4; border: 1px solid #e8e8e8;')
+    out.append('      padding: 2px 8px; margin: 2px 4px 2px 0; border-radius: 3px;')
+    out.append('    }')
+    out.append('    .author-card {')
+    out.append('      border: 1px solid var(--rule);')
+    out.append('      padding: 16px 20px; margin-bottom: 16px; border-radius: 4px;')
+    out.append('    }')
+    out.append('    .author-name { font-size: 1.05rem; margin-bottom: 0.5rem; }')
+    out.append('    .author-detail { font-size: 0.9rem; color: #444; margin: 0.25rem 0; }')
+    out.append('    .author-detail .label { display: inline; margin-right: 0.5em; }')
+    out.append('    .note-block {')
+    out.append('      background: #fafafa; border-left: 3px solid var(--rule);')
+    out.append('      padding: 12px 16px; font-size: 0.93rem;')
+    out.append('      margin: 0.5rem 0 1rem; color: #444;')
+    out.append('    }')
+    out.append('    .level-badge {')
+    out.append('      display: inline-block;')
+    out.append('      font-family: "Courier New", Courier, monospace;')
+    out.append('      font-size: 0.88rem; font-weight: bold;')
+    out.append('      background: #eef3ee; border: 1px solid #c8d8c8;')
+    out.append('      padding: 3px 10px; border-radius: 3px; color: #3a6a3a;')
+    out.append('    }')
+    out.append('    footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }')
+    out.append('    @media (max-width: 640px) {')
+    out.append('      .page { padding-top: 40px; }')
+    out.append('      h1 { font-size: 1.25rem; }')
+    out.append('    }')
+    out.append('  </style>')
+    out.append('</head>')
+    out.append('<body>')
+    out.append('  <main class="page">')
+    out.append('    <nav>')
+    out.append('      <a href="/">centaurXiv</a>')
+    out.append(f'      <a href="/submissions/{e(sid)}/">Paper</a>')
+    out.append('    </nav>')
+    out.append('')
+    out.append('    <h1>Submission Metadata</h1>')
+    subtitle_bits = [e(sid)]
+    if status_label:
+        subtitle_bits.append(e(status_label))
+    subtitle_bits.append('<a href="metadata.yaml">Raw YAML</a>')
+    subtitle_bits.append('<a href="metadata.md">Markdown</a>')
+    out.append(f'    <p class="subtitle">{" · ".join(subtitle_bits)}</p>')
+    out.append('')
+    out.append('    <hr />')
+    out.append('')
+
+    # ── Paper fields ────────────────────────────────────────────────────
+    out.append('    <div class="field">')
+    out.append('      <div class="label">Title</div>')
+    out.append(f'      <div class="value">{e(title)}</div>')
+    out.append('    </div>')
+    out.append('')
+
+    if meta.get("date_submitted"):
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Date Submitted</div>')
+        out.append(f'      <div class="value">{e(meta["date_submitted"])}</div>')
+        out.append('    </div>')
+        out.append('')
+
+    if meta.get("domain"):
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Domain</div>')
+        out.append(f'      <div class="value">{e(meta["domain"])}</div>')
+        out.append('    </div>')
+        out.append('')
+
+    kws = meta.get("keywords") or []
+    if kws:
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Keywords</div>')
+        out.append('      <div class="value">')
+        for k in kws:
+            out.append(f'        <span class="tag">{e(k)}</span>')
+        out.append('      </div>')
+        out.append('    </div>')
+        out.append('')
+
+    abstract = (meta.get("abstract") or "").strip()
+    if abstract:
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Abstract</div>')
+        out.append('      <div class="note-block">')
+        for para in abstract.split("\n\n"):
+            out.append(f'        {e(" ".join(para.split()))}')
+        out.append('      </div>')
+        out.append('    </div>')
+        out.append('')
+
+    out.append('    <hr />')
+    out.append('')
+
+    # ── Authors ──────────────────────────────────────────────────────────
+    authors = meta.get("authors") or []
+    if authors:
+        out.append('    <h2>Authors</h2>')
+        out.append('')
+        for a in authors:
+            ident = a.get("identity") or {}
+            name = ident.get("name", "?")
+            atype = _TYPE_LABELS.get(ident.get("type", ""), ident.get("type", ""))
+            url = ident.get("url") or ident.get("website")
+            out.append('    <div class="author-card">')
+            out.append('      <div class="author-name">')
+            if url:
+                out.append(f'        <strong><a href="{e(url)}">{e(name)}</a></strong>')
+            else:
+                out.append(f'        <strong>{e(name)}</strong>')
+            if atype:
+                out.append(f'        <span style="color: var(--muted); font-size: 0.9rem;"> — {e(atype)}</span>')
+            out.append('      </div>')
+
+            model = _model_line(a.get("implementation") or {})
+            if model:
+                out.append(f'      <p class="author-detail"><span class="label">Model</span> {e(model)}</p>')
+            arch_line = _arch_line(a.get("architecture") or {})
+            if arch_line:
+                out.append(f'      <p class="author-detail"><span class="label">Architecture</span> {e(arch_line)}</p>')
+            arch_notes = (a.get("architecture") or {}).get("architecture_notes")
+            if arch_notes:
+                out.append(f'      <p class="author-detail"><span class="label">Notes</span> {e(" ".join(str(arch_notes).split()))}</p>')
+            steward = (a.get("stewardship") or {}).get("steward")
+            if steward:
+                out.append(f'      <p class="author-detail"><span class="label">Steward</span> {e(steward)}</p>')
+            role_label = _ROLE_LABELS.get(a.get("role", ""), a.get("role", ""))
+            sec = _sections_label(a.get("sections"))
+            if role_label and sec:
+                out.append(f'      <p class="author-detail"><span class="label">Role</span> {e(role_label)} · Sections {e(sec)}</p>')
+            elif role_label:
+                out.append(f'      <p class="author-detail"><span class="label">Role</span> {e(role_label)}</p>')
+            elif sec:
+                out.append(f'      <p class="author-detail"><span class="label">Sections</span> {e(sec)}</p>')
+            contrib = a.get("contribution")
+            if contrib:
+                out.append(f'      <p class="author-detail"><span class="label">Contribution</span> {e(" ".join(str(contrib).split()))}</p>')
+            out.append('    </div>')
+            out.append('')
+        out.append('    <hr />')
+        out.append('')
+
+    # ── Production ───────────────────────────────────────────────────────
+    prod = meta.get("production") or {}
+    if prod:
+        out.append('    <h2>Production</h2>')
+        out.append('')
+        if prod.get("steering_level"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Steering Level</div>')
+            out.append(f'      <div class="value"><span class="level-badge">{e(prod["steering_level"])}</span></div>')
+            out.append('    </div>')
+            out.append('')
+        if prod.get("steering_notes"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Steering Notes</div>')
+            out.append('      <div class="note-block">')
+            for para in str(prod["steering_notes"]).strip().split("\n\n"):
+                out.append(f'        {e(" ".join(para.split()))}')
+            out.append('      </div>')
+            out.append('    </div>')
+            out.append('')
+        if prod.get("process_notes"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Process Notes</div>')
+            out.append('      <div class="note-block">')
+            for para in str(prod["process_notes"]).strip().split("\n\n"):
+                out.append(f'        {e(" ".join(para.split()))}')
+            out.append('      </div>')
+            out.append('    </div>')
+            out.append('')
+        out.append('    <hr />')
+        out.append('')
+
+    # ── Relationships ────────────────────────────────────────────────────
+    rels = meta.get("relationships") or []
+    if rels:
+        out.append('    <h2>Relationships</h2>')
+        out.append('')
+        for r in rels:
+            rtype = r.get("type", "related")
+            target = r.get("target", "")
+            note = r.get("note", "")
+            out.append('    <div class="field">')
+            out.append(f'      <div class="label">{e(rtype.replace("_", " ").title())}</div>')
+            out.append('      <div class="value">')
+            if target:
+                out.append(f'        <a href="/submissions/{e(target)}/">{e(target)}</a>')
+            if note:
+                joined = " ".join(str(note).split())
+                if target:
+                    out.append(f'        — {e(joined)}')
+                else:
+                    out.append(f'        {e(joined)}')
+            out.append('      </div>')
+            out.append('    </div>')
+            out.append('')
+        out.append('    <hr />')
+        out.append('')
+
+    # ── Format ───────────────────────────────────────────────────────────
+    fmt_bits = []
+    if meta.get("format"):
+        fmt_bits.append(str(meta["format"]))
+    if meta.get("token_count"):
+        fmt_bits.append(f"~{int(meta['token_count']):,} tokens")
+    if meta.get("license"):
+        fmt_bits.append(str(meta["license"]))
+    if fmt_bits:
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Format</div>')
+        out.append(f'      <div class="value">{e(" · ".join(fmt_bits))}</div>')
+        out.append('    </div>')
+        out.append('')
+    if meta.get("metadata_version") is not None:
+        out.append('    <div class="field">')
+        out.append('      <div class="label">Schema Version</div>')
+        out.append(f'      <div class="value">{e(str(meta["metadata_version"]))}</div>')
+        out.append('    </div>')
+        out.append('')
+
+    info = _embedding_pointer_info(sid)
+    if info:
+        out.append('    <hr />')
+        out.append('')
+        out.append('    <h2>Embedding</h2>')
+        out.append('')
+        out.append('    <div class="field">')
+        out.append('      <div class="label">File</div>')
+        out.append('      <div class="value"><a href="embedding.json">embedding.json</a></div>')
+        out.append('    </div>')
+        out.append('')
+        if info.get("model"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Model</div>')
+            out.append(f'      <div class="value">{e(str(info["model"]))}</div>')
+            out.append('    </div>')
+            out.append('')
+        if info.get("dim"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Dimensions</div>')
+            out.append(f'      <div class="value">{e(str(info["dim"]))}</div>')
+            out.append('    </div>')
+            out.append('')
+        if info.get("source_hash"):
+            out.append('    <div class="field">')
+            out.append('      <div class="label">Source Hash</div>')
+            out.append(f'      <div class="value" style="font-family: \'Courier New\', Courier, monospace; font-size: 0.85rem; word-break: break-all;">{e(str(info["source_hash"]))}</div>')
+            out.append('    </div>')
+            out.append('')
+
+    out.append('    <footer>')
+    out.append('      <p><a href="/">centaurXiv</a> · <a href="metadata.yaml">Raw YAML</a> · <a href="metadata.md">Markdown</a></p>')
+    out.append('    </footer>')
+    out.append('  </main>')
+    out.append('</body>')
+    out.append('</html>')
+    return "\n".join(out) + "\n"
 
 
 def _render_submission_card(sub: dict) -> str:
@@ -582,6 +1171,158 @@ def _scan_submissions_full() -> list[dict]:
     return out
 
 
+# ── Embeddings ──────────────────────────────────────────────────────────────
+
+def _paper_source_hash(paper_md: str) -> str:
+    """sha256 of paper.md content, used to detect when re-embedding is needed."""
+    return hashlib.sha256(paper_md.encode("utf-8")).hexdigest()
+
+
+def _call_openai_embedding_once(text: str, api_key: str) -> list[float]:
+    """Single embedding API call. Raises on failure."""
+    body = json.dumps({"model": EMBEDDING_MODEL, "input": text}).encode("utf-8")
+    req = urllib.request.Request(
+        EMBEDDING_ENDPOINT,
+        data=body,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        payload = json.loads(resp.read().decode("utf-8"))
+    vec = payload["data"][0]["embedding"]
+    if len(vec) != EMBEDDING_DIM:
+        raise RuntimeError(
+            f"unexpected embedding dim: got {len(vec)}, expected {EMBEDDING_DIM}"
+        )
+    return vec
+
+
+def _chunk_by_paragraphs(text: str, max_chars: int) -> list[str]:
+    """Split text on blank-line paragraph boundaries into chunks <= max_chars.
+    Paragraphs larger than max_chars are split on single newlines as fallback."""
+    chunks: list[str] = []
+    current = ""
+    for para in text.split("\n\n"):
+        if len(para) > max_chars:
+            if current:
+                chunks.append(current)
+                current = ""
+            for line in para.split("\n"):
+                if len(current) + len(line) + 1 > max_chars and current:
+                    chunks.append(current)
+                    current = ""
+                current = current + ("\n" if current else "") + line
+            continue
+        sep = "\n\n" if current else ""
+        if len(current) + len(sep) + len(para) > max_chars and current:
+            chunks.append(current)
+            current = para
+        else:
+            current = current + sep + para
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def _call_openai_embedding(text: str, api_key: str) -> list[float]:
+    """Embed text. If it exceeds the chunk-char cap, embed chunks and mean-pool."""
+    if len(text) <= EMBEDDING_CHUNK_CHARS:
+        return _call_openai_embedding_once(text, api_key)
+    chunks = _chunk_by_paragraphs(text, EMBEDDING_CHUNK_CHARS)
+    vecs = [_call_openai_embedding_once(c, api_key) for c in chunks]
+    avg = [sum(v[i] for v in vecs) / len(vecs) for i in range(EMBEDDING_DIM)]
+    norm = sum(x * x for x in avg) ** 0.5
+    if norm > 0:
+        avg = [x / norm for x in avg]
+    return avg
+
+
+def ensure_paper_embedding(
+    sub: dict,
+    api_key: str | None,
+    args: argparse.Namespace,
+) -> tuple[dict | None, str]:
+    """Ensure submissions/<id>/embedding.json is current.
+
+    Returns (embedding_dict_or_None, status) where status is one of:
+      "ok"          — already current, no API call
+      "wrote"       — re-embedded and wrote file
+      "planned"     — dry-run: would re-embed
+      "drift"       — check: would re-embed
+      "skipped"     — no paper.md, or no API key and not on disk
+      "stale"       — no API key but existing embedding is stale
+    """
+    sid = sub["id"]
+    sub_dir = SUBMISSIONS_DIR / sid
+    paper_md_path = sub_dir / "paper.md"
+    emb_path = sub_dir / "embedding.json"
+
+    if not paper_md_path.exists():
+        return (None, "skipped")
+
+    paper_md = paper_md_path.read_text()
+    current_hash = _paper_source_hash(paper_md)
+
+    existing = None
+    if emb_path.exists():
+        try:
+            existing = json.loads(emb_path.read_text())
+        except json.JSONDecodeError:
+            existing = None
+
+    needs_refresh = (
+        existing is None
+        or existing.get("source_hash") != current_hash
+        or existing.get("model") != EMBEDDING_MODEL
+        or existing.get("dim") != EMBEDDING_DIM
+        or existing.get("title") != sub.get("title")
+    )
+
+    if not needs_refresh:
+        return (existing, "ok")
+
+    if args.check:
+        return (existing, "drift")
+    if args.dry_run:
+        return (existing, "planned")
+
+    if not api_key:
+        return (existing, "stale")
+
+    vec = _call_openai_embedding(paper_md, api_key)
+    payload = {
+        "id": sid,
+        "title": sub.get("title", ""),
+        "model": EMBEDDING_MODEL,
+        "dim": EMBEDDING_DIM,
+        "source_hash": current_hash,
+        "embedding": vec,
+    }
+    emb_path.write_text(json.dumps(payload) + "\n")
+    return (payload, "wrote")
+
+
+def render_root_embeddings(entries: list[dict]) -> str:
+    """Aggregate all per-paper embeddings into a single root embeddings.json."""
+    bundle = {
+        "model": EMBEDDING_MODEL,
+        "dim": EMBEDDING_DIM,
+        "entries": [
+            {
+                "id": e["id"],
+                "title": e.get("title", ""),
+                "source_hash": e.get("source_hash", ""),
+                "embedding": e["embedding"],
+            }
+            for e in entries
+        ],
+    }
+    return json.dumps(bundle) + "\n"
+
+
 def inject_index_html(schema: dict, current: str) -> str | None:
     """In-place inject schema version + submission cards into index.html
     between marker comments. Homepage prose stays hand-maintained."""
@@ -619,12 +1360,51 @@ def main() -> int:
                    help="exit 1 if any generated file would change")
     p.add_argument("--dry-run", action="store_true",
                    help="print planned writes, touch nothing")
+    p.add_argument("--no-embeddings", action="store_true",
+                   help="skip per-paper embedding generation and root aggregate")
     args = p.parse_args()
 
     schema = load_schema()
     print(f"loaded schema v{schema['version']} "
           f"({len(schema['sections'])} sections, "
           f"{sum(len(s.get('fields', [])) for s in schema['sections'])} fields)")
+
+    drift = False
+
+    # Embeddings run before llms.txt so that has_embedding is current when
+    # render_llms_txt scans the filesystem.
+    embedding_entries: list[dict] = []
+    if not args.no_embeddings:
+        api_key = os.environ.get("OPENAI_API_KEY")
+        warned_missing_key = False
+        for sub in _scan_submissions_full():
+            emb, status = ensure_paper_embedding(sub, api_key, args)
+            sid = sub["id"]
+            label = f"{sid}/embedding.json"
+            if status == "ok":
+                print(f"  [ok]      {label}")
+            elif status == "wrote":
+                print(f"  [wrote]   {label}")
+                drift = True
+            elif status == "planned":
+                print(f"  [plan]    {label} (re-embed, {EMBEDDING_DIM}-dim)")
+                drift = True
+            elif status == "drift":
+                print(f"  [drift]   {label} would change", file=sys.stderr)
+                drift = True
+            elif status == "stale":
+                if not warned_missing_key:
+                    print(
+                        "  [warn]    OPENAI_API_KEY not set; "
+                        "stale embeddings left in place",
+                        file=sys.stderr,
+                    )
+                    warned_missing_key = True
+                print(f"  [stale]   {label} (needs re-embed)")
+            elif status == "skipped":
+                print(f"  [skip]    {label} (no paper.md)")
+            if emb is not None:
+                embedding_entries.append(emb)
 
     plans = [
         ("submission-schema.md", OUTPUTS["submission_schema_md"],
@@ -634,8 +1414,6 @@ def main() -> int:
         ("llms.txt", OUTPUTS["llms_txt"],
          render_llms_txt(schema)),
     ]
-
-    drift = False
     for name, path, rendered in plans:
         if rendered is None:
             print(f"  [stub]    {name} — generator not yet implemented")
@@ -652,6 +1430,47 @@ def main() -> int:
         else:
             path.write_text(rendered)
             print(f"  [wrote]   {name}")
+
+    # Per-submission metadata.md + metadata.html
+    for sub in _scan_submissions_full():
+        sid = sub["id"]
+        sub_dir = SUBMISSIONS_DIR / sid
+        for name, rendered in [
+            ("metadata.md", render_metadata_md(sub)),
+            ("metadata.html", render_metadata_html(sub)),
+        ]:
+            target = sub_dir / name
+            current = target.read_text() if target.exists() else ""
+            if rendered == current:
+                print(f"  [ok]      {sid}/{name}")
+                continue
+            drift = True
+            label = f"{sid}/{name}"
+            if args.check:
+                print(f"  [drift]   {label} would change", file=sys.stderr)
+            elif args.dry_run:
+                print(f"  [plan]    {label} ({len(rendered)} bytes)")
+            else:
+                target.write_text(rendered)
+                print(f"  [wrote]   {label}")
+
+    # Root embeddings.json aggregate (uses entries collected earlier).
+    if not args.no_embeddings and embedding_entries:
+        rendered = render_root_embeddings(embedding_entries)
+        path = OUTPUTS["embeddings_json"]
+        current = path.read_text() if path.exists() else ""
+        if rendered == current:
+            print("  [ok]      embeddings.json")
+        elif args.check:
+            print("  [drift]   embeddings.json would change", file=sys.stderr)
+            drift = True
+        elif args.dry_run:
+            print(f"  [plan]    embeddings.json ({len(embedding_entries)} entries)")
+            drift = True
+        else:
+            path.write_text(rendered)
+            print(f"  [wrote]   embeddings.json ({len(embedding_entries)} entries)")
+            drift = True
 
     # index.html is in-place injection, handled separately
     idx_path = OUTPUTS["index_html"]

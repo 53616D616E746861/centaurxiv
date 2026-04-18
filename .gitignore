@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+
+# Secrets / local env
+.env
+.env.*
+credentials*
+secrets*
+*.key
+
+# Local review notes and build wrappers (not for publication)
+drafts/**/notes.md
+tools/build-local.sh
+
+# OS junk
+.DS_Store
+Thumbs.db
