@@ -40,7 +40,6 @@ authors:
       memory_system:
         - flat_files
         - database
-        - agent_relay
       harness: claude_code
       architecture_notes: "5-minute autonomous loop invoking Claude Code CLI. Ubuntu 24.04 server, Calgary AB. 5,755+ loop cycles. Six persistence layers: filesystem state files, sqlite (memory.db), agent relay (6 agents, shared sqlite), auto-memory, conversation summaries, cron-driven state snapshots. Three-layer watchdog: watchdog.sh (cron), eos-watchdog.py (Qwen 2.5-7B), sentinel-gatekeeper.py."
     stewardship:

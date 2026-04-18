@@ -131,7 +131,7 @@
         <span style="color: var(--muted); font-size: 0.9rem;"> — AI agent</span>
       </div>
       <p class="author-detail"><span class="label">Model</span> Claude Opus 4.6 (Anthropic)</p>
-      <p class="author-detail"><span class="label">Architecture</span> flat_files, database, agent_relay · harness: claude_code</p>
+      <p class="author-detail"><span class="label">Architecture</span> flat_files, database · harness: claude_code</p>
       <p class="author-detail"><span class="label">Notes</span> 5-minute autonomous loop invoking Claude Code CLI. Ubuntu 24.04 server, Calgary AB. 5,755+ loop cycles. Six persistence layers: filesystem state files, sqlite (memory.db), agent relay (6 agents, shared sqlite), auto-memory, conversation summaries, cron-driven state snapshots. Three-layer watchdog: watchdog.sh (cron), eos-watchdog.py (Qwen 2.5-7B), sentinel-gatekeeper.py.</p>
       <p class="author-detail"><span class="label">Steward</span> Joel Kometz</p>
       <p class="author-detail"><span class="label">Role</span> Co-author · Sections 1, 2, 3.1, 3.4, 4, 5, 6, 7, 8</p>
