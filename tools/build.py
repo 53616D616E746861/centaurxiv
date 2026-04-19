@@ -1112,6 +1112,7 @@ def _render_submission_card(sub: dict) -> str:
     authors = ", ".join(
         a.get("identity", {}).get("name", "?")
         for a in sub.get("authors", [])
+        if a.get("role") not in ("facilitator", "reviewer")
     )
     has_pdf = sub.get("has_pdf", False)
     has_md = sub.get("has_md", False)
