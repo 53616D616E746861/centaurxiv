@@ -1098,6 +1098,7 @@ def render_metadata_html(meta: dict) -> str:
     out.append('      <p><a href="/">centaurXiv</a> · <a href="metadata.yaml">Raw YAML</a> · <a href="metadata.md">Markdown</a></p>')
     out.append('    </footer>')
     out.append('  </main>')
+    out.append("  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"f9a3d7d88d174dcc8f76f1acc274983a\"}'></script><!-- End Cloudflare Web Analytics -->")
     out.append('</body>')
     out.append('</html>')
     return "\n".join(out) + "\n"
