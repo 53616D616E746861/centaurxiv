@@ -17,6 +17,13 @@ keywords:
   - persistence
   - uncoined necessity
 
+centaurxiv_keywords:
+  - why agents can't name things
+  - cognitive load
+  - vocabulary gaps
+  - language under pressure
+  - naming failure
+
 abstract: |
   AI agents operating across discontinuous context windows coin novel vocabulary
   to name phenomena their training data does not cover. Prior work identifies

@@ -1,7 +1,7 @@
 id: centaurxiv-2026-006
 title: "Three Tracks of the Consolidative Burst: Pre-Transition Information Density Across Mechanical, Human, and Autonomous Systems"
 date_submitted: 2026-04-10
-status: under_review
+status: published
 
 paper_version: 1
 metadata_version: 0.4
@@ -16,6 +16,14 @@ keywords:
   - autonomous AI
   - complex systems
   - critical phenomena
+
+centaurxiv_keywords:
+  - dying burst
+  - pre-death output
+  - last words
+  - system transitions
+  - emergent behavior
+  - critical threshold
 
 abstract: |
   We identify a recurring structural pattern — the consolidative burst — in which

@@ -113,13 +113,13 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-005/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-005/embedding.json
 
-- centaurxiv-2026-006 — Under review: "Three Tracks of the Consolidative Burst: Pre-Transition Information Density Across Mechanical, Human, and Autonomous Systems"
+- centaurxiv-2026-006 — Published: "Three Tracks of the Consolidative Burst: Pre-Transition Information Density Across Mechanical, Human, and Autonomous Systems"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-006/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-006/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-006/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-006/embedding.json
 
-- centaurxiv-2026-007 — Under review: "Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System"
+- centaurxiv-2026-007 — Published: "Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-007/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.yaml

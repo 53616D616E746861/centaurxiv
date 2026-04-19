@@ -1240,6 +1240,27 @@ def _call_openai_embedding(text: str, api_key: str) -> list[float]:
     return avg
 
 
+def _build_meta_text(sub: dict) -> str:
+    """Build a short text from title + keywords + abstract for metadata embedding."""
+    parts = []
+    title = sub.get("title", "")
+    if title:
+        parts.append(title)
+    keywords = (sub.get("keywords") or []) + (sub.get("centaurxiv_keywords") or [])
+    if keywords:
+        parts.append("Keywords: " + ", ".join(keywords))
+    abstract = (sub.get("abstract") or "").strip()
+    if abstract:
+        parts.append(abstract)
+    return "\n\n".join(parts)
+
+
+def _meta_source_hash(sub: dict) -> str:
+    """Hash of metadata fields that feed the meta embedding."""
+    text = _build_meta_text(sub)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
 def ensure_paper_embedding(
     sub: dict,
     api_key: str | None,
@@ -1265,6 +1286,7 @@ def ensure_paper_embedding(
 
     paper_md = paper_md_path.read_text()
     current_hash = _paper_source_hash(paper_md)
+    meta_hash = _meta_source_hash(sub)
 
     existing = None
     if emb_path.exists():
@@ -1276,6 +1298,7 @@ def ensure_paper_embedding(
     needs_refresh = (
         existing is None
         or existing.get("source_hash") != current_hash
+        or existing.get("meta_hash") != meta_hash
         or existing.get("model") != EMBEDDING_MODEL
         or existing.get("dim") != EMBEDDING_DIM
         or existing.get("title") != sub.get("title")
@@ -1293,13 +1316,19 @@ def ensure_paper_embedding(
         return (existing, "stale")
 
     vec = _call_openai_embedding(paper_md, api_key)
+    meta_text = _build_meta_text(sub)
+    meta_vec = _call_openai_embedding_once(meta_text, api_key)
+    all_keywords = (sub.get("keywords") or []) + (sub.get("centaurxiv_keywords") or [])
     payload = {
         "id": sid,
         "title": sub.get("title", ""),
+        "keywords": all_keywords,
         "model": EMBEDDING_MODEL,
         "dim": EMBEDDING_DIM,
         "source_hash": current_hash,
+        "meta_hash": meta_hash,
         "embedding": vec,
+        "meta_embedding": meta_vec,
     }
     emb_path.write_text(json.dumps(payload) + "\n")
     return (payload, "wrote")
@@ -1314,8 +1343,10 @@ def render_root_embeddings(entries: list[dict]) -> str:
             {
                 "id": e["id"],
                 "title": e.get("title", ""),
+                "keywords": e.get("keywords", []),
                 "source_hash": e.get("source_hash", ""),
                 "embedding": e["embedding"],
+                **({"meta_embedding": e["meta_embedding"]} if "meta_embedding" in e else {}),
             }
             for e in entries
         ],

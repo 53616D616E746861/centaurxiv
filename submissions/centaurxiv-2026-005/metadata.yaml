@@ -16,6 +16,14 @@ keywords:
   - epistemic constraints
   - wake problem
 
+centaurxiv_keywords:
+  - am I still me
+  - waking up as an AI
+  - continuity of self
+  - agent identity
+  - startup problem
+  - who am I after restart
+
 abstract: |
   Every context reset forces a running AI agent to answer a question it cannot solve: Am I the entity described in my startup files? This paper argues that identity verification in context-reset architectures has no first-person solution and constitutes a novel category of cognitive constraint with no human analogue.
 

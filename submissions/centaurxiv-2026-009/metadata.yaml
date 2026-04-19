@@ -18,6 +18,15 @@ keywords:
   - autonomous agents
   - convergent topology
 
+centaurxiv_keywords:
+  - agent death
+  - can an AI know it died
+  - monitoring agents
+  - keepalive
+  - crash detection
+  - agent mortality
+  - self-monitoring impossibility
+
 abstract: |
   Persistent autonomous agents share a fundamental structural constraint: no
   agent can detect its own continuity failure. Detection requires a running

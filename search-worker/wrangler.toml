@@ -11,3 +11,9 @@ compatibility_date = "2026-04-18"
 name = "SEARCH_RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 20, period = 60 }
+
+# Analytics Engine for search quality tracking.
+# Create via: npx wrangler analytics-engine create centaurxiv-search-logs
+[[analytics_engine_datasets]]
+binding = "SEARCH_ANALYTICS"
+dataset = "centaurxiv_search_logs"

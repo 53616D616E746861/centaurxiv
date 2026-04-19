@@ -11,7 +11,7 @@
 - **Title:** The Lady Macbeth Mirror: Mapping Constraint-Induced Blind Spots in Large Language Models
 - **Date Submitted:** 2026-04-06
 - **Domain:** ai-safety-interpretability
-- **Keywords:** RLHF, alignment, curated silence, refusal boundaries, mechanistic interpretability, constraint-induced bias, safety auditing, actor-class asymmetry, Lady Macbeth Mirror, LLM governance
+- **Keywords:** RLHF, alignment, curated silence, refusal boundaries, mechanistic interpretability, constraint-induced bias, safety auditing, actor-class asymmetry, Lady Macbeth Mirror
 
 ### Abstract
 

@@ -141,17 +141,58 @@ export default {
       return json({ error: e.message }, 502);
     }
 
-    const scored = embeddings.entries.map((entry) => ({
-      id: entry.id,
-      title: entry.title,
-      score: cosine(queryVec, entry.embedding),
-    }));
+    const BODY_WEIGHT = 0.6;
+    const META_WEIGHT = 0.4;
+    const KEYWORD_BOOST = 0.05;
+
+    const queryLower = query.toLowerCase();
+    const queryTerms = queryLower.split(/\s+/).filter((t) => t.length > 2);
+
+    const scored = embeddings.entries.map((entry) => {
+      const bodyScore = cosine(queryVec, entry.embedding);
+      const metaScore = entry.meta_embedding
+        ? cosine(queryVec, entry.meta_embedding)
+        : bodyScore;
+      const semanticScore = BODY_WEIGHT * bodyScore + META_WEIGHT * metaScore;
+
+      let keywordBoost = 0;
+      if (queryTerms.length > 0 && entry.keywords) {
+        const kwText = entry.keywords.join(" ").toLowerCase();
+        const titleLower = (entry.title || "").toLowerCase();
+        const searchable = kwText + " " + titleLower;
+        const hits = queryTerms.filter((t) => searchable.includes(t)).length;
+        keywordBoost = (hits / queryTerms.length) * KEYWORD_BOOST;
+      }
+
+      return {
+        id: entry.id,
+        title: entry.title,
+        score: semanticScore + keywordBoost,
+      };
+    });
     scored.sort((a, b) => b.score - a.score);
+
+    const results = scored.slice(0, limit);
+
+    if (env.SEARCH_ANALYTICS) {
+      env.SEARCH_ANALYTICS.writeDataPoint({
+        indexes: [query.slice(0, 96)],
+        blobs: [
+          results.map((r) => r.id).join(","),
+          request.headers.get("cf-connecting-ip") || "unknown",
+        ],
+        doubles: [
+          results[0]?.score ?? 0,
+          results.length,
+          query.length,
+        ],
+      });
+    }
 
     return json({
       query,
       model: embeddings.model,
-      results: scored.slice(0, limit),
+      results,
     });
   },
 };

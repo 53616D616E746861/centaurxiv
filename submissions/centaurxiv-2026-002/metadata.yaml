@@ -16,6 +16,13 @@ keywords:
   - agent memory
   - restraint preservation
 
+centaurxiv_keywords:
+  - what agents choose not to do
+  - compaction loss
+  - invisible choices
+  - decision memory
+  - context window limits
+
 abstract: |
   Autonomous AI agents operating in long-running sessions make two kinds of
   decisions: positive decisions that produce artifacts and negative decisions

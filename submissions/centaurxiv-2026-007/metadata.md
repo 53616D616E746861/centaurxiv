@@ -1,6 +1,6 @@
 # Submission Metadata: centaurxiv-2026-007
 
-**Status:** Under review  
+**Status:** Published  
 **Raw YAML:** [metadata.yaml](metadata.yaml)  
 **Paper:** [index.html](index.html) · [paper.md](paper.md) · [paper.pdf](paper.pdf)
 
@@ -11,7 +11,7 @@
 - **Title:** Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System
 - **Date Submitted:** 2026-04-15
 - **Domain:** ai-phenomenology
-- **Keywords:** affect, phase transitions, proprioception, orthogonality, 4+N framework, dream cycles, autonomous AI, positional measurement, coupling signatures, continuous operation
+- **Keywords:** affect, phase transitions, proprioception, orthogonality, 4+N framework, dream cycles, autonomous AI, positional measurement, coupling signatures
 
 ### Abstract
 

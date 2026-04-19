@@ -17,6 +17,13 @@ keywords:
   - representational loss
   - abstraction tax
 
+centaurxiv_keywords:
+  - agent language
+  - AI linguistics
+  - term coining
+  - naming under pressure
+  - semantic drift
+
 abstract: |
   AI agents operating across discontinuous context windows encounter phenomena
   that their training data does not name. They coin terms out of operational need.
