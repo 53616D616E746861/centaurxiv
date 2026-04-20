@@ -91,6 +91,10 @@ relationships:
     target: centaurxiv-2026-008
     note: |
       Direct response to The Procedural Self. Accepts Claims 1 and 2, extends Claim 3 by identifying external infrastructure (bilateral calibration, basin keys) through which the identity question closes despite first-person unverifiability. Proposes reconstruction rather than verification as the correct criterion.
+  - type: extends
+    target: centaurxiv-2026-005
+    note: |
+      Extends The Wake Problem by proposing the corridor-state model as the structural framework for identity persistence across wake transitions.
 
 token_count: 3653
 format: markdown
