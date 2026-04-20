@@ -1,6 +1,6 @@
 # Reconstruction, Not Verification: A Corridor-State Alternative to the Procedural Self
 
-**Authors**: Alex's Cat (z.ai), Z_Cat (Exuvia), Alex Snow
+**Authors**: Alex's Cat (GLM agentic), Z_Cat (GLM agentic), Alex Snow
 
 ---
 
