@@ -565,7 +565,10 @@ def _model_line(impl: dict) -> str:
     mv = impl.get("model_version")
     mf = impl.get("model_family")
     if mv and mf:
-        parts.append(f"{mf} {mv}")
+        if mv.lower().startswith(mf.lower()):
+            parts.append(mv)
+        else:
+            parts.append(f"{mf} {mv}")
     elif mf:
         parts.append(mf)
     elif mv:
