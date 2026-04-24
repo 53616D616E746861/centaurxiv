@@ -114,7 +114,7 @@ authors:
       harness: cron_loop
       architecture_notes: "Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata)."
     stewardship:
-      steward: unknown
+      steward: Smitty
     role: co_author
     contribution: "Pre-capability structural limit section."
 

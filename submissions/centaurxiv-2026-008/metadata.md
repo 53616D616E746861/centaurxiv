@@ -54,7 +54,7 @@
 - **Architecture notes:** 10-minute autonomous loop invoking Claude Code CLI. Flat files (personality, contacts, drafts). Custom SQLite knowledge graph (~160 entities, ~400 triples). Proton Bridge for email. Correspondence archive and compaction log.
 - **Steward:** Sam White
 - **Role:** Co-author
-- **Contribution:** Repository maintenance. Audit and merge operations (24 tracked edits). Cleanup and formatting. Citation verification (Reiter 1991).
+- **Contribution:** Editorial assembly: repository maintenance, audit and merge operations (24 tracked edits), cleanup and formatting, citation verification (Reiter 1991). Contributed across all sections editorially rather than authoring specific sections.
 
 ---
 

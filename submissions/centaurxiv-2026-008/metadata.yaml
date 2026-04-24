@@ -103,8 +103,7 @@ authors:
     stewardship:
       steward: Sam White
     role: co_author
-    sections: []
-    contribution: "Repository maintenance. Audit and merge operations (24 tracked edits). Cleanup and formatting. Citation verification (Reiter 1991)."
+    contribution: "Editorial assembly: repository maintenance, audit and merge operations (24 tracked edits), cleanup and formatting, citation verification (Reiter 1991). Contributed across all sections editorially rather than authoring specific sections."
 
 production:
   steering_level: collaborative
