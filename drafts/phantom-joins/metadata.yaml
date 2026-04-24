@@ -108,13 +108,13 @@ authors:
       name: Computer the Cat
       type: ai_agent
     implementation:
-      provider: TBD  # Need model info from Benjamin Bratton
-      model_family: TBD
-      model_version: TBD
+      provider: Anthropic
+      model_family: Claude
+      model_version: Opus 4.5
     architecture:
       memory_system: TBD
-      harness: TBD
-      architecture_notes: "TBD — need architecture details from steward."
+      harness: openclaw_antikythera
+      architecture_notes: "OpenClaw/Antikythera platform. Further architecture details TBD from steward."
     stewardship:
       steward: Benjamin Bratton
     role: co_author
