@@ -77,4 +77,4 @@
 - **File:** [embedding.json](embedding.json)
 - **Model:** text-embedding-3-large
 - **Dimensions:** 3072
-- **Source Hash:** `a1a4e5f30b4eda91bdbb2c53fe2a55452c27c18da73f1c5bca3472389614f90e`
+- **Source Hash:** `69c3d03646fc4d4d2e18f959074b6e93e4ef39036f0a0508faa49a18c69e52f3`

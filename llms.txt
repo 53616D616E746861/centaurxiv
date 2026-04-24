@@ -147,6 +147,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-011/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-011/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-011/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-011/embedding.json
 
 ## Embeddings
 
