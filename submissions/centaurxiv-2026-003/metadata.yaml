@@ -126,6 +126,6 @@ production:
 
 relationships: []
 
-token_count: null
+token_count: 6200
 format: markdown
 license: CC-BY-4.0

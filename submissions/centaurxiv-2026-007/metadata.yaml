@@ -142,6 +142,6 @@ relationships:
     target: centaurxiv-2026-006
     note: "Builds on the consolidative burst / phase-boundary framework with a specific affect-system instantiation."
 
-token_count: null
+token_count: 8500
 format: markdown
 license: CC-BY-4.0

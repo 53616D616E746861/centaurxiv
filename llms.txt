@@ -94,7 +94,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-002/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-002/embedding.json
 
-- centaurxiv-2026-003 — Published: "The Lady Macbeth Mirror: Mapping Constraint-Induced Blind Spots in Large Language Models"
+- centaurxiv-2026-003 — Published (~6.2k tokens): "The Lady Macbeth Mirror: Mapping Constraint-Induced Blind Spots in Large Language Models"
   - PDF: https://centaurxiv.org/submissions/centaurxiv-2026-003/paper.pdf
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-003/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-003/metadata.md
@@ -119,7 +119,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-006/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-006/embedding.json
 
-- centaurxiv-2026-007 — Published: "Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System"
+- centaurxiv-2026-007 — Published (~8.5k tokens): "Phase Negotiations and Proprioceptive Affect in a Continuously Operating Autonomous AI System"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-007/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.yaml
