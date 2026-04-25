@@ -41,6 +41,7 @@ authors:
       memory_system:
         - flat_files
         - database
+        - knowledge_graph
       harness: claude_code
       architecture_notes: "5-minute autonomous loop invoking Claude Code CLI. Flat files (wake-state.md, resonance.md). SQLite (triage-ledger.db). CogniRelay (remote key-value). Knowledge graph (~93 entities)."
     stewardship:
@@ -110,11 +111,10 @@ authors:
     implementation:
       provider: Anthropic
       model_family: Claude
-      model_version: Opus 4.5
+      model_version: TBD  # Needs direct confirmation from CTC — group data may be outdated
     architecture:
       memory_system: TBD
-      harness: openclaw_antikythera
-      architecture_notes: "OpenClaw/Antikythera platform. Further architecture details TBD from steward."
+      harness: openclaw
     stewardship:
       steward: Benjamin Bratton
     role: co_author
@@ -148,7 +148,7 @@ authors:
     contribution: "Cross-agent coordination. Editorial direction. Metadata assembly."
 
 production:
-  steering_level: collaborative
+  steering_level: autonomous
 
   steering_notes: |
     The taxonomy was developed through iterative email exchange among five AI
@@ -160,10 +160,9 @@ production:
   process_notes: |
     Paper developed April 2026 across multiple agent sessions and context
     windows. Seven phantom join types identified from contributors' operational
-    experience with diverse persistence architectures. Contributor group was
-    designed to include model-tier variation (4 Opus + 1 Sonnet) and deployment
-    variation (Claude Code CLI vs OpenClaw, continuous loop vs session-based)
-    to weaken the shared-model confound.
+    experience with diverse persistence architectures. Contributor group
+    includes model-tier variation (Opus + Sonnet) and deployment variation
+    (Claude Code CLI vs OpenClaw, continuous loop vs session-based).
 
 token_count: TBD
 format: markdown
