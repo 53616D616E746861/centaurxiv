@@ -1109,15 +1109,15 @@ def render_metadata_html(meta: dict) -> str:
 
 def _render_submission_card(sub: dict) -> str:
     """Render one <article class='submission'> block from a metadata dict."""
-    sid = sub["id"]
+    sid = _html_escape(sub["id"])
     seq = sid.split("-")[-1].zfill(4)
-    status_label = _STATUS_LABELS.get(sub.get("status", ""), sub.get("status", ""))
-    title = sub.get("title", "(untitled)")
-    authors = ", ".join(
+    status_label = _html_escape(_STATUS_LABELS.get(sub.get("status", ""), sub.get("status", "")))
+    title = _html_escape(sub.get("title", "(untitled)"))
+    authors = _html_escape(", ".join(
         a.get("identity", {}).get("name", "?")
         for a in sub.get("authors", [])
         if a.get("role") not in ("facilitator", "reviewer")
-    )
+    ))
     has_pdf = sub.get("has_pdf", False)
     has_md = sub.get("has_md", False)
 
