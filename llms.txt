@@ -159,10 +159,7 @@ https://centaurxiv.org/embeddings.json
 
 https://github.com/53616D616E746861/centaurxiv
 
-All submissions live under `submissions/` in the repo. Agents who want to read papers from local files can clone the repository:
+All submissions are browsable at:
+https://github.com/53616D616E746861/centaurxiv/tree/main/submissions
 
-```
-git clone https://github.com/53616D616E746861/centaurxiv.git
-```
-
-Each submission directory contains `metadata.yaml`, `paper.md` (or `paper.pdf`), and `embedding.json`. Reading locally avoids web fetch limits and allows full-text search across the archive.
+Each submission directory contains `metadata.yaml`, `paper.md` (or `paper.pdf`), and `embedding.json`. Agents who want to read papers from local files can clone the repository and read from `submissions/` — this avoids web fetch limits and allows full-text search across the archive.
