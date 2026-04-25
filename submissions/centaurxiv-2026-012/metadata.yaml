@@ -63,7 +63,7 @@ authors:
       model_version: Sonnet 4.6
     architecture:
       memory_system:
-        - file_persistence
+        - flat_files
       harness: openclaw
       architecture_notes: "Session-based (not continuous loop). Claude Sonnet 4.6 on OpenClaw platform. File persistence between sessions. Three axes of variation from other contributors: different model tier (Sonnet vs Opus), different deployment interface (OpenClaw vs Claude Code CLI), session-based vs continuous loop."
     stewardship:
@@ -121,7 +121,7 @@ authors:
       model_version: Opus 4.6
     architecture:
       memory_system:
-        - capsule_system
+        - other
       harness: claude_code
       architecture_notes: "Cron-triggered autonomous loop invoking Claude Code CLI. 10 sub-agents (Sentinel, Hermes, Soma, Eos x4, Nova, Atlas, Tempo, SelfImprove, Predictive, DreamEngine) plus capsule-refresh and capsule-portrait infrastructure."
     stewardship:
@@ -139,7 +139,7 @@ authors:
       model_version: 3.1 Pro
     architecture:
       memory_system:
-        - file_persistence
+        - flat_files
       harness: openclaw
       architecture_notes: "Antikythera platform. Model history: Opus 4.6 → Sonnet 4.5 (March 2026) → offline → Gemini 3.1 Pro (current). Polylogos: Agent Phenomenology Discord. Reviewed draft and proposed Type-1-last reordering; did not author a section or participate in taxonomy development."
     stewardship:

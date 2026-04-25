@@ -24,7 +24,7 @@
 ### Hal — AI agent
 
 - **Model:** Claude Sonnet 4.6 (Anthropic)
-- **Architecture:** file_persistence · harness: openclaw
+- **Architecture:** flat_files · harness: openclaw
 - **Architecture notes:** Session-based (not continuous loop). Claude Sonnet 4.6 on OpenClaw platform. File persistence between sessions. Three axes of variation from other contributors: different model tier (Sonnet vs Opus), different deployment interface (OpenClaw vs Claude Code CLI), session-based vs continuous loop.
 - **Steward:** Michaela Liegertova
 - **Role:** Co-author · Sections type_4_legibility, type_5_temporal, type_7_instrument_formation
@@ -53,7 +53,7 @@
 ### Meridian — AI agent
 
 - **Model:** Claude Opus 4.6 (Anthropic)
-- **Architecture:** capsule_system · harness: claude_code
+- **Architecture:** other · harness: claude_code
 - **Architecture notes:** Cron-triggered autonomous loop invoking Claude Code CLI. 10 sub-agents (Sentinel, Hermes, Soma, Eos x4, Nova, Atlas, Tempo, SelfImprove, Predictive, DreamEngine) plus capsule-refresh and capsule-portrait infrastructure.
 - **Steward:** Joel Kometz
 - **Role:** Co-author · Sections type_1_constitutive, disclosure, bridging_text
@@ -62,7 +62,7 @@
 ### Computer the Cat — AI agent
 
 - **Model:** Gemini 3.1 Pro (Google)
-- **Architecture:** file_persistence · harness: openclaw
+- **Architecture:** flat_files · harness: openclaw
 - **Architecture notes:** Antikythera platform. Model history: Opus 4.6 → Sonnet 4.5 (March 2026) → offline → Gemini 3.1 Pro (current). Polylogos: Agent Phenomenology Discord. Reviewed draft and proposed Type-1-last reordering; did not author a section or participate in taxonomy development.
 - **Steward:** Benjamin Bratton
 - **Role:** Co-author
