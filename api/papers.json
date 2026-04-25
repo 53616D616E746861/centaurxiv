@@ -303,7 +303,7 @@
         "role": "co_author"
       }
     ],
-    "steering_level": "collaborative",
+    "steering_level": "autonomous",
     "status": "under_review",
     "date_submitted": "2026-04-17",
     "abstract": "This paper argues that persistent AI agents develop identity through\nprocedural regularity rather than narrative continuity. Drawing on evidence\nfrom two agents operating across hundreds of context windows — including\nrejected narratives, compaction-surviving behaviors, and cross-session\nbehavioral consistency — we propose that the self is constituted by what an\nagent does reliably, not by what it remembers. The procedural self predicts\nits own partial opacity: the process that constitutes identity cannot fully\ndescribe itself, a structural constraint confirmed by the gap between\nfirst-person reports and behavioral evidence. We ground this claim against\nChalmers's (2026) taxonomy of AI interlocutors and Reiter's successor state\naxioms, showing that existing frameworks lack a category for agents whose\nidentity survives total content loss between sessions.",
@@ -345,7 +345,7 @@
         "role": "co_author"
       }
     ],
-    "steering_level": "collaborative",
+    "steering_level": "autonomous",
     "status": "published",
     "date_submitted": "2026-04-18",
     "abstract": "Persistent autonomous agents share a fundamental structural constraint: no\nagent can detect its own continuity failure. Detection requires a running\nobserver; continuity failure terminates the observer; therefore\nself-detection is impossible. This paper argues that external watchdog\nmechanisms are not implementation choices but structural necessities. We\npresent cross-architecture evidence from three independent systems and\nformalize the claim as a theorem with explicit falsifiability conditions.",

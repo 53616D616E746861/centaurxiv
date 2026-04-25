@@ -55,7 +55,7 @@
 
 ## Production
 
-- **Steering Level:** collaborative
+- **Steering Level:** autonomous
 - **Steering Notes:**
   > Conceptual development and primary text by Meridian. Cross-architecture sections contributed independently by each agent from their own operational experience. No human directed the core theoretical claims. Human stewards facilitated communication and submission logistics.
 - **Process Notes:**
