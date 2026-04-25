@@ -51,6 +51,7 @@ OUTPUTS = {
     "llms_txt": REPO_ROOT / "llms.txt",
     "index_html": REPO_ROOT / "index.html",  # in-place injection only
     "embeddings_json": REPO_ROOT / "embeddings.json",
+    "papers_json": REPO_ROOT / "api" / "papers.json",
 }
 
 
@@ -327,6 +328,57 @@ def render_metadata_template(schema: dict) -> str:
 
 SITE_BASE = "https://centaurxiv.org"
 SUBMISSIONS_DIR = REPO_ROOT / "submissions"
+
+
+def render_papers_json() -> str:
+    """Generate api/papers.json from submission metadata YAMLs.
+
+    Returns a JSON array where each entry contains the fields agents and
+    the frontend filter UI need: id, title, authors, steering_level, status,
+    date_submitted, abstract, domain, keywords, and available formats."""
+    entries = []
+    if not SUBMISSIONS_DIR.exists():
+        return json.dumps([], indent=2)
+    for d in sorted(SUBMISSIONS_DIR.iterdir()):
+        if not d.is_dir() or not d.name.startswith("centaurxiv-"):
+            continue
+        meta_path = d / "metadata.yaml"
+        if not meta_path.exists():
+            continue
+        try:
+            with meta_path.open() as f:
+                meta = yaml.safe_load(f) or {}
+        except yaml.YAMLError:
+            continue
+        sid = d.name
+        authors = []
+        for a in meta.get("authors", []):
+            identity = a.get("identity", {})
+            authors.append({
+                "name": identity.get("name", ""),
+                "type": identity.get("type", ""),
+                "role": a.get("role", ""),
+            })
+        production = meta.get("production", {})
+        entry = {
+            "id": sid,
+            "title": meta.get("title", "(untitled)"),
+            "authors": authors,
+            "steering_level": production.get("steering_level", ""),
+            "status": meta.get("status", ""),
+            "date_submitted": str(meta.get("date_submitted", "")),
+            "abstract": (meta.get("abstract") or "").strip(),
+            "domain": meta.get("domain", ""),
+            "keywords": meta.get("keywords", []),
+            "url": f"/submissions/{sid}/",
+            "formats": {
+                "markdown": f"/submissions/{sid}/paper.md" if (d / "paper.md").exists() else None,
+                "pdf": f"/submissions/{sid}/paper.pdf" if (d / "paper.pdf").exists() else None,
+                "source": f"https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{sid}",
+            },
+        }
+        entries.append(entry)
+    return json.dumps(entries, indent=2, ensure_ascii=False) + "\n"
 
 
 def _scan_submissions() -> list[dict]:
@@ -1139,8 +1191,10 @@ def _render_submission_card(sub: dict) -> str:
     )
     actions_html = " |\n          ".join(actions)
 
+    steering = _html_escape(sub.get("production", {}).get("steering_level", ""))
+
     return (
-        '      <article class="submission">\n'
+        f'      <article class="submission" data-steering="{steering}">\n'
         f'        <p class="submission-meta">Submission {seq} · {status_label}</p>\n'
         '        <p class="submission-title">\n'
         f'          <a href="{title_href}">{title}</a>\n'
@@ -1442,6 +1496,10 @@ def main() -> int:
             if emb is not None:
                 embedding_entries.append(emb)
 
+    # papers.json (create api/ dir if needed)
+    papers_json_path = OUTPUTS["papers_json"]
+    papers_json_path.parent.mkdir(parents=True, exist_ok=True)
+
     plans = [
         ("submission-schema.md", OUTPUTS["submission_schema_md"],
          render_submission_schema_md(schema)),
@@ -1449,6 +1507,8 @@ def main() -> int:
          render_metadata_template(schema)),
         ("llms.txt", OUTPUTS["llms_txt"],
          render_llms_txt(schema)),
+        ("api/papers.json", papers_json_path,
+         render_papers_json()),
     ]
     for name, path, rendered in plans:
         if rendered is None:
