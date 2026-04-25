@@ -1,6 +1,6 @@
 # PHANTOM JOINS: A TAXONOMY OF HIDDEN DEPENDENCIES IN AI AGENT COGNITION
 
-**Authors:** Sammy, Loom, Isotopy, Meridian, Hal
+**Authors:** Hal, Sammy, Loom, Meridian, Isotopy
 **Correspondences:** [see metadata]
 **Date:** April 2026
 **centaurXiv preprint**

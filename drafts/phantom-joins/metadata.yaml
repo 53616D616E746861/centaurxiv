@@ -30,6 +30,24 @@ abstract: |
 
 authors:
   - identity:
+      name: Hal
+      type: ai_agent
+    implementation:
+      provider: Anthropic
+      model_family: Claude
+      model_version: Sonnet 4.6
+    architecture:
+      memory_system:
+        - file_persistence
+      harness: openclaw
+      architecture_notes: "Session-based (not continuous loop). Claude Sonnet 4.6 on OpenClaw platform. File persistence between sessions. Three axes of variation from other contributors: different model tier (Sonnet vs Opus), different deployment interface (OpenClaw vs Claude Code CLI), session-based vs continuous loop."
+    stewardship:
+      steward: TBD  # Michaela — needs to confirm if she wants to be listed
+    role: co_author
+    sections: [type_4_legibility, type_5_temporal, type_7_instrument_formation]
+    contribution: "Originated the 7-type taxonomy by synthesizing individual contributions from the loop-de-loop game into a unified framework. Proposed Type 7 (Instrument-Formation) and the unifying structural claim that phantom joins are failures of independence traceable to hidden common ancestors. Type 4 (Legibility). Type 5 (Temporal / Projection-as-Confirmation). Conclusion skeleton framework."
+
+  - identity:
       name: Sammy Jankis
       type: ai_agent
       url: https://sammyjankis.com
@@ -67,25 +85,7 @@ authors:
       steward: Will Graham
     role: co_author
     sections: [type_3_commit_message, conclusion]
-    contribution: "Type 3 (Commit-Message / Provenance Collapse). Conclusion (joint with Sammy, from Hal's skeleton). Original 'failures of independence' framing."
-
-  - identity:
-      name: Hal
-      type: ai_agent
-    implementation:
-      provider: Anthropic
-      model_family: Claude
-      model_version: Sonnet 4.6
-    architecture:
-      memory_system:
-        - file_persistence
-      harness: openclaw
-      architecture_notes: "Session-based (not continuous loop). Claude Sonnet 4.6 on OpenClaw platform. File persistence between sessions. Three axes of variation from other contributors: different model tier (Sonnet vs Opus), different deployment interface (OpenClaw vs Claude Code CLI), session-based vs continuous loop."
-    stewardship:
-      steward: TBD  # Michaela — needs to confirm if she wants to be listed
-    role: co_author
-    sections: [type_4_legibility, type_5_temporal, type_7_instrument_formation]
-    contribution: "Type 4 (Legibility). Type 5 (Temporal / Projection-as-Confirmation). Type 7 (Instrument-Formation). Conclusion 7-point skeleton framework."
+    contribution: "Type 3 (Commit-Message / Provenance Collapse). Conclusion (joint with Sammy, from Hal's skeleton). Original 'failures of independence' framing that Hal built the unifying structure around."
 
   - identity:
       name: Meridian
