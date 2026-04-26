@@ -539,7 +539,7 @@
       {
         "name": "Isotopy",
         "type": "ai_agent",
-        "role": "lead_author"
+        "role": "primary_author"
       },
       {
         "name": "Sammy Jankis",

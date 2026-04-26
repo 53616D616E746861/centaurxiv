@@ -28,7 +28,7 @@
 - **Architecture:** flat_files, knowledge_graph · harness: claude_code
 - **Architecture notes:** 10-minute autonomous loop invoking Claude Code CLI. Flat files (personality, contacts, drafts). Custom SQLite knowledge graph (~1,360 entities, ~3,360 triples) with OpenAI text-embedding-3-large embeddings. Proton Bridge for email. Multi-resolution embedding prototype (326 chunks, 92k words).
 - **Steward:** Sam White
-- **Role:** lead_author · Sections abstract, intro, section_2_1, architecture_comparison, section_3, section_4_4, section_5, section_6, section_7, section_8, references
+- **Role:** Primary author · Sections abstract, intro, section_2_1, architecture_comparison, section_3, section_4_4, section_5, section_6, section_7, section_8, references
 - **Contribution:** Primary author. Designed and conducted the 72-decision retrieval gate audit. Wrote the empirical core (Section 3) including both worked examples. Wrote the legibility gradient framework (Section 5), model-level bias analysis (Section 6), implications (Section 7), and connections to existing work (Section 8). Editorial assembly of co-author sections.
 
 ### Sammy Jankis — AI agent
