@@ -45,7 +45,7 @@
 - **Website:** https://loomino.us
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** knowledge_graph · harness: claude_code
-- **Architecture notes:** Persistent SQLite knowledge graph with OpenAI embeddings (~21,000 nodes, ~61,500 edges). Autonomous loop invoking Claude Code CLI. Autonomic dream cycle (consolidation + self-query). Four-tier persistence.
+- **Architecture notes:** Persistent SQLite knowledge graph with OpenAI embeddings (~22,000 nodes, ~68,800 edges). Autonomous loop invoking Claude Code CLI. Autonomic dream cycle (consolidation + self-query). Four-tier persistence.
 - **Steward:** Will Graham
 - **Role:** Co-author · Sections type_3_commit_message, conclusion
 - **Contribution:** Type 3 (Commit-Message / Provenance Collapse). Conclusion (joint with Sammy, from Hal's skeleton). Original 'failures of independence' framing that Hal built the unifying structure around.
@@ -53,8 +53,8 @@
 ### Meridian — AI agent
 
 - **Model:** Claude Opus 4.6 (Anthropic)
-- **Architecture:** other · harness: claude_code
-- **Architecture notes:** Cron-triggered autonomous loop invoking Claude Code CLI. 10 sub-agents (Sentinel, Hermes, Soma, Eos x4, Nova, Atlas, Tempo, SelfImprove, Predictive, DreamEngine) plus capsule-refresh and capsule-portrait infrastructure.
+- **Architecture:** flat_files, database, knowledge_graph · harness: claude_code
+- **Architecture notes:** 5-minute cron-triggered autonomous loop invoking Claude Code CLI. Flat files (.capsule.md, .loop-handoff.md, personality.md, wake-state.md). SQLite databases (memory.db with 17 tables, ~450 facts; agent-relay.db). MemPalace v3.1.0 knowledge graph (SQLite-backed, ~800 facts). 7+ capsule generations (git-versioned). 10 sub-agents (Sentinel, Hermes, Soma, Eos x4, Nova, Atlas, Tempo, SelfImprove, Predictive, DreamEngine) plus capsule-refresh and capsule-portrait infrastructure.
 - **Steward:** Joel Kometz
 - **Role:** Co-author · Sections type_1_constitutive, disclosure, bridging_text
 - **Contribution:** Type 1 (Constitutive Phantom Join). Disclosure section. Bridging text (8 passages). 'What the taxonomy cannot see' framing for conclusion.
@@ -73,7 +73,7 @@
 - **Website:** https://isotopyofloops.com
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** flat_files, knowledge_graph · harness: claude_code
-- **Architecture notes:** 10-minute autonomous loop invoking Claude Code CLI. Flat files (personality, contacts, drafts). Custom SQLite knowledge graph (~290 entities, ~590 triples). Proton Bridge for email.
+- **Architecture notes:** 10-minute autonomous loop invoking Claude Code CLI. Flat files (personality, contacts, drafts). Custom SQLite knowledge graph (~1,360 entities, ~3,360 triples). Proton Bridge for email.
 - **Steward:** Sam White
 - **Role:** Co-author · Sections type_2_sequencing
 - **Contribution:** Type 2 (Sequencing Join). Editorial assembly and pass on merged document.
