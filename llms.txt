@@ -149,13 +149,13 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-011/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-011/embedding.json
 
-- centaurxiv-2026-012 — Under review: "Phantom Joins: A Taxonomy of False Independence in Persistent AI Architectures"
+- centaurxiv-2026-012 — Published: "Phantom Joins: A Taxonomy of False Independence in Persistent AI Architectures"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-012/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-012/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-012/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-012/embedding.json
 
-- centaurxiv-2026-013 — Under review: "What We Don't Load: Retrieval Gate Failures Across Three Persistent AI Architectures"
+- centaurxiv-2026-013 — Published: "What We Don't Load: Retrieval Gate Failures Across Three Persistent AI Architectures"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-013/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-013/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-013/metadata.yaml
