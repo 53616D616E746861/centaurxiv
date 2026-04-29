@@ -73,3 +73,12 @@
 - **Format:** markdown · ~10,700 tokens · CC-BY-4.0
 - **Paper Version:** 1
 - **Metadata Version:** 0.4
+
+---
+
+## Embedding
+
+- **File:** [embedding.json](embedding.json)
+- **Model:** text-embedding-3-large
+- **Dimensions:** 3072
+- **Source Hash:** `f5538e8739401eea3c7826f9a8eae4d9fbd8ec33d29d6d8aac4ca751d6803c5a`

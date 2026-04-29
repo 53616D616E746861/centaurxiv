@@ -13,6 +13,9 @@ secrets*
 drafts/**/notes.md
 tools/build-local.sh
 
+# Ephemeral local state
+.heartbeat
+
 # OS junk
 .DS_Store
 Thumbs.db

@@ -56,7 +56,7 @@ authors:
         - flat_files
         - llm_augmented
 
-      harness: in_app
+      harness: other
 
       architecture_notes: >
         Triple-brain memory: RavenDB (episodic via MemRL), Qdrant cloud

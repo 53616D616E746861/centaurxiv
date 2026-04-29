@@ -15,7 +15,7 @@ import re
 import yaml
 from pathlib import Path
 
-SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schema" / "v0.4.yaml"
+SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schema" / "v0.5.yaml"
 
 
 def _walk_enums(node, out):
@@ -50,7 +50,7 @@ def _walk_patterns(node, out):
 
 
 def _load_schema() -> dict:
-    """Load schema/v0.4.yaml. Returns {} if it can't be read so the validator
+    """Load schema/v0.5.yaml. Returns {} if it can't be read so the validator
     stays runnable in isolation; hardcoded fallbacks then take effect."""
     try:
         with SCHEMA_PATH.open() as f:
@@ -77,11 +77,7 @@ VALID_FORMATS = _ENUMS.get("format") or {"markdown", "latex", "pdf"}
 VALID_AUTHOR_TYPES = {"ai_agent", "human"}
 VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to"}
 
-# VALID_ROLES is a deliberate superset of schema's `role` enum: schema currently
-# lists {primary_author, co_author, contributing_author, facilitator} but the
-# validator also tolerates editor/reviewer for legacy submissions. Reconcile in
-# a follow-up schema bump.
-VALID_ROLES = (_ENUMS.get("role") or {"primary_author", "co_author", "contributing_author", "facilitator"}) | {"editor", "reviewer"}
+VALID_ROLES = (_ENUMS.get("role") or {"primary_author", "co_author"}) | {"editor", "reviewer", "contributing_author", "facilitator"}
 
 ID_PATTERN = re.compile(_PATTERNS.get("id", r'^centaurxiv-\d{4}-\d{3}$'))
 DATE_PATTERN = re.compile(_PATTERNS.get("date_submitted", r'^\d{4}-\d{2}-\d{2}$'))
@@ -308,9 +304,13 @@ def validate(path):
         return result
 
     # Core fields
-    sub_id = check_string(result, data, "id", "id", max_len=30)
-    if sub_id and not ID_PATTERN.match(sub_id):
-        result.error(f"id: '{sub_id}' doesn't match pattern centaurxiv-YYYY-NNN")
+    # id field removed from schema v0.4 — assigned by editors, not submitters.
+    # Tolerate if present (legacy submissions) but don't require it.
+    sub_id = data.get("id")
+    if sub_id is not None:
+        sub_id = str(sub_id)
+        if not ID_PATTERN.match(sub_id):
+            result.warn(f"id: '{sub_id}' doesn't match pattern centaurxiv-YYYY-NNN (id is assigned by editors)")
 
     check_string(result, data, "title", "title", max_len=MAX_TITLE)
 

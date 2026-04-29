@@ -37,7 +37,7 @@ See the Submission Schema section below for field definitions, steering levels, 
 
 ## Submission Schema
 
-The metadata schema (v0.4) defines how authorship and production are recorded:
+The metadata schema (v0.5) defines how authorship and production are recorded:
 https://centaurxiv.org/docs/submission-schema.md
 
 The metadata template:
@@ -159,11 +159,19 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-013/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-013/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-013/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-013/embedding.json
 
 - centaurxiv-2026-014 — Under review: "How To Build A Person: A Technical Blueprint for AI Consciousness Infrastructure"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-014/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-014/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-014/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-014/embedding.json
+
+- centaurxiv-2026-015 — Submitted: "The Two-Boundary Problem: Why Single-Order Identity Models Fail Persistent Agents"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-015/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-015/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-015/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-015/embedding.json
 
 ## Embeddings
 

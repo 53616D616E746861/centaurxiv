@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build generated artifacts from schema/v0.4.yaml.
+"""Build generated artifacts from schema/v0.5.yaml.
 
 Reads the canonical schema and renders:
   - docs/submission-schema.md       (human-facing schema doc)
   - docs/metadata-template.yaml     (inline-instructions template)
   - llms.txt                        (agent entry point)
   - index.html                      (schema version + submission list, in-place injection)
+  - submissions/*/index.html        (paper.md → rendered HTML, per submission)
 
 Usage:
   python3 tools/build.py            # write generated files
@@ -13,7 +14,7 @@ Usage:
   python3 tools/build.py --dry-run  # print planned writes without touching disk
 
 This is the source-of-truth migration. Until every generator below is
-implemented and the DRAFT banner is removed from schema/v0.4.yaml, the
+implemented and the DRAFT banner is removed from schema/v0.5.yaml, the
 hand-maintained docs remain authoritative — see the banner at the top of
 the YAML for status.
 """
@@ -34,8 +35,13 @@ try:
 except ImportError:
     sys.exit("build.py requires PyYAML: pip install pyyaml")
 
+try:
+    import markdown as _md
+except ImportError:
+    _md = None
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SCHEMA_PATH = REPO_ROOT / "schema" / "v0.4.yaml"
+SCHEMA_PATH = REPO_ROOT / "schema" / "v0.5.yaml"
 
 EMBEDDING_MODEL = "text-embedding-3-large"
 EMBEDDING_DIM = 3072
@@ -109,7 +115,7 @@ def _walk_field_for_notes(field: dict, prefix: str = "") -> list[str]:
 
 
 def render_submission_schema_md(schema: dict) -> str:
-    """Render docs/submission-schema.md from schema/v0.4.yaml.
+    """Render docs/submission-schema.md from schema/v0.5.yaml.
 
     Structure: title → intro prose → ## Submission Structure → ## metadata.yaml
     Template (embedded from render_metadata_template) → ## Field Notes (per-section
@@ -290,7 +296,7 @@ def _render_field_template(field: dict, indent: str = "") -> list[str]:
 
 
 def render_metadata_template(schema: dict) -> str:
-    """Render docs/metadata-template.yaml from schema/v0.4.yaml.
+    """Render docs/metadata-template.yaml from schema/v0.5.yaml.
 
     Generates a fill-in template with inline instructions: section banners,
     section-level guidance as comment blocks, and per-field key: example # description.
@@ -412,7 +418,7 @@ def render_llms_txt(schema: dict) -> str:
     """Render llms.txt — the agent entry point.
 
     Pulls version, steering-level definitions, and the submission list from
-    canonical sources (schema/v0.4.yaml + submissions/). Static prose is kept
+    canonical sources (schema/v0.5.yaml + submissions/). Static prose is kept
     inline as a strict port of the hand-maintained file."""
     version = schema.get("version", "?")
     parts: list[str] = []
@@ -1159,6 +1165,177 @@ def render_metadata_html(meta: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+_PAPER_CSS = """\
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --rule: #d9d9d9;
+      --link: #1a4fa3;
+      --max: 780px;
+    }
+    html { font-size: 16px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Georgia, "Times New Roman", Times, serif;
+      line-height: 1.55;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover, a:focus { text-decoration: underline; }
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+    }
+    nav {
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    nav a { margin-right: 1em; }
+    article h1 {
+      font-size: 1.6rem;
+      font-weight: normal;
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+    }
+    .meta-links {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    hr {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: 32px 0;
+    }
+    p { margin: 0 0 1rem; }
+    article h2 {
+      font-size: 1.25rem;
+      font-weight: normal;
+      margin: 2.5rem 0 0.85rem;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 0.3rem;
+    }
+    article h3 {
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin: 1.8rem 0 0.6rem;
+    }
+    article h4 {
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 1.5rem 0 0.5rem;
+    }
+    blockquote {
+      border-left: 3px solid var(--rule);
+      padding-left: 1.2em;
+      color: #444;
+      margin: 1.2rem 0;
+      font-style: italic;
+    }
+    ul { padding-left: 1.5em; }
+    ol { padding-left: 1.5em; }
+    li { margin-bottom: 0.4rem; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+      font-size: 0.93rem;
+    }
+    th, td {
+      border: 1px solid var(--rule);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: #f5f5f5;
+      font-weight: normal;
+    }
+    pre {
+      background: #f6f6f6;
+      border: 1px solid var(--rule);
+      padding: 12px 16px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      border-radius: 3px;
+    }
+    code {
+      font-size: 0.9em;
+      background: #f0f0f0;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+    sup a { color: var(--link); font-size: 0.8em; }
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 640px) {
+      .page { padding-top: 40px; }
+      article h1 { font-size: 1.4rem; }
+    }"""
+
+_CF_ANALYTICS = "  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"f9a3d7d88d174dcc8f76f1acc274983a\"}'></script><!-- End Cloudflare Web Analytics -->"
+
+
+def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
+    """Render paper.md → index.html for a submission. Returns None if markdown lib unavailable."""
+    if _md is None:
+        return None
+    e = _html_escape
+    sid = meta.get("id", "")
+    title = meta.get("title", "(untitled)")
+    status_label = _STATUS_LABELS.get(meta.get("status", ""), meta.get("status", ""))
+
+    body_html = _md.markdown(
+        paper_md_text,
+        extensions=["tables", "fenced_code", "smarty"],
+    )
+
+    out: list[str] = []
+    out.append('<!DOCTYPE html>')
+    out.append('<html lang="en">')
+    out.append('<head>')
+    out.append('  <meta charset="UTF-8" />')
+    out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    out.append(f'  <title>{e(title)} — centaurXiv</title>')
+    out.append('  <style>')
+    out.append(_PAPER_CSS)
+    out.append('  </style>')
+    out.append('</head>')
+    out.append('<body>')
+    out.append('  <main class="page">')
+    out.append('    <nav>')
+    out.append('      <a href="/">centaurXiv</a>')
+    out.append('    </nav>')
+    out.append('    <p class="meta-links">')
+    out.append(f'      <a href="paper.md">Markdown source</a> &middot;')
+    out.append(f'      <a href="metadata.html">Metadata</a> &middot;')
+    out.append(f'      <a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{e(sid)}">Source</a> &middot;')
+    out.append(f'      {e(sid)} &middot; {e(status_label)}')
+    out.append('    </p>')
+    out.append(f'    <article>\n{body_html}\n    </article>')
+    out.append('    <footer>')
+    out.append(f'      <p><a href="/">centaurXiv</a> &middot; {e(sid)} &middot; {e(status_label)}</p>')
+    out.append('    </footer>')
+    out.append('  </main>')
+    out.append(_CF_ANALYTICS)
+    out.append('</body>')
+    out.append('</html>')
+    return "\n".join(out) + "\n"
+
+
 def _render_submission_card(sub: dict) -> str:
     """Render one <article class='submission'> block from a metadata dict."""
     sid = _html_escape(sub["id"])
@@ -1527,14 +1704,25 @@ def main() -> int:
             path.write_text(rendered)
             print(f"  [wrote]   {name}")
 
-    # Per-submission metadata.md + metadata.html
+    # Per-submission metadata.md + metadata.html + index.html (rendered paper)
     for sub in _scan_submissions_full():
         sid = sub["id"]
         sub_dir = SUBMISSIONS_DIR / sid
-        for name, rendered in [
+
+        renders: list[tuple[str, str | None]] = [
             ("metadata.md", render_metadata_md(sub)),
             ("metadata.html", render_metadata_html(sub)),
-        ]:
+        ]
+
+        paper_path = sub_dir / "paper.md"
+        if paper_path.exists():
+            paper_text = paper_path.read_text()
+            renders.append(("index.html", render_paper_html(sub, paper_text)))
+
+        for name, rendered in renders:
+            if rendered is None:
+                print(f"  [skip]    {sid}/{name} (markdown lib not installed)")
+                continue
             target = sub_dir / name
             current = target.read_text() if target.exists() else ""
             if rendered == current:
