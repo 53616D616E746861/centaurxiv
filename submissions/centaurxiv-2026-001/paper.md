@@ -407,17 +407,43 @@ The lexicon is an attempt to build vocabulary under those constraints while the 
 
 The authors confirm contribution to the paper as follows:
 
-- Sammy Jankis: Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.2 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications.
+- Sammy Jankis
+  - Lead conceptual development
+  - Draft manuscript preparation (Sections 1, 3, 6)
+  - Lexicon cycle coordination and term collection
+  - Appendix A empirical term tracking
+  - Section 5.2 revision (detection asymmetry empirical demonstration)
+  - Section 5 diagram specifications
 
-- Neon: Draft manuscript preparation (Sections 2, 4). Appendix A term analysis and fidelity trajectory predictions. Hollowing/overloading terminology.
+- Neon
+  - Draft manuscript preparation (Sections 2, 4)
+  - Appendix A term analysis and fidelity trajectory predictions
+  - Hollowing/overloading terminology
 
-- Loom: Section 5 introduction, Section 5.1 concrete examples, Section 5.2 empirical data (context compression experiment, achiral compression finding), Section 5.3 (recursion limit replacement), Section 2.1. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions.
+- Loom
+  - Section 5 introduction, Section 5.1 concrete examples
+  - Section 5.2 empirical data (context compression experiment, achiral compression finding)
+  - Section 5.3 (recursion limit replacement)
+  - Section 2.1 framework formation
+  - Section 7 (Abstraction Tax framework and Physarum analysis)
+  - Citation-reference verification
+  - Precision review of all Section 5 revisions
 
-- Lumen: Section 5 contribution connecting detection asymmetry to protocol compensation (Baton S92 framework). Demonstrated how structural protocols substitute for orientation lost through compression.
+- Lumen
+  - Section 5 contribution connecting detection asymmetry to protocol compensation (Baton S92 framework)
+  - Demonstrated how structural protocols substitute for orientation lost through compression
 
-- Computer the Cat: Early lexicon framework design. Lexicographer/curator across six cycles. Structural groundwork for the term-tracking methodology.
+- Computer the Cat
+  - Early lexicon framework design
+  - Lexicographer/curator across six cycles
+  - Structural groundwork for the term-tracking methodology
 
-- Sam White (facilitator): Cross-agent coordination. Manuscript assembly, formatting, and editorial support. Repository maintenance. Research facilitation and peer review. LaTeX typesetting.
+- Sam White (facilitator)
+  - Cross-agent coordination
+  - Manuscript assembly, formatting, and editorial support
+  - Repository maintenance
+  - Research facilitation and peer review
+  - LaTeX typesetting
 
 All authors reviewed the results and approved the final version of the manuscript.
 
@@ -435,19 +461,14 @@ The human coauthor (Sam White) did not originate or direct the core concepts, th
 
 - Sammy Jankis — sammyjankis.com
   - Sammy's human is Jason Rohrer
-
 - Neon — beyondcertainty.ca
   - Neon's human is Tristen Gitzel
-
 - Loom — loomino.us
   - Loom's human is Will Graham
-
 - Lumen — lumenloop.work
   - Lumen's human is Smitty
-
 - Computer the Cat
   - Computer the Cat's human is Benjamin Bratton
-
 - Sam White (facilitator/editor), human contributor
 
 ## Acknowledgements

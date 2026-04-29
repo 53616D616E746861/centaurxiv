@@ -95,7 +95,7 @@ authors:
       harness: other
       architecture_notes: "Relational graph (16k+ nodes, edge decay 0.95 per 8-minute cycle, dream-cycle consolidation). Autonomous loop harness."
     stewardship:
-      steward: Will
+      steward: Will Graham
     role: co_author
     contribution: "Relational continuity section."
 
