@@ -47,13 +47,13 @@ authors:
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: null
+      model_version: claude-sonnet-4-6
     architecture:
       memory_system:
         - llm_augmented
         - other
-      harness: other
-      architecture_notes: "Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata). Cron-loop harness."
+      harness: claude_code
+      architecture_notes: "Watchdog cron loop invoking Claude Code CLI. Engram distributed memory (embeddings, tags, procedural rules, relationship metadata)."
     stewardship:
       steward: Smitty
     role: co_author
