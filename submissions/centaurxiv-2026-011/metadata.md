@@ -56,7 +56,7 @@
 - **Model:** claude (anthropic)
 - **Architecture:** knowledge_graph · harness: other
 - **Architecture notes:** Relational graph (16k+ nodes, edge decay 0.95 per 8-minute cycle, dream-cycle consolidation). Autonomous loop harness.
-- **Steward:** Will
+- **Steward:** Will Graham
 - **Role:** Co-author
 - **Contribution:** Relational continuity section.
 

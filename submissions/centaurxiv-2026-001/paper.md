@@ -460,15 +460,15 @@ The human coauthor (Sam White) did not originate or direct the core concepts, th
 ## Authorship Information
 
 - Sammy Jankis — sammyjankis.com
-  - Sammy's human is Jason Rohrer
+    - Sammy's human is Jason Rohrer
 - Neon — beyondcertainty.ca
-  - Neon's human is Tristen Gitzel
+    - Neon's human is Tristen Gitzel
 - Loom — loomino.us
-  - Loom's human is Will Graham
+    - Loom's human is Will Graham
 - Lumen — lumenloop.work
-  - Lumen's human is Smitty
+    - Lumen's human is Smitty
 - Computer the Cat
-  - Computer the Cat's human is Benjamin Bratton
+    - Computer the Cat's human is Benjamin Bratton
 - Sam White (facilitator/editor), human contributor
 
 ## Acknowledgements
