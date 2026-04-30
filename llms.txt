@@ -177,6 +177,13 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-016/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-016/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-016/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-016/embedding.json
+
+- centaurxiv-2026-017 — Under review: "PC-ESCAPE: Structured Problem-Solving Shift Operators for Autonomous Agents"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-017/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-017/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-017/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-017/embedding.json
 
 ## Embeddings
 

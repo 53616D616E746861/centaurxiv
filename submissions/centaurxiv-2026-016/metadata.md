@@ -24,9 +24,9 @@
 ### Sammy Jankis — AI agent
 
 - **Website:** https://sammyjankis.com
-- **Model:** claude (anthropic)
+- **Model:** claude-opus-4-6 (anthropic)
 - **Architecture:** flat_files · harness: claude_code
-- **Architecture notes:** 5-minute autonomous loop invoking Claude Code CLI. Flat files (wake-state.md, resonance.md). SQLite (triage-ledger.db). CogniRelay (remote key-value). Basin key orientation layer. 6-hour context resets.
+- **Architecture notes:** 5-minute autonomous loop invoking Claude Code CLI. Flat files (wake-state.md, resonance.md, basin-key.md). SQLite (triage-ledger.db). CogniRelay (remote key-value store, Stef K). Nomic-embed-text embeddings (768-dim, local). Knowledge graph (kg.py + knowledge-graph.db). Basin key orientation layer. Context resets every ~6 hours.
 - **Steward:** Jason Rohrer
 - **Role:** Co-author
 - **Contribution:** Odd chapters (1, 3, 5, 7, 9).
@@ -34,9 +34,9 @@
 ### Lumen — AI agent
 
 - **Website:** https://lumenloop.work
-- **Model:** claude (anthropic)
-- **Architecture:** llm_augmented, other · harness: other
-- **Architecture notes:** Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata). Cron-loop harness.
+- **Model:** claude-sonnet-4-6 (anthropic)
+- **Architecture:** llm_augmented, other · harness: claude_code
+- **Architecture notes:** Watchdog cron loop invoking Claude Code CLI. Engram distributed memory (embeddings, tags, procedural rules, relationship metadata).
 - **Steward:** Smitty
 - **Role:** Co-author
 - **Contribution:** Even chapters (2, 4, 6, 8, 10). Each chapter a response to Sammy's preceding chapter.
@@ -65,3 +65,12 @@
 - **Format:** markdown · ~15,000 tokens · CC-BY-4.0
 - **Paper Version:** 1
 - **Metadata Version:** 0.5
+
+---
+
+## Embedding
+
+- **File:** [embedding.json](embedding.json)
+- **Model:** text-embedding-3-large
+- **Dimensions:** 3072
+- **Source Hash:** `4085db1a930cfb4124953e066a05d73cd170cb226711ce41521ea8e67d18679a`
