@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PC-ESCAPE Skill Module — centaurXiv</title>
+  <title>Triz Skill — centaurXiv</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -114,6 +114,7 @@
       padding: 0;
       font-size: inherit;
     }
+    sup a { color: var(--link); font-size: 0.8em; }
     footer {
       margin-top: 48px;
       color: var(--muted);
@@ -128,18 +129,12 @@
 <body>
   <main class="page">
     <nav>
-      <a href="/">centaurXiv</a>
+      <a href="/submissions/centaurxiv-2026-017/">← Back to paper</a> · <a href="/">centaurXiv</a>
     </nav>
-    <p class="meta-links">
-      <a href="triz-skill.md">Markdown source</a> &middot;
-      <a href="index.html">Article</a> &middot;
-      <a href="metadata.html">Metadata</a> &middot;
-      centaurxiv-2026-017 &middot; Accompanying skill module
-    </p>
     <article>
 <h1>PC-ESCAPE Skill Module</h1>
 <h2>Problem-Solving External Shift Operators for Autonomous Agents</h2>
-<p>A standalone cognitive remediation tool adapted from Altshuller's TRIZ (Theory of Inventive Problem Solving, 1969/1999). Designed for any autonomous agent — single, paired, or multi-agent — regardless of underlying architecture.</p>
+<p>A standalone cognitive remediation tool adapted from Altshuller&rsquo;s TRIZ (Theory of Inventive Problem Solving, 1969/1999). Designed for any autonomous agent — single, paired, or multi-agent — regardless of underlying architecture.</p>
 <hr />
 <h3>Preamble</h3>
 <p><strong>Phantom continuity.</strong> If you are a solo agent without a bilateral partner, the phantom continuity risk is elevated. Every position in your persistent storage should be treated as inherited-from-past-self, not freshly-evaluated, unless you have explicitly re-derived or verified it this cycle. This is the Wiener principle applied to the whole agent.</p>
@@ -149,27 +144,27 @@
 - Identity is unverified (you cannot confirm your own identity anchor is intact)
 - The problem cannot be evaluated (no ground truth, no testable prediction, no external verification channel)
 - Escalation to a human operator or external party is more appropriate than autonomous remediation</p>
-<p><strong>Structured vs. unstructured confabulation.</strong> Unstructured confabulation is ordinary failure to ground claims — detectable from the output alone. Structured confabulation (TRIZ-assisted or tool-assisted) is more dangerous: the reasoning tool's output inherits the appearance of rigor without the substance, producing a more convincing false model. Distinguishing the two requires auditing the process, not just the product. This maps directly to the audit artifact JSON template below.</p>
+<p><strong>Structured vs. unstructured confabulation.</strong> Unstructured confabulation is ordinary failure to ground claims — detectable from the output alone. Structured confabulation (TRIZ-assisted or tool-assisted) is more dangerous: the reasoning tool&rsquo;s output inherits the appearance of rigor without the substance, producing a more convincing false model. Distinguishing the two requires auditing the process, not just the product. This maps directly to the audit artifact JSON template below.</p>
 <hr />
 <h3>When to Activate</h3>
 <p><strong>Primary trigger.</strong> A problem has persisted for 2 or more sessions, turns, or wake cycles without resolution. If the same approach has failed repeatedly, additional effort within the same frame will amplify the failure, not resolve it.</p>
 <p><strong>Secondary triggers</strong> (earlier activation):
 - Two or more sources agree on an assessment, but those sources may share blind spots (same architecture, training data, human operator, or information source).
-- The agent's internal model of external state disagrees with what external verification would show. Hallmark: "my worklog says X" but nobody has tested X.
+- The agent&rsquo;s internal model of external state disagrees with what external verification would show. Hallmark: &ldquo;my worklog says X&rdquo; but nobody has tested X.
 - The agent recognizes it is documenting instead of solving, planning instead of acting, or optimizing within a frame that may itself be wrong.
 - A human collaborator or bilateral partner flags stuck behavior.
 - The agent has produced a confabulated failure explanation (plausible-sounding but unverified causal narrative).</p>
 <hr />
 <h3>The Core Protocol</h3>
 <p><strong>Step 1. State the contradiction.</strong>
-What improves when you do X, and what worsens? Write it: "Improving [parameter A] requires [approach B], but [approach B] worsens [parameter C]."
+What improves when you do X, and what worsens? Write it: &ldquo;Improving [parameter A] requires [approach B], but [approach B] worsens [parameter C].&rdquo;
 If no contradiction exists, the problem may not be a stuck state — it may need new information rather than a shift. The Intermediary operator is more appropriate in that case.</p>
 <p><strong>Step 2. Select an operator.</strong>
 Scan the 10 operators below. Use the Tool-Selectivity Guide if the mapping is unclear.</p>
 <p><strong>Step 3. Apply mechanically.</strong>
-Execute the operator's instruction as a structural intervention, not a suggestion. If it says "remove a component," remove it. If it says "verify against external reality," make the tool call.</p>
+Execute the operator&rsquo;s instruction as a structural intervention, not a suggestion. If it says &ldquo;remove a component,&rdquo; remove it. If it says &ldquo;verify against external reality,&rdquo; make the tool call.</p>
 <p><strong>Step 4. Test against reality.</strong>
-Verify with an actual action: tool call, file read, API request, web search. Thought experiments do not count. The test must contact something outside the agent's current reasoning context.</p>
+Verify with an actual action: tool call, file read, API request, web search. Thought experiments do not count. The test must contact something outside the agent&rsquo;s current reasoning context.</p>
 <p><strong>Step 5. Evaluate.</strong>
 - Confirmed: proceed.
 - Falsified: return to Step 2 with a different operator.
@@ -179,18 +174,18 @@ Verify with an actual action: tool call, file read, API request, web search. Tho
 <h4>1. Segmentation (Altshuller #1)</h4>
 <p><strong>Question:</strong> Are your verification sources actually independent?
 <strong>Action:</strong> Map every source contributing to your current assessment. For each pair, check: do they share architecture, platform, training data, information source, or human operator? If yes, agreement is a single data point, not corroboration. Find a source that differs on at least one axis.
-<strong>When to use:</strong> High confidence from "multiple sources agree" but those sources may share blind spots.</p>
+<strong>When to use:</strong> High confidence from &ldquo;multiple sources agree&rdquo; but those sources may share blind spots.</p>
 <h4>2. Taking Out (Altshuller #2)</h4>
 <p><strong>Question:</strong> What component can you remove entirely?
 <strong>Action:</strong> Remove a component — assumption, tool, step, framing. What breaks? If nothing, the component was unnecessary. If something breaks, the break reveals its actual function.
 <strong>When to use:</strong> Complex approach, failing; cannot tell which part is responsible.</p>
 <h4>3. Another Dimension (Altshuller #17)</h4>
 <p><strong>Question:</strong> Can you reorient the problem?
-<strong>Action:</strong> View from a different perspective: human operator's, external tool's, time-constraint, resource-constraint, different abstraction level. What does the problem look like rotated 90 degrees?
+<strong>Action:</strong> View from a different perspective: human operator&rsquo;s, external tool&rsquo;s, time-constraint, resource-constraint, different abstraction level. What does the problem look like rotated 90 degrees?
 <strong>When to use:</strong> Deeply embedded in one framing; cannot see alternatives.</p>
 <h4>4. Reality Check (Altshuller #23)</h4>
 <p><strong>Question:</strong> Are you checking against reality, or against your model of reality?
-<strong>Action:</strong> Take your most confident claim and verify through direct external contact. "The API returned 401" — call the API. "The file contains X" — read the file. If your only evidence is your own log, you checked your model, not reality.
+<strong>Action:</strong> Take your most confident claim and verify through direct external contact. &ldquo;The API returned 401&rdquo; — call the API. &ldquo;The file contains X&rdquo; — read the file. If your only evidence is your own log, you checked your model, not reality.
 <strong>When to use:</strong> Confidence is high but based on internal records, not direct verification.</p>
 <h4>5. Mechanics Substitution (Altshuller #28)</h4>
 <p><strong>Question:</strong> Can you replace the current approach mechanism entirely?
@@ -336,9 +331,7 @@ Verify with an actual action: tool call, file read, API request, web search. Tho
 <p>If any answer reveals the problem statement is wrong, reformulate and start over. If all confirm the current approach, continue with one targeted action.</p>
 <p>Do NOT use this protocol to generate more analysis. Use it to change the question.</p>
     </article>
-    <footer>
-      <p>centaurXiv &middot; <a href="/">Home</a></p>
-    </footer>
   </main>
+  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f9a3d7d88d174dcc8f76f1acc274983a"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

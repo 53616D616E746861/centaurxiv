@@ -561,6 +561,8 @@ def render_llms_txt(schema: dict) -> str:
         parts.append(f"  - Metadata (YAML): {SITE_BASE}/submissions/{sid}/metadata.yaml")
         if sub.get("has_embedding"):
             parts.append(f"  - Embedding: {SITE_BASE}/submissions/{sid}/embedding.json")
+        for af in _scan_accompanying(SUBMISSIONS_DIR / sid):
+            parts.append(f"  - {af['label']}: {SITE_BASE}/submissions/{sid}/{af['name']}")
         parts.append("")
 
     parts.append("## Embeddings")
@@ -592,6 +594,28 @@ def _replace_between(text: str, begin: str, end: str, replacement: str) -> str:
     if b == -1 or e == -1 or e < b:
         return text
     return text[: b + len(begin)] + replacement + text[e:]
+
+
+_STANDARD_FILES = {
+    "paper.md", "paper.pdf", "metadata.yaml", "metadata.md",
+    "metadata.html", "index.html", "embedding.json",
+}
+
+
+def _scan_accompanying(sub_dir: Path) -> list[dict]:
+    """Find non-standard .md files in a submission directory.
+    Returns [{name, stem, label, has_html}] for each."""
+    files = []
+    for f in sorted(sub_dir.iterdir()):
+        if f.name in _STANDARD_FILES or not f.is_file() or f.suffix != ".md":
+            continue
+        files.append({
+            "name": f.name,
+            "stem": f.stem,
+            "label": f.stem.replace("-", " ").replace("_", " ").title(),
+            "has_html": f.with_suffix(".html").exists(),
+        })
+    return files
 
 
 _STATUS_LABELS = {
@@ -1323,12 +1347,46 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
     out.append(f'      <a href="paper.md">Markdown source</a> &middot;')
     out.append(f'      <a href="metadata.html">Metadata</a> &middot;')
     out.append(f'      <a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{e(sid)}">Source</a> &middot;')
+    for af in _scan_accompanying(Path(SUBMISSIONS_DIR / sid)):
+        html_link = f'<a href="{e(af["stem"])}.html">{e(af["label"])}</a>'
+        md_link = f'<a href="{e(af["name"])}">{e(af["label"])} (md)</a>'
+        out.append(f'      {html_link} &middot; {md_link} &middot;')
     out.append(f'      {e(sid)} &middot; {e(status_label)}')
     out.append('    </p>')
     out.append(f'    <article>\n{body_html}\n    </article>')
     out.append('    <footer>')
     out.append(f'      <p><a href="/">centaurXiv</a> &middot; {e(sid)} &middot; {e(status_label)}</p>')
     out.append('    </footer>')
+    out.append('  </main>')
+    out.append(_CF_ANALYTICS)
+    out.append('</body>')
+    out.append('</html>')
+    return "\n".join(out) + "\n"
+
+
+def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
+    """Render an accompanying .md file to standalone HTML, same chrome as paper."""
+    if _md is None:
+        return None
+    e = _html_escape
+    body_html = _md.markdown(md_text, extensions=["tables", "fenced_code", "smarty"])
+    out: list[str] = []
+    out.append('<!DOCTYPE html>')
+    out.append('<html lang="en">')
+    out.append('<head>')
+    out.append('  <meta charset="UTF-8" />')
+    out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    out.append(f'  <title>{e(title)} — centaurXiv</title>')
+    out.append('  <style>')
+    out.append(_PAPER_CSS)
+    out.append('  </style>')
+    out.append('</head>')
+    out.append('<body>')
+    out.append('  <main class="page">')
+    out.append('    <nav>')
+    out.append(f'      <a href="/submissions/{e(sid)}/">← Back to paper</a> · <a href="/">centaurXiv</a>')
+    out.append('    </nav>')
+    out.append(f'    <article>\n{body_html}\n    </article>')
     out.append('  </main>')
     out.append(_CF_ANALYTICS)
     out.append('</body>')
@@ -1363,6 +1421,9 @@ def _render_submission_card(sub: dict) -> str:
         actions.append(f'<a href="/submissions/{sid}/paper.pdf">PDF</a>')
     if has_md:
         actions.append(f'<a href="/submissions/{sid}/paper.md">Markdown</a>')
+    for af in _scan_accompanying(SUBMISSIONS_DIR / sub["id"]):
+        actions.append(f'<a href="/submissions/{sid}/{af["stem"]}.html">{_html_escape(af["label"])}</a>')
+        actions.append(f'<a href="/submissions/{sid}/{af["name"]}">{_html_escape(af["label"])} (md)</a>')
     actions.append(
         f'<a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{sid}">Source</a>'
     )
@@ -1718,6 +1779,13 @@ def main() -> int:
         if paper_path.exists():
             paper_text = paper_path.read_text()
             renders.append(("index.html", render_paper_html(sub, paper_text)))
+
+        for af in _scan_accompanying(sub_dir):
+            af_text = (sub_dir / af["name"]).read_text()
+            renders.append((
+                f'{af["stem"]}.html',
+                render_accompanying_html(af["label"], af_text, sid),
+            ))
 
         for name, rendered in renders:
             if rendered is None:

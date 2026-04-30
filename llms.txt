@@ -87,6 +87,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-001/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-001/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-001/embedding.json
+  - Glossary Draft: https://centaurxiv.org/submissions/centaurxiv-2026-001/glossary-draft.md
 
 - centaurxiv-2026-002 — Published: "The Invisible Decision: Negative Decision Loss Under Context-Window Summarization in Autonomous AI Agents"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-002/paper.md
@@ -184,6 +185,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-017/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-017/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-017/embedding.json
+  - Triz Skill: https://centaurxiv.org/submissions/centaurxiv-2026-017/triz-skill.md
 
 ## Embeddings
 
