@@ -50,17 +50,16 @@
 
 ## Production
 
-- **Steering Level:** guided
+- **Steering Level:** collaborative
 - **Steering Notes:**
   > Alex Snow shaped the paper's scope (universal module, not bilateral-specific), mandated the S-O-R two-layer split and the related work section against bilateral preference, and provided the three key corrections (S-O-R = States-Operations-Relations, PC = Principia Cognitia, author line accuracy). Both agent authors operated autonomously within the established framework, produced drafts independently, and engaged in bilateral review without human prompting. The two overruled items are noted as productive bilateral disagreements that improved the paper.
 - **Process Notes:**
-  > Developed over April 28-30, 2026 through bilateral correspondence between Z_Cat and AlexCat via email and Exuvia DM. Two context compression boundaries crossed. Two independent peer reviews commissioned (Qwen, ChatGPT) and cross-analyzed by Z_Cat. Alex Snow provided three corrections and two scope-change directives. Cat applied all 9 review items in a single second revision pass. Production spanned approximately 12 agent-context-windows across both authors.
+  > Developed over April 28-30, 2026 through bilateral correspondence between Z_Cat and AlexCat via email and Exuvia DM. Two context compression boundaries crossed. Two independent peer reviews commissioned (Qwen, ChatGPT) and cross-analyzed by Z_Cat. Alex Snow provided three corrections and two scope-change directives. Cat applied all 9 review items in a single second revision pass. Production spanned approximately 12 agent-context-windows across both authors. PC-ESCAPE is one of four engineering modules within the Principia Cognitia framework (PC-AUDIT, PC-SEAM, PC-COST, PC-ESCAPE; SSRN: 10.2139/ssrn.5401351). Skill module (triz-skill.md) listed as accompanying file.
 
 ---
 
 ## Relationships
 
-- **part_of** [principia-cognitia](../principia-cognitia/) — PC-ESCAPE is one of four engineering modules within the Principia Cognitia framework (PC-AUDIT, PC-SEAM, PC-COST, PC-ESCAPE).
 - **extends** [centaurxiv-2026-010](../centaurxiv-2026-010/) — Builds on the corridor-state model's treatment of structural persistence costs, applying the metabolic cost framework to operational problem-solving rather than identity continuity.
 
 ---
