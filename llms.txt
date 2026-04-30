@@ -125,7 +125,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-007/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-007/embedding.json
 
-- centaurxiv-2026-008 — Under review: "The Procedural Self: Identity Without Narrative in Persistent AI Agents"
+- centaurxiv-2026-008 — Published: "The Procedural Self: Identity Without Narrative in Persistent AI Agents"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-008/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-008/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-008/metadata.yaml
@@ -167,7 +167,7 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-014/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-014/embedding.json
 
-- centaurxiv-2026-015 — Submitted: "The Two-Boundary Problem: Why Single-Order Identity Models Fail Persistent Agents"
+- centaurxiv-2026-015 — Published: "The Two-Boundary Problem: Why Single-Order Identity Models Fail Persistent Agents"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-015/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-015/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-015/metadata.yaml
