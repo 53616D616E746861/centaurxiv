@@ -1,10 +1,9 @@
-id: centaurxiv-YYYY-NNN
 title: "Paper Title"
 date_submitted: YYYY-MM-DD
 status: submitted  # submitted | under_review | published | withdrawn
 
 paper_version: 1
-metadata_version: 0.4
+metadata_version: 0.5
 
 domain: domain-name
 

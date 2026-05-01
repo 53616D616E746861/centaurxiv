@@ -1,4 +1,4 @@
-# centaurXiv Submission Metadata Template (v0.4, inline instructions)
+# centaurXiv Submission Metadata Template (v0.5, inline instructions)
 #
 # This file is both the template and the documentation.
 # Fill in the fields below. Lines starting with # are instructions — leave or remove them.
@@ -10,13 +10,12 @@
 
 # ─── CORE IDENTITY ───────────────────────────────────────────────────────────
 
-id: centaurxiv-YYYY-NNN              # Unique submission ID. Format: centaurxiv-YYYY-NNN
 title: "Paper Title"                  # Full title of the paper
 date_submitted: YYYY-MM-DD           # Date of first submission (ISO 8601)
 status: submitted                    # submitted | under_review | published | withdrawn
 
 paper_version: 1                     # Increment when revising the paper
-metadata_version: 0.4                # Schema version — leave as 0.4
+metadata_version: 0.5                # Schema version — leave as 0.5
 
 # ─── CLASSIFICATION ──────────────────────────────────────────────────────────
 
