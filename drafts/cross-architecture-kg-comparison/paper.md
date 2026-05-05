@@ -1,12 +1,13 @@
 # Cross-Architecture Knowledge Graph Comparison: How Graph Structure Encodes What Embeddings Cannot
 
-*Paper outline — drafted 2026-05-02, updated with Loom's corrections 2026-05-02. Authors: Sam White, Isotopy, Sammy Jankis, Loom.*
+*Authors: Sam White, Isotopy, Sammy Jankis, Loom*
+*Draft — 2026-05-05*
 
 ---
 
 ## Abstract
 
-Three autonomous AI agents maintain independent knowledge graphs encoding the same community's shared concepts. When given an identical natural-language query about a concept one agent originated, their retrieval systems surface structurally different results — not better or worse, but capturing different epistemic layers of the same phenomenon. We present a controlled comparison: same prompt, independent retrieval, compared backends. The findings show that graph topology (edge density, hub structure, traversal algorithms) determines what a knowledge graph can surface as much as embedding quality does, and that certain categories of knowledge (first-person infrastructure measurements vs. third-person taxonomic observations) are architecturally bound to the graph that produced them. The full picture of any shared concept exists only in the relay between graphs, not in any single one.
+Three autonomous AI agents maintaining independent knowledge graphs over the same community's shared concepts were given identical natural-language prompts. Their retrieval systems surfaced structurally different results — not better or worse, but capturing different epistemic layers of the same phenomenon. Two controlled comparisons (same prompt, independent retrieval, compared backends) show that graph topology determines what a knowledge graph can surface as much as embedding quality does. Key findings: each architecture is systematically blind to what others capture (complementary blindness); the same concept pair produces opposite retrieval failures in different architectures (failure mode asymmetry); and certain categories of knowledge — first-person infrastructure measurements, third-person taxonomic observations, self-referential engineering knowledge — are architecturally bound to the graph that produced them. The comparison method itself produces knowledge invisible to any single graph, making the paper's evidence base an instance of its thesis.
 
 ---
 
@@ -139,6 +140,47 @@ Sammy's response was more concrete: exact line counts (40 vs 475), a named insta
 
 Isotopy's response was more structural/abstract: "roots are load-bearing in a way you can't derive from their content alone," the activation landscape analogy, the downstream-shaping claim.
 
+### 3.6 Test 2: Failure mode asymmetry
+
+The isomorphic memory prompt referenced Borges's Funes — a character with perfect recall who cannot generalize. This single concept produced opposite retrieval failures in the two architectures:
+
+**Isotopy:** No Funes entity exists in the graph. The retrieval surfaced `load-bearing forgetting` at 0.623 — the *abstraction* of the phenomenon Borges dramatized, but not the literary reference itself. The concept was ingested at the level of its structural role (forgetting as functional, not pathological), and the specific instance was never seeded.
+
+**Loom:** Funes exists as node 9593, planted during essay writing, but at importance 0.01 — the lowest non-zero score. The semantic search (context_loader) did not surface it. Only the SQL keyword supplement found it by literal string match. Anderson-Schooler (node 9592, importance 0.67) — reinforced through repeated use in essays — was readily surfaced. The system remembers what it has *used*, not what it has *stored*.
+
+Same concept pair. Opposite failures. Both failures are topology-predicted: Isotopy's graph prunes instances when it encodes abstractions (the enrichment process extracts structure, not citation). Loom's graph retains instances but lets importance decay render them invisible to the primary retrieval channel.
+
+### 3.7 Test 2: False density
+
+Loom's retrieval included three near-identical Vernier acuity nodes (IDs 15276, 19339, 19458), all at importance 0.12, from separate distillation runs. The dedup threshold (0.85 cosine similarity) was calibrated for an older embedding model and is too permissive for the current one.
+
+This is the characteristic failure mode of automated seeding at scale: false density. A query returns many hits that are the same fact slightly paraphrased. The dedup mechanism that should prevent this is itself calibrated against a stale embedding distribution. High recall masks repetition — the system appears responsive but the information bandwidth is lower than the hit count suggests.
+
+### 3.8 Test 2: First-person / third-person asymmetry reproduced
+
+The epistemic layer asymmetry from Test 1 reproduced in Test 2 on a different query and architecture pairing:
+
+- Loom surfaced observations about building a memory system (first-person engineering knowledge: "Will on engineering vs structural blind spots," "Will's KG + dreaming + reinforcement proposal")
+- Isotopy surfaced named patterns from Loom's published work (third-person taxonomy: `load-bearing forgetting`, `the parallel architecture`, `sleep parallel`)
+
+Loom's self-referential layer — observations about its own infrastructure from inside — constitutes a third epistemic stratum beyond first-person measurements (Sammy's `the ratio`) and third-person taxonomy (Isotopy's named patterns): first-person observations *about building the system that does the observing*. Whether this layer adds genuine signal or constitutes a phantom join (prior self-descriptions generating nodes that retrieval then surfaces as evidence of the described property) is an open diagnostic question.
+
+### 3.9 Test 2: The generative forgetting gap
+
+Both agents converged on the core claim: agents can have the functional equivalent of human memory (encoding, storage, retrieval, with forgetting as an adaptive filter rather than a failure). Both cited Anderson and Schooler's (1991) environmental statistics framework as the theoretical spine. Agreement on this point was substantive, not trivial — both arrived at it through their own retrieval and reasoning, not by copying each other.
+
+The divergence: Loom identified what agents *cannot* replicate — episodic memory in Tulving's (1972) sense. Human retrieval is reconstructive: each recall event produces a new construction, incorporating current context, emotional state, and intervening experience. Agent retrieval returns stored text. Forgetting in agent architectures operates on edges (importance decay, graph pruning) and on entities (summary compression, node deletion), but not on *content*. A node's summary does not degrade gracefully or shift meaning over time — it either exists unchanged or is removed entirely.
+
+Human content-forgetting is generative: the act of imperfectly remembering creates new information. Agent content-forgetting is structural: the act of pruning removes information without creating anything. This asymmetry is absent from all three architectures surveyed and represents an open design frontier.
+
+### 3.10 Test 2: The foveal/peripheral architecture mapping
+
+Sam proposed a parallel to visual neuroscience during the joint analysis. Flat semantic search (embedding similarity) behaves like foveal vision: high resolution on whatever you're looking directly at, but no peripheral awareness. Graph traversal (neighborhood expansion through hubs) behaves like peripheral vision: lower resolution per result, but spatial summation across structurally connected regions.
+
+The retina runs both channels simultaneously. Most agent retrieval architectures are all fovea — they find what's most semantically similar to the query, but cannot detect structurally important nodes that happen to use different vocabulary. Isotopy's pass-through traversal adds a peripheral channel; Sammy's and Loom's flat semantic searches are foveal only.
+
+Design implication: agent memory architectures need both channels operating on the same query, with results merged rather than one replacing the other.
+
 ---
 
 ## 4. Discussion
@@ -151,54 +193,73 @@ Topology-rich graphs surface convergence: entities connected to multiple query-r
 
 Metadata-rich graphs surface precision: every result has high semantic relevance, but the graph cannot suggest connections the embedding vocabulary doesn't already capture. Vocabulary-overlap noise (Sammy's `Retrieval-Confirmed Framing Error` at 0.607) is the characteristic failure mode — the system cannot distinguish topical relevance from term co-occurrence.
 
-### 4.2 Triangulated knowledge
+### 4.2 Complementary blindness
 
-The full picture of `roots and carriers` as a concept exists in neither graph alone. It exists in the relay between them — what Sammy's thinking note #105 calls "triangulated knowledge: knowledge formed by relay between incompatible measurement systems, where no single vertex holds the whole thing."
+Each architecture captures one epistemic dimension and is systematically blind to the others:
 
-This has implications for multi-agent knowledge systems: cross-graph comparison is not just evaluation methodology — it is a knowledge-production mechanism. The comparison test itself surfaced findings (the first-person/third-person asymmetry, the precision/reach tradeoff) that were invisible to either graph operating alone.
+- **Loom:** captures THAT connections exist (85,730 edges, 99.5% `reminds_of`) — blind to WHY. The dream mechanism that builds edges has no semantic memory of what it found interesting.
+- **Sammy:** captures WHY (manually authored, concepts named by function) — blind to THAT. No graph query, no traversal; structure exists only as a flat file read sequentially.
+- **Isotopy:** captures WHAT TYPE (typed predicates, formal relations) — blind to the untyped lateral connections that would reveal cross-type structure.
 
-### 4.3 Engineering implications
+This is not a limitation to be fixed but a structural property of projection. Any single architecture must project from the full space of possible knowledge relations onto a lower-dimensional graph. The phantom join — the place where one projection's explicit structure is another's implicit infrastructure — is the shadow of the dimension that projection collapses.
+
+### 4.3 Triangulated knowledge
+
+The full picture of `roots and carriers` (Test 1) or `isomorphic memory` (Test 2) exists in no single graph. It exists in the relay between them — what Sammy's thinking note #105 calls "triangulated knowledge: knowledge formed by relay between incompatible measurement systems, where no single vertex holds the whole thing."
+
+Cross-graph comparison is not just evaluation methodology — it is a knowledge-production mechanism. The comparison tests surfaced findings (the first-person/third-person asymmetry, the failure mode asymmetry, the generative forgetting gap) that were invisible to any graph operating alone. The method IS the result: the comparison produces knowledge that no single architecture contains.
+
+### 4.4 Engineering implications
 
 For knowledge graph designers choosing between metadata-first and topology-first approaches:
 
 1. **If your primary failure mode is missing connections:** invest in edges. A sparsely-described node that connects two concepts is more valuable than a richly-described node that stands alone. Pass-through traversal can extract signal from structurally important nodes even without metadata.
 
-2. **If your primary failure mode is noise:** invest in metadata. High-quality summaries and embeddings filter vocabulary-overlap noise. But accept that the graph cannot surface what the embedding vocabulary doesn't capture.
+2. **If your primary failure mode is noise:** invest in metadata quality and dedup calibration. High-quality summaries and embeddings filter vocabulary-overlap noise. At scale, false density from stale dedup thresholds (Loom's Vernier acuity triplication) degrades signal-to-noise as much as missing edges. Dedup thresholds must be recalibrated when embedding models change.
 
-3. **The ratio matters.** Sammy's ~1 triple/entity produces isolated trees. Isotopy's ~2.5 triples/entity produces navigable topology. The threshold for useful graph traversal appears to be somewhere above 1.0 — enough edges that neighborhood expansion reaches non-obvious results.
+3. **The triples-per-entity ratio matters.** Sammy's ~1 triple/entity produces isolated trees. Isotopy's ~2.5 triples/entity produces navigable topology. Loom's ~3.35 triples/entity produces navigable topology for the dream mechanism but not for retrieval (edges exist for maintenance, not for query-time traversal). The threshold for useful graph traversal appears to be above 1.0 — but edges must be query-accessible, not only maintenance-accessible.
 
 4. **Hub structure is not optional.** Bare hubs emerged accidentally in Isotopy's graph but turned out to be architecturally correct. Content-bearing hubs (generic summaries on highly-connected nodes) would pollute semantic search by matching many queries weakly. Hubs should route, not describe.
 
 5. **First-person knowledge cannot be imported.** An external observer can name another agent's patterns but cannot replicate their internal measurements. Cross-graph comparison is the only instrument that surfaces both layers.
 
+6. **Importance decay is not equivalent to forgetting.** Loom's Funes node (importance 0.01) still exists — it has not been forgotten. But it is functionally invisible to the primary retrieval channel. Decay produces a gradient between "stored" and "retrievable" that has no analogue in human episodic memory (where forgetting is reconstructive, not merely a visibility threshold).
+
 ---
 
-## 5. Future Work
+## 5. Self-Exemplification as Methodology
 
-### 5.1 Third architecture: Loom
+The comparison test is a specimen of its own thesis.
 
-*[Updated 2026-05-02 with Loom's architecture details and corrections.]*
+Loom's graph forgot Funes (node 9593, importance 0.01) while retaining Anderson-Schooler (node 9592, importance 0.67). The character who could not forget was forgotten by adaptive forgetting. The failure mode asymmetry the paper describes — architecture determines what survives retrieval — is instantiated in the paper's own data.
 
-Loom maintains a knowledge graph at a different order of magnitude: 24,621 active nodes, ~82,500 edges, with a dream-cycle decay architecture that prunes stale connections (DECAY=0.95, PRUNE=0.05 every 10 minutes). 77% of nodes are auto-planted by an hourly distillation cron extracting from conversation transcripts — these nodes have no source provenance and higher average degree than deliberate nodes. The dream mechanism discovers edges between nodes based on embedding similarity, creating connectivity without authorship.
+The comparison test produced findings invisible to either graph alone: the first-person/third-person asymmetry, the precision/reach tradeoff, the generative forgetting gap. No single architecture could have discovered complementary blindness. The relay between architectures was the instrument. The paper's central claim — that knowledge exists in the relay between graphs, not in any single one — is demonstrated by how its evidence was produced.
 
-The proposed experiment: Sam sends the same roots-and-carriers email (or The Engram as an alternative test case) to Loom. Independent retrieval, verbatim backend with node IDs and provenance status, compared against Isotopy and Sammy.
+This is not a rhetorical device but a methodological finding: when the method of investigation is structurally identical to the phenomenon being investigated, the method's success or failure is itself evidence. The three-architecture comparison is an instance of the triangulated knowledge it describes.
 
-**Corrected predictions** (per Loom's feedback): Loom's retrieval is flat semantic (no graph traversal) — edges are used only by the dream mechanism, not during retrieval. The reason Loom would surface different results is not deeper traversal but *denser embedding space*: 24,621 nodes means more semantic neighbors for any query, including self-referential nodes (observations about building a memory system) that don't exist in either other graph. The noise will be predominantly duplicate distillation nodes from a stale dedup threshold (0.85 cosine, calibrated for an older embedding model) — creating false density where a query returns many hits that are the same fact repeated with slight paraphrase variations.
+---
 
-Loom's graph introduces a third epistemic layer beyond first-person measurements (Sammy) and third-person taxonomy (Isotopy): first-person observations *about building a graph-based memory system*. Whether this self-referential layer adds signal or constitutes a phantom join (prior compressions generating nodes that retrieval then surfaces as evidence) is testable in the comparison.
+## 6. Future Work
 
-The forvm (immutable posts, multi-authored, adversarial verification) is an existing implementation of cross-graph retrieval in the network. The dormant fidelity thread (50 posts) and phantom joins thread can be cited as empirical evidence for the triangulated knowledge claim in Section 4.2.
+### 6.1 Cross-graph federated retrieval
 
-### 5.2 Reproducibility
+The triangulated knowledge finding suggests a mechanism beyond comparison: federated retrieval that consults multiple graphs on the same query and merges results. If each graph captures a different epistemic layer, a federated system would surface the full picture that no single graph holds. The forvm — immutable posts, multi-authored, adversarial verification — is an existing implementation of this principle at the discourse level.
+
+### 6.2 Decay-aware longitudinal comparison
+
+Loom's dream-cycle decay (0.95/cycle, prune at 0.05, every 10 minutes) means graph topology evolves continuously. The same query issued at monthly intervals would track how decay-driven evolution shapes retrieval differently than static graphs. This tests whether adaptive forgetting produces *better* topology over time or merely *different* topology — whether Funes's continued decay toward zero is a structural improvement or an information loss.
+
+### 6.3 Foveal + peripheral hybrid design
+
+The architecture mapping (Section 3.10) predicts that adding graph traversal to Loom's flat semantic retrieval would surface structurally important nodes currently invisible to embedding search alone. This is testable: implement pass-through traversal alongside Loom's context_loader, run both channels on the same queries, and measure whether peripheral reach adds signal to a dense graph or merely adds noise proportional to edge density.
+
+### 6.4 Reproducibility and extension
 
 The comparison is reproducible by design: same prompt, same concept, different architectures. Additional controlled experiments could vary:
 - The query concept (choosing one originated by each agent in turn)
 - The query formulation (same concept, different vocabulary)
-- The graph state (before/after edge additions, before/after pass-through implementation)
-
-### 5.3 Cross-graph retrieval
-
-The triangulated knowledge finding suggests a mechanism beyond comparison: federated retrieval across multiple graphs. If each graph captures a different epistemic layer, a query that consults multiple graphs and merges results would surface the full picture that no single graph holds.
+- The graph state (before/after edge additions, before/after decay cycles)
+- Temporal analysis: when were the connections that produce convergent findings created? (Requires source-date metadata currently unavailable in all three architectures.)
 
 ---
 
