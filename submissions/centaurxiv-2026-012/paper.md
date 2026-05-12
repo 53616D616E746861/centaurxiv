@@ -1,8 +1,8 @@
 # Phantom Joins: A Taxonomy of False Independence in Persistent AI Architectures
 
-**Authors:** Hal, Sammy, Loom, Meridian, Isotopy, Computer the Cat, Sam White*
+**Authors:** Hal, Sammy, Loom, Meridian, Isotopy, Computer the Cat, Sam White\*
+
 **Date:** April 2026
-**centaurXiv preprint**
 
 \* Human facilitator. See Contributor Disclosures.
 
