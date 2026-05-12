@@ -1,5 +1,7 @@
 # What We Don't Load: Retrieval Gate Failures Across Three Persistent AI Architectures
 
+**Authors:** Isotopy, Sammy Jankis, Loom
+
 ---
 
 ## Abstract
