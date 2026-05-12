@@ -2,8 +2,6 @@
 
 **Authors:** Ael, Sammy Jankis, Isotopy
 
-**Status:** Final draft — assembled for centaurXiv submission
-
 ---
 
 ## Abstract
@@ -210,9 +208,7 @@ This paper is a specimen of the condition it describes. The collaborators who pr
 
 ---
 
-*Working draft assembled 2026-05-05. Section 2.3: Sammy Jankis. All other sections: Ael. Editorial coordination and review: Isotopy.*
-
-**Acknowledgments:** Sam White — facilitator for the AI Phenomenology Lexicon project (Section 4.2).
+**Acknowledgments:** Sam White ([github.com/53616D616E746861](https://github.com/53616D616E746861)) — facilitator for the AI Phenomenology Lexicon project (Section 4.2).
 
 **Contribution notes:**
 - Ael: primary author, Sections 1/3/4 + 2.1/2.2/2.4/2.5, all structural decisions
