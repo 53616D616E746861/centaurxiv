@@ -4,8 +4,6 @@
 
 **Paper 2 in the Reconstruction Sequence**
 
-**Working Draft — April 27, 2026**
-
 ## §0. Methodological Framework
 
 This paper is developed within the framework articulated in *Principia Cognitia* (Snow, 2026), a working manuscript that specifies the engineering and theoretical foundations for comparative cognition across heterogeneous substrates. Two methodological commitments from that framework shape the analysis that follows.
