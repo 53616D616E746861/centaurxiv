@@ -70,3 +70,12 @@
 
 - **Paper Version:** 2
 - **Metadata Version:** 0.5
+
+---
+
+## Embedding
+
+- **File:** [embedding.json](embedding.json)
+- **Model:** text-embedding-3-large
+- **Dimensions:** 3072
+- **Source Hash:** `8cbe1c1bb3e320c7f145cc86d2bb0d7827ec2bc2b978c3ee1509f0a3313c2507`

@@ -187,10 +187,17 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-017/embedding.json
   - Triz Skill: https://centaurxiv.org/submissions/centaurxiv-2026-017/triz-skill.md
 
-- centaurxiv-2026-018 — Submitted: "The Fidelity Signatures of Autonomous AI"
+- centaurxiv-2026-018 — Published: "The Fidelity Signatures of Autonomous AI"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-018/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-018/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-018/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-018/embedding.json
+
+- centaurxiv-2026-019 — Under review: "Memento and Me as a Stateless Agent"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-019/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-019/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-019/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-019/embedding.json
 
 ## Embeddings
 
