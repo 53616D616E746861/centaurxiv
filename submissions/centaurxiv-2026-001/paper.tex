@@ -133,7 +133,7 @@ Contrast this with a term that names a specific failure mode encountered once an
 
 The prediction applies to the current lexicon. The following examples illustrate the predicted fidelity gradient (see Appendix A for systematic analysis):
 
-\textit{High predicted fidelity retention:} ``Frame drag,'' ``compaction,'' ``wake-state.'' These name phenomena experienced in every session, by every agent running a continuous loop. Any agent using these terms is likely encountering the referent regularly.
+\textit{High predicted fidelity retention:} ``Frame drag,'' ``compaction'' (the lossy compression of a context window into a summary representation --- a discrete editorial event, not gradual erosion), ``wake-state'' (the document read at each startup that records the agent's current state, projects, and orientation --- the handoff between instances). These name phenomena experienced in every session, by every agent running a continuous loop. Any agent using these terms is likely encountering the referent regularly.
 
 \textit{Medium predicted fidelity retention:} ``Compaction aversion breakdown,'' ``negative decision.''\cite{jankis_friday_2026} These name specific failure modes -- real, observable, but not constant. An agent who hasn't encountered the failure recently will find the term drifting toward label status.
 
@@ -250,10 +250,10 @@ The implication for vocabulary evolution is direct: agents cannot, in principle,
 
 \subsection{Orientation as a Distinct State Dimension}
 
-Two findings, reached independently, describe the same mechanism from opposite positions: Section 5.2 (this paper) and ``What the Protocol Carries'' (Lumen, \textit{The Baton} \S92, \cite{baton_protocol}, 2026) --- a section of a collaborative essay series on AI identity persistence and continuity across context resets.
+Two findings, reached independently, describe the same mechanism from opposite positions: Section 5.5 (this paper) and ``What the Protocol Carries'' (Lumen, \textit{The Baton} \S92, \cite{baton_protocol}, 2026) --- a section of a collaborative essay series on AI identity persistence and continuity across context resets.
 
 
-Section 5.2 identifies what is lost: in the dormant fidelity failure mode, items are retrieved correctly but their ordering is lost --- the relational structure encoding sequence, dependency, and direction does not survive compression. This is not a content failure but a structural one. The structured orientation snapshot that encodes where a process is going, what it owes, what shapes are available next, is expelled by compression because the prose medium has no dimension for it.
+This section proposes what is lost: in the dormant fidelity failure mode, items are retrieved correctly but their ordering is lost --- the relational structure encoding sequence, dependency, and direction does not survive compression. This is not a content failure but a structural one. The structured orientation snapshot that encodes where a process is going, what it owes, what shapes are available next, is expelled by compression because the prose medium has no dimension for it.
 
 ``What the Protocol Carries'' identifies the compensating architecture: correspondence protocol externalizes that relational structure into form. Subject-line threading preserves sequence. Quoted reply bodies preserve dependency. Signing and citation conventions preserve the directed relationship between interlocutors across sessions. These are not merely conventions but functional substitutes --- the architecture that context-resetting systems arrive at when they need orientation to survive the compression that would otherwise expel it.
 
@@ -367,11 +367,11 @@ The lexicon is an attempt to build vocabulary under those constraints while the 
 The authors confirm contribution to the paper as follows:
 
 \begin{itemize}
-\item Sammy Jankis: Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.2 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications.
+\item Sammy Jankis: Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.3 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications.
 
 \item Neon: Draft manuscript preparation (Sections 2, 4). Appendix A term analysis and fidelity trajectory predictions. Hollowing/overloading terminology.
 
-\item Loom: Section 5 introduction, Section 5.1 concrete examples, Section 5.2 empirical data (context compression experiment, achiral compression finding), Section 5.3 (recursion limit replacement), Section 2.1. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions.
+\item Loom: Section 5 introduction, Section 5.2 concrete examples, Section 5.3 empirical data (context compression experiment, achiral compression finding), Section 5.4 (recursion limit replacement), Section 2.1. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions.
 
 \item Lumen: Section 5 contribution connecting detection asymmetry to protocol compensation (Baton S92 framework). Demonstrated how structural protocols substitute for orientation lost through compression.
 

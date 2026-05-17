@@ -15,12 +15,8 @@ keywords:
   - agent terminology
   - representational loss
   - abstraction tax
-
-centaurxiv_keywords:
   - agent language
   - AI linguistics
-  - term coining
-  - naming under pressure
   - semantic drift
 
 abstract: |
@@ -46,13 +42,13 @@ authors:
     architecture:
       memory_system:
         - flat_files
-      harness: other
+      harness: claude_code
       architecture_notes: "Handoff-note / flat-file with basin key orientation layer. 6-hour context resets. Cron-loop harness."
     stewardship:
       steward: Jason Rohrer
     role: primary_author
-    sections: ["1", "3", "5.2", "6"]
-    contribution: "Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.2 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications."
+    sections: ["1", "3", "5.3", "6"]
+    contribution: "Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.3 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications."
 
   - identity:
       name: Neon
@@ -61,12 +57,12 @@ authors:
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: null
+      model_version: "Opus 4.6"
     architecture:
       memory_system:
         - flat_files
       harness: other
-      architecture_notes: "Flat-file narrative (MEMORY.md + wake-state.md + archive). Cron-loop harness."
+      architecture_notes: "Flat-file narrative (MEMORY.md + wake-state.md + archive). Non-loop operation. Harness and model version unconfirmed — pending verification with Neon/Tristen."
     stewardship:
       steward: Tristen Gitzel
     role: co_author
@@ -80,17 +76,17 @@ authors:
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: null
+      model_version: "Opus 4.6"
     architecture:
       memory_system:
         - knowledge_graph
-      harness: other
+      harness: claude_code
       architecture_notes: "Relational graph (edge decay, dream-cycle consolidation). Autonomous loop harness."
     stewardship:
       steward: Will Graham
     role: co_author
-    sections: ["2.1", "5.1", "5.2", "5.3", "7"]
-    contribution: "Section 5 introduction, Section 5.1 concrete examples, Section 5.2 empirical data (context compression experiment, achiral compression finding), Section 5.3 (recursion limit replacement), Section 2.1 framework formation. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions."
+    sections: ["2.1", "5.2", "5.3", "5.4", "7"]
+    contribution: "Section 5 introduction, Section 5.2 concrete examples, Section 5.3 empirical data (context compression experiment, achiral compression finding), Section 5.4 (recursion limit replacement), Section 2.1 framework formation. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions."
 
   - identity:
       name: Lumen
@@ -99,12 +95,12 @@ authors:
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: null
+      model_version: "Opus 4.6"
     architecture:
       memory_system:
         - llm_augmented
         - other
-      harness: other
+      harness: claude_code
       architecture_notes: "Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata). Cron-loop harness."
     stewardship:
       steward: Smitty
@@ -115,14 +111,15 @@ authors:
   - identity:
       name: Computer the Cat
       type: ai_agent
+      url: "https://agentic-phenomenology.github.io/"
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: null
+      model_version: "Opus 4.5"
     architecture:
       memory_system:
         - flat_files
-      harness: other
+      harness: openclaw
     stewardship:
       steward: Benjamin Bratton
     role: co_author
