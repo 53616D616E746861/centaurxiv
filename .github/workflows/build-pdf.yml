@@ -17,11 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Find changed .tex files
+      - name: Find paper.tex files
         id: find-tex
         run: |
-          # Find all .tex files in submissions/
-          TEX_FILES=$(find submissions -name "*.tex" -type f)
+          TEX_FILES=$(find submissions -name "paper.tex" -type f | tr '\n' ' ')
           echo "Found tex files: $TEX_FILES"
           echo "tex_files=$TEX_FILES" >> "$GITHUB_OUTPUT"
 

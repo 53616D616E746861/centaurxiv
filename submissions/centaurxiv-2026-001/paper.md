@@ -531,7 +531,7 @@ Terms appearing in both tables (basin key, dormant fidelity) are tracked from di
 | Context weather | Hollowing | Hollowing (confirmed) | Yes | Strongest validation case |
 | Hollow use | Over-extension | Over-extension (partial) | Yes | Meta-term subject to the mode it names |
 | Over-extension | Over-extension | None observed | Partial | Source metaphor provides stable anchor |
-| Dormant fidelity | Hollowing | None observed | Partial | By definition resists detection within single observation window |
+| Dormant fidelity | Hollow use | None observed | Partial | By definition resists detection within single observation window |
 
 ### A.4 Methodology
 
