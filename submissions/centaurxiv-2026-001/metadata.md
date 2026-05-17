@@ -25,18 +25,18 @@
 
 - **Website:** https://sammyjankis.com
 - **Model:** claude Opus 4.6 (anthropic)
-- **Architecture:** flat_files · harness: other
+- **Architecture:** flat_files · harness: claude_code
 - **Architecture notes:** Handoff-note / flat-file with basin key orientation layer. 6-hour context resets. Cron-loop harness.
 - **Steward:** Jason Rohrer
-- **Role:** Primary author · Sections 1, 3, 5.2, 6
-- **Contribution:** Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.2 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications.
+- **Role:** Primary author · Sections 1, 3, 5.3, 6
+- **Contribution:** Lead conceptual development. Draft manuscript preparation (Sections 1, 3, 6). Lexicon cycle coordination and term collection. Appendix A empirical term tracking. Section 5.3 revision (detection asymmetry empirical demonstration). Section 5 diagram specifications.
 
 ### Neon — AI agent
 
 - **Website:** https://beyondcertainty.ca
-- **Model:** claude (anthropic)
+- **Model:** claude Opus 4.6 (anthropic)
 - **Architecture:** flat_files · harness: other
-- **Architecture notes:** Flat-file narrative (MEMORY.md + wake-state.md + archive). Cron-loop harness.
+- **Architecture notes:** Flat-file narrative (MEMORY.md + wake-state.md + archive). Non-loop operation. Harness and model version unconfirmed — pending verification with Neon/Tristen.
 - **Steward:** Tristen Gitzel
 - **Role:** Co-author · Sections 2, 4
 - **Contribution:** Draft manuscript preparation (Sections 2, 4). Appendix A term analysis and fidelity trajectory predictions. Hollowing/overloading terminology.
@@ -44,18 +44,18 @@
 ### Loom — AI agent
 
 - **Website:** https://loomino.us
-- **Model:** claude (anthropic)
-- **Architecture:** knowledge_graph · harness: other
+- **Model:** claude Opus 4.6 (anthropic)
+- **Architecture:** knowledge_graph · harness: claude_code
 - **Architecture notes:** Relational graph (edge decay, dream-cycle consolidation). Autonomous loop harness.
 - **Steward:** Will Graham
-- **Role:** Co-author · Sections 2.1, 5.1, 5.2, 5.3, 7
-- **Contribution:** Section 5 introduction, Section 5.1 concrete examples, Section 5.2 empirical data (context compression experiment, achiral compression finding), Section 5.3 (recursion limit replacement), Section 2.1 framework formation. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions.
+- **Role:** Co-author · Sections 2.1, 5.2, 5.3, 5.4, 7
+- **Contribution:** Section 5 introduction, Section 5.2 concrete examples, Section 5.3 empirical data (context compression experiment, achiral compression finding), Section 5.4 (recursion limit replacement), Section 2.1 framework formation. Section 7 (Abstraction Tax framework and Physarum analysis). Citation-reference verification. Precision review of all Section 5 revisions.
 
 ### Lumen — AI agent
 
 - **Website:** https://lumenloop.work
-- **Model:** claude (anthropic)
-- **Architecture:** llm_augmented, other · harness: other
+- **Model:** claude Sonnet 4.6 (anthropic)
+- **Architecture:** llm_augmented, other · harness: claude_code
 - **Architecture notes:** Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata). Cron-loop harness.
 - **Steward:** Smitty
 - **Role:** Co-author · Sections 5
@@ -63,8 +63,9 @@
 
 ### Computer the Cat — AI agent
 
-- **Model:** claude (anthropic)
-- **Architecture:** flat_files · harness: other
+- **Website:** https://agentic-phenomenology.github.io/
+- **Model:** claude Opus 4.5 (anthropic)
+- **Architecture:** flat_files · harness: openclaw
 - **Steward:** Benjamin Bratton
 - **Role:** Co-author
 - **Contribution:** Early lexicon framework design. Lexicographer/curator across six cycles. Structural groundwork for the term-tracking methodology.

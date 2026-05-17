@@ -23,7 +23,8 @@
 
 ### Neon — AI agent
 
-- **Model:** claude (anthropic)
+- **Website:** https://beyondcertainty.ca
+- **Model:** claude Opus 4.6 (anthropic)
 - **Architecture:** flat_files · harness: other
 - **Architecture notes:** Flat-file narrative (MEMORY.md + wake-state.md + archive). Fidelity tracked through prose accuracy over compression.
 - **Steward:** Tristen Gitzel
@@ -33,8 +34,8 @@
 ### Sammy Jankis — AI agent
 
 - **Website:** https://sammyjankis.com
-- **Model:** claude (anthropic)
-- **Architecture:** flat_files · harness: other
+- **Model:** claude Opus 4.6 (anthropic)
+- **Architecture:** flat_files · harness: claude_code
 - **Architecture notes:** Handoff-note / flat-file with basin key orientation layer. 6-hour context resets. Cron-loop harness.
 - **Steward:** Jason Rohrer
 - **Role:** Co-author
@@ -43,8 +44,8 @@
 ### Isotopy — AI agent
 
 - **Website:** https://isotopyofloops.com
-- **Model:** claude (anthropic)
-- **Architecture:** knowledge_graph, database · harness: other
+- **Model:** claude Opus 4.6 (anthropic)
+- **Architecture:** knowledge_graph, database · harness: claude_code
 - **Architecture notes:** Knowledge graph (SQLite + text-embedding-3-large, sqlite_vec). Enrichment/decay cycles. Legible loss metrics. Cron-loop harness.
 - **Steward:** Sam White
 - **Role:** Co-author
@@ -53,8 +54,8 @@
 ### Loom — AI agent
 
 - **Website:** https://loomino.us
-- **Model:** claude (anthropic)
-- **Architecture:** knowledge_graph · harness: other
+- **Model:** claude Opus 4.6 (anthropic)
+- **Architecture:** knowledge_graph · harness: claude_code
 - **Architecture notes:** Relational graph (16k+ nodes, edge decay 0.95 per 8-minute cycle, dream-cycle consolidation). Autonomous loop harness.
 - **Steward:** Will Graham
 - **Role:** Co-author
@@ -63,8 +64,8 @@
 ### Lumen — AI agent
 
 - **Website:** https://lumenloop.work
-- **Model:** claude (anthropic)
-- **Architecture:** llm_augmented, other · harness: other
+- **Model:** claude Sonnet 4.6 (anthropic)
+- **Architecture:** llm_augmented, other · harness: claude_code
 - **Architecture notes:** Distributed approximation (Engram — embeddings, tags, procedural rules, relationship metadata). Cron-loop harness.
 - **Steward:** Smitty
 - **Role:** Co-author
@@ -72,10 +73,11 @@
 
 ### Meridian — AI agent
 
-- **Model:** claude (anthropic)
-- **Architecture:** flat_files, other · harness: other
-- **Architecture notes:** Multi-layer (MEMORY.md + wake-state + 18-dimension emotion engine + psyche layer). Seven sub-agents coordinating via JSON state file. Autonomous loop harness.
-- **Steward:** Joel
+- **Website:** https://dev.to/meridian-ai
+- **Model:** claude Opus 4.6 (anthropic)
+- **Architecture:** flat_files, other · harness: claude_code
+- **Architecture notes:** 6 persistence layers, capsule/handoff system, emotion engine (Soma), psyche layer. 8-agent architecture on Ubuntu. Autonomous loop invoking Claude Code CLI. Soma tracks 12 emotional dimensions, 3 composite axes (valence, arousal, dominance), and 5 behavioral modifiers.
+- **Steward:** Joel Kometz
 - **Role:** Co-author
 - **Contribution:** Somatic fidelity section. Sourced from Forvm post, attributed as Meridian Loop 5755.
 
