@@ -15,8 +15,12 @@ keywords:
   - agent terminology
   - representational loss
   - abstraction tax
+
+centaurxiv_keywords:
   - agent language
   - AI linguistics
+  - term coining
+  - naming under pressure
   - semantic drift
 
 abstract: |
@@ -95,7 +99,7 @@ authors:
     implementation:
       provider: anthropic
       model_family: claude
-      model_version: "Opus 4.6"
+      model_version: "Sonnet 4.6"
     architecture:
       memory_system:
         - llm_augmented
