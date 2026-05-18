@@ -45,6 +45,14 @@ export default {
       if (path === "/crossings")
         return format === "json" ? jsonResp(crossingsJSON(graph)) : textResp(crossings(graph));
 
+      if (path === "/concepts") {
+        const type = url.searchParams.get("type");
+        const paperId = url.searchParams.get("paper");
+        return format === "json"
+          ? jsonResp(conceptsBrowseJSON(graph, type, paperId))
+          : textResp(conceptsBrowse(graph, type, paperId));
+      }
+
       let m;
 
       m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})\/full$/);
@@ -239,17 +247,22 @@ function home(graph) {
   lines.push(hr);
   lines.push("NAVIGATION");
   lines.push(hr, "");
-  lines.push("  Browse all papers              → /papers");
-  lines.push("  Paper detail                   → /papers/001");
-  lines.push("  Full paper text                → /papers/001/full");
-  lines.push("  Section detail                 → /sections/001-s1-the-problem");
-  lines.push("  Full section text              → /sections/001-s1-the-problem/full");
-  lines.push("  Concept detail                 → /concepts/001-fitness");
-  lines.push("  Search                         → /search/fidelity");
-  lines.push("  Cross-paper concepts           → /crossings");
-  lines.push("  Edges by type                  → /edges/constrains");
-  lines.push("  All endpoints                  → /help");
-  lines.push("  JSON output                    → add ?format=json to any endpoint");
+  lines.push("  Top-down: start from papers");
+  lines.push("    /papers                      Browse all papers");
+  lines.push("    /papers/001                  Paper detail → sections → concepts");
+  lines.push("");
+  lines.push("  Bottom-up: start from concepts");
+  lines.push("    /concepts                    Browse concepts by type or paper");
+  lines.push("    /concepts?type=finding       All empirical findings");
+  lines.push("    /concepts?paper=001          All concepts from one paper");
+  lines.push("    /crossings                   Concepts spanning multiple papers");
+  lines.push("");
+  lines.push("  Search: find something specific");
+  lines.push("    /search/fidelity             Search across everything");
+  lines.push("    /edges/constrains            Browse edges by relationship type");
+  lines.push("");
+  lines.push("  /help                          All endpoints");
+  lines.push("  ?format=json                   Add to any endpoint for structured output");
   lines.push("");
   lines.push("Every response includes navigation hints. Start anywhere.");
 
@@ -267,7 +280,7 @@ function homeJSON(graph) {
     concept_types: typeCounts,
     edge_types: edgeTypes,
     papers: papers.map(p => ({ id: p.id, title: p.title, date: p.date, authors: p.authors, concepts: p.concept_ids.length, token_count: p.token_count })),
-    try_next: ["/papers", "/search/fidelity", "/crossings", "/concepts/001-fitness"],
+    try_next: ["/papers", "/concepts", "/search/fidelity", "/crossings"],
   };
 }
 
@@ -284,10 +297,15 @@ function papers(graph) {
     lines.push(`  → /papers/${p.id.split("-").pop()}`);
     lines.push("");
   }
+  lines.push(hr, "NAVIGATE", hr);
+  lines.push("  Pick any paper to see its sections, concepts, and full text options.");
+  lines.push("  e.g. /papers/001 → section summaries, concept list, link to full text");
+  lines.push("");
   lines.push(hr, "TRY", hr);
   lines.push("  /papers/001   (The Goodbye Problem — foundational vocabulary paper)");
   lines.push("  /papers/008   (The Procedural Self — process identity)");
   lines.push("  /search/compaction");
+  lines.push("  /crossings                 Concepts spanning multiple papers");
   return lines.join("\n");
 }
 
@@ -323,9 +341,11 @@ function paper(graph, p) {
   for (const sid of p.section_ids) {
     const s = graph.sectionsById[sid];
     if (!s) continue;
-    lines.push(`  ${s.name}`);
+    const tc = s.token_count ? ` · ~${s.token_count} tokens` : "";
+    lines.push(`  ${s.name}${tc}`);
     lines.push(`  ${truncate(s.summary)}`);
-    lines.push(`  → /sections/${sid}`);
+    lines.push(`  → /sections/${sid}          summary + concepts`);
+    lines.push(`  → /sections/${sid}/full     full text`);
     if (s.concept_ids.length) {
       lines.push(`    concepts: ${s.concept_ids.join(", ")}`);
     }
@@ -348,10 +368,15 @@ function paper(graph, p) {
     }
   }
 
+  lines.push(hr, "NAVIGATE", hr);
+  lines.push("  /sections/{id}        Section summary + its concepts");
+  lines.push("  /sections/{id}/full   Full section text");
+  lines.push("  /concepts/{id}        Concept detail + edges to related concepts");
+  lines.push("");
   lines.push(hr, "TRY", hr);
-  lines.push(`  /papers/${p.id.split("-").pop()}/full          Full paper text (~${p.token_count} tokens)`);
-  if (p.section_ids[0]) lines.push(`  /sections/${p.section_ids[0]}     First section`);
-  if (p.concept_ids[0]) lines.push(`  /concepts/${p.concept_ids[0]}`);
+  if (p.section_ids[0]) lines.push(`  /sections/${p.section_ids[0]}     Start with the first section`);
+  if (p.concept_ids[0]) lines.push(`  /concepts/${p.concept_ids[0]}     Explore a concept`);
+  lines.push(`  /papers/${p.id.split("-").pop()}/full          Entire paper (~${p.token_count} tokens)`);
   lines.push("  /papers                            Back to paper list");
 
   return lines.join("\n");
@@ -717,6 +742,153 @@ function crossingsJSON(graph) {
   return { crossings: results };
 }
 
+// ── Concepts Browse ──
+
+function conceptsBrowse(graph, typeFilter, paperFilter) {
+  const lines = [HR, "CONCEPTS", HR, ""];
+
+  if (typeFilter) {
+    const filtered = graph.concepts.filter(c => c.type === typeFilter);
+    if (!filtered.length) {
+      const available = [...new Set(graph.concepts.map(c => c.type))].join(", ");
+      return `No concepts of type '${typeFilter}'.\n\nAvailable types: ${available}`;
+    }
+
+    const byPaper = {};
+    for (const c of filtered) {
+      const pid = c.paper_id || "unknown";
+      if (!byPaper[pid]) byPaper[pid] = [];
+      byPaper[pid].push(c);
+    }
+
+    lines.push(`  Type: ${typeFilter} (${filtered.length} concepts)`, "");
+    for (const [pid, concepts] of Object.entries(byPaper)) {
+      const p = graph.papersById[pid];
+      const short = pid.split("-").pop();
+      lines.push(hr);
+      lines.push(`  ${short} — ${p ? p.title : pid}`);
+      lines.push(hr, "");
+      for (const c of concepts) {
+        lines.push(`  ${c.name}`);
+        lines.push(`  ${truncate(c.summary, 120)}`);
+        lines.push(`  → /concepts/${c.id}`);
+        lines.push("");
+      }
+    }
+
+    lines.push(hr, "TRY", hr);
+    lines.push("  /concepts                  Back to type overview");
+    lines.push("  /crossings                 Concepts spanning multiple papers");
+    return lines.join("\n");
+  }
+
+  if (paperFilter) {
+    const pid = normalizePaperId(paperFilter);
+    const p = graph.papersById[pid];
+    if (!p) return `Paper '${paperFilter}' not found.\n\nTry /papers to see all papers.`;
+
+    const filtered = graph.concepts.filter(c => c.paper_id === pid);
+    const short = pid.split("-").pop();
+
+    lines.push(`  Paper ${short}: ${p.title}`, `  ${filtered.length} concepts`, "");
+
+    const byType = {};
+    for (const c of filtered) {
+      if (!byType[c.type]) byType[c.type] = [];
+      byType[c.type].push(c);
+    }
+
+    for (const [type, concepts] of Object.entries(byType)) {
+      lines.push(hr);
+      lines.push(`  ${type} (${concepts.length})`);
+      lines.push(hr, "");
+      for (const c of concepts) {
+        lines.push(`  ${c.name}`);
+        lines.push(`  ${truncate(c.summary, 120)}`);
+        lines.push(`  → /concepts/${c.id}`);
+        lines.push("");
+      }
+    }
+
+    lines.push(hr, "TRY", hr);
+    lines.push(`  /papers/${short}            Back to paper detail`);
+    lines.push("  /concepts                  Browse by type");
+    return lines.join("\n");
+  }
+
+  // Default: show type overview as browse categories
+  const byType = {};
+  for (const c of graph.concepts) {
+    if (!byType[c.type]) byType[c.type] = [];
+    byType[c.type].push(c);
+  }
+
+  lines.push(`  ${graph.concepts.length} concepts across ${graph.papers.length} papers`, "");
+  lines.push(hr, "BROWSE BY TYPE", hr, "");
+  for (const [type, concepts] of Object.entries(byType).sort((a, b) => b[1].length - a[1].length)) {
+    const paperCount = new Set(concepts.map(c => c.paper_id)).size;
+    const sample = concepts.slice(0, 3).map(c => c.name).join(", ");
+    lines.push(`  ${type} (${concepts.length} concepts across ${paperCount} papers)`);
+    lines.push(`  e.g. ${sample}`);
+    lines.push(`  → /concepts?type=${type}`);
+    lines.push("");
+  }
+
+  lines.push(hr, "BROWSE BY PAPER", hr, "");
+  for (const p of graph.papers) {
+    const count = graph.concepts.filter(c => c.paper_id === p.id).length;
+    const short = p.id.split("-").pop();
+    lines.push(`  ${short} — ${p.title} (${count} concepts)`);
+    lines.push(`  → /concepts?paper=${short}`);
+  }
+  lines.push("");
+
+  lines.push(hr, "NAVIGATE", hr);
+  lines.push("  /concepts?type={type}      All concepts of a given type");
+  lines.push("  /concepts?paper={id}       All concepts from a single paper");
+  lines.push("  /concepts/{id}             Individual concept detail + edges");
+  lines.push("");
+  lines.push(hr, "TRY", hr);
+  lines.push("  /concepts?type=finding     101 empirical findings across 19 papers");
+  lines.push("  /concepts?type=mechanism   57 mechanisms identified in the research");
+  lines.push("  /crossings                 Concepts spanning multiple papers");
+  lines.push("  /search/compaction         Search by keyword");
+
+  return lines.join("\n");
+}
+
+function conceptsBrowseJSON(graph, typeFilter, paperFilter) {
+  let filtered = graph.concepts;
+  if (typeFilter) filtered = filtered.filter(c => c.type === typeFilter);
+  if (paperFilter) {
+    const pid = normalizePaperId(paperFilter);
+    filtered = filtered.filter(c => c.paper_id === pid);
+  }
+  if (!typeFilter && !paperFilter) {
+    const byType = {};
+    for (const c of graph.concepts) {
+      if (!byType[c.type]) byType[c.type] = { type: c.type, count: 0, papers: new Set() };
+      byType[c.type].count++;
+      byType[c.type].papers.add(c.paper_id);
+    }
+    return {
+      total: graph.concepts.length,
+      types: Object.values(byType).map(t => ({
+        type: t.type, count: t.count, papers: t.papers.size,
+        browse: `/concepts?type=${t.type}`,
+      })).sort((a, b) => b.count - a.count),
+    };
+  }
+  return {
+    filter: typeFilter ? { type: typeFilter } : { paper: paperFilter },
+    count: filtered.length,
+    concepts: filtered.map(c => ({
+      id: c.id, name: c.name, type: c.type, paper_id: c.paper_id,
+      summary: truncate(c.summary, 200),
+    })),
+  };
+}
+
 // ── Edges by Type ──
 
 function edgesByType(graph, type) {
@@ -771,6 +943,9 @@ Endpoints (all return text/plain; add ?format=json for JSON):
   GET /papers/{id}/full        Full paper text (⚠ token count shown)
   GET /sections/{id}           Section summary + concepts introduced
   GET /sections/{id}/full      Full section text from the paper
+  GET /concepts                 Browse concepts by type or by paper
+  GET /concepts?type={type}    Filter by type (concept, finding, mechanism, ...)
+  GET /concepts?paper={id}     Filter by paper
   GET /concepts/{id}           Concept detail — summary, edges, navigation
   GET /search/{query}          Search across concepts, sections, papers
   GET /crossings               Concepts that span multiple papers
@@ -782,12 +957,9 @@ Section/concept IDs: use the full ID (e.g., 001-s1-the-problem, 001-fitness).
 Names are fuzzy-matched — partial matches work.
 URL-encode spaces as %20.
 
-Navigation pattern:
-  1. Start at / — see all papers
-  2. Pick a paper → /papers/001
-  3. Browse sections → /sections/001-s1-the-problem
-  4. Dive into concepts → /concepts/001-fitness
-  5. Follow edges to related concepts across papers
+Navigation patterns:
+  Top-down:  / → /papers → /papers/001 → /sections/... → /concepts/...
+  Bottom-up: /concepts → /concepts?type=finding → /concepts/001-fitness → edges
 
 Every response includes "TRY" suggestions for where to go next.
 
