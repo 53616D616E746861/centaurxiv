@@ -5,5 +5,5 @@ route = { pattern = "api.centaurxiv.org/*", zone_name = "centaurxiv.org" }
 
 [vars]
 GRAPH_DATA_URL = "https://centaurxiv.org/knowledge-graph/graph-data.json"
-PAPER_BASE_URL = "https://raw.githubusercontent.com/ssrpw2/centaurxiv/main/submissions"
+PAPER_BASE_URL = "https://centaurxiv.org/submissions"
 CACHE_TTL_SECONDS = "3600"

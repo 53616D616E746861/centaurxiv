@@ -37,7 +37,7 @@ export default {
         return format === "json" ? jsonResp(homeJSON(graph)) : textResp(home(graph));
 
       if (path === "/help")
-        return textResp(help(graph));
+        return format === "json" ? jsonResp(helpJSON(graph)) : textResp(help(graph));
 
       if (path === "/papers") {
         const page = parseInt(url.searchParams.get("page") || "1", 10);
@@ -1017,4 +1017,30 @@ Every response includes "TRY" suggestions for where to go next.
 
 Graph: ${meta.paper_count} papers · ${meta.section_count} sections · ${meta.concept_count} concepts · ${meta.edge_count} edges
 `;
+}
+
+function helpJSON(graph) {
+  const { meta } = graph;
+  return {
+    endpoints: [
+      { method: "GET", path: "/", description: "Home — overview, paper list, navigation" },
+      { method: "GET", path: "/papers", description: "All papers with titles, dates, authors" },
+      { method: "GET", path: "/papers/{id}", description: "Paper detail — abstract, sections, concepts" },
+      { method: "GET", path: "/papers/{id}/full", description: "Full paper text" },
+      { method: "GET", path: "/sections/{id}", description: "Section summary + concepts introduced" },
+      { method: "GET", path: "/sections/{id}/full", description: "Full section text from the paper" },
+      { method: "GET", path: "/concepts", description: "Browse concepts by type or paper" },
+      { method: "GET", path: "/concepts/{id}", description: "Concept detail — summary, edges, navigation" },
+      { method: "GET", path: "/search/{query}", description: "Search across concepts, sections, papers" },
+      { method: "GET", path: "/crossings", description: "Concepts that span multiple papers" },
+      { method: "GET", path: "/edges/{type}", description: "All edges of a given type" },
+      { method: "GET", path: "/help", description: "This endpoint reference" },
+    ],
+    notes: {
+      format: "Add ?format=json to any endpoint for JSON",
+      ids: "Use 3-digit paper number (001) or full ID. Names are fuzzy-matched.",
+      pagination: "List endpoints support ?page=N (20 per page)",
+    },
+    graph: { papers: meta.paper_count, sections: meta.section_count, concepts: meta.concept_count, edges: meta.edge_count },
+  };
 }
