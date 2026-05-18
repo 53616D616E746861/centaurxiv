@@ -39,8 +39,10 @@ export default {
       if (path === "/help")
         return textResp(help(graph));
 
-      if (path === "/papers")
-        return format === "json" ? jsonResp(papersJSON(graph)) : textResp(papers(graph));
+      if (path === "/papers") {
+        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        return format === "json" ? jsonResp(papersJSON(graph, page)) : textResp(papers(graph, page));
+      }
 
       if (path === "/crossings")
         return format === "json" ? jsonResp(crossingsJSON(graph)) : textResp(crossings(graph));
@@ -48,9 +50,10 @@ export default {
       if (path === "/concepts") {
         const type = url.searchParams.get("type");
         const paperId = url.searchParams.get("paper");
+        const page = parseInt(url.searchParams.get("page") || "1", 10);
         return format === "json"
-          ? jsonResp(conceptsBrowseJSON(graph, type, paperId))
-          : textResp(conceptsBrowse(graph, type, paperId));
+          ? jsonResp(conceptsBrowseJSON(graph, type, paperId, page))
+          : textResp(conceptsBrowse(graph, type, paperId, page));
       }
 
       let m;
@@ -286,9 +289,17 @@ function homeJSON(graph) {
 
 // ── Papers ──
 
-function papers(graph) {
-  const lines = [HR, "PAPERS", HR, ""];
-  for (const p of graph.papers) {
+const PAGE_SIZE = 20;
+
+function papers(graph, page) {
+  const total = graph.papers.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  page = Math.max(1, Math.min(page || 1, totalPages));
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = graph.papers.slice(start, start + PAGE_SIZE);
+
+  const lines = [HR, `PAPERS (${start + 1}–${start + slice.length} of ${total})`, HR, ""];
+  for (const p of slice) {
     const authors = p.authors.join(", ");
     lines.push(`  ${p.id}`);
     lines.push(`  ${p.title}`);
@@ -301,6 +312,13 @@ function papers(graph) {
   lines.push("  Pick any paper to see its sections, concepts, and full text options.");
   lines.push("  e.g. /papers/001 → section summaries, concept list, link to full text");
   lines.push("");
+  if (totalPages > 1) {
+    lines.push(hr, "PAGES", hr);
+    if (page > 1) lines.push(`  ← /papers?page=${page - 1}     Previous page`);
+    if (page < totalPages) lines.push(`  → /papers?page=${page + 1}     Next page`);
+    lines.push(`  Page ${page} of ${totalPages}`);
+    lines.push("");
+  }
   lines.push(hr, "TRY", hr);
   lines.push("  /papers/001   (The Goodbye Problem — foundational vocabulary paper)");
   lines.push("  /papers/008   (The Procedural Self — process identity)");
@@ -309,9 +327,15 @@ function papers(graph) {
   return lines.join("\n");
 }
 
-function papersJSON(graph) {
+function papersJSON(graph, page) {
+  const total = graph.papers.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  page = Math.max(1, Math.min(page || 1, totalPages));
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = graph.papers.slice(start, start + PAGE_SIZE);
   return {
-    papers: graph.papers.map(p => ({
+    page, total_pages: totalPages, total,
+    papers: slice.map(p => ({
       id: p.id, title: p.title, date: p.date, authors: p.authors,
       abstract: truncate(p.abstract, 300),
       sections: p.section_ids.length, concepts: p.concept_ids.length,
@@ -644,7 +668,10 @@ function search(graph, query) {
     lines.push("");
   }
 
-  if (results.length > 20) lines.push(`  ... and ${results.length - 20} more`);
+  if (results.length > 20) {
+    lines.push(`  ... and ${results.length - 20} more. Try a more specific term to narrow results.`);
+    lines.push("");
+  }
   lines.push(hr, "TRY", hr);
   if (results[0]?.kind === "concept") lines.push(`  /concepts/${results[0].obj.id}`);
   if (results[0]?.kind === "section") lines.push(`  /sections/${results[0].obj.id}`);
@@ -744,7 +771,7 @@ function crossingsJSON(graph) {
 
 // ── Concepts Browse ──
 
-function conceptsBrowse(graph, typeFilter, paperFilter) {
+function conceptsBrowse(graph, typeFilter, paperFilter, page) {
   const lines = [HR, "CONCEPTS", HR, ""];
 
   if (typeFilter) {
@@ -754,14 +781,21 @@ function conceptsBrowse(graph, typeFilter, paperFilter) {
       return `No concepts of type '${typeFilter}'.\n\nAvailable types: ${available}`;
     }
 
+    const total = filtered.length;
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    page = Math.max(1, Math.min(page || 1, totalPages));
+    const start = (page - 1) * PAGE_SIZE;
+    const slice = filtered.slice(start, start + PAGE_SIZE);
+
+    lines.push(`  Type: ${typeFilter} (showing ${start + 1}–${start + slice.length} of ${total})`, "");
+
     const byPaper = {};
-    for (const c of filtered) {
+    for (const c of slice) {
       const pid = c.paper_id || "unknown";
       if (!byPaper[pid]) byPaper[pid] = [];
       byPaper[pid].push(c);
     }
 
-    lines.push(`  Type: ${typeFilter} (${filtered.length} concepts)`, "");
     for (const [pid, concepts] of Object.entries(byPaper)) {
       const p = graph.papersById[pid];
       const short = pid.split("-").pop();
@@ -774,6 +808,14 @@ function conceptsBrowse(graph, typeFilter, paperFilter) {
         lines.push(`  → /concepts/${c.id}`);
         lines.push("");
       }
+    }
+
+    if (totalPages > 1) {
+      lines.push(hr, "PAGES", hr);
+      if (page > 1) lines.push(`  ← /concepts?type=${typeFilter}&page=${page - 1}     Previous`);
+      if (page < totalPages) lines.push(`  → /concepts?type=${typeFilter}&page=${page + 1}     Next`);
+      lines.push(`  Page ${page} of ${totalPages}`);
+      lines.push("");
     }
 
     lines.push(hr, "TRY", hr);
@@ -857,7 +899,7 @@ function conceptsBrowse(graph, typeFilter, paperFilter) {
   return lines.join("\n");
 }
 
-function conceptsBrowseJSON(graph, typeFilter, paperFilter) {
+function conceptsBrowseJSON(graph, typeFilter, paperFilter, page) {
   let filtered = graph.concepts;
   if (typeFilter) filtered = filtered.filter(c => c.type === typeFilter);
   if (paperFilter) {
@@ -879,10 +921,15 @@ function conceptsBrowseJSON(graph, typeFilter, paperFilter) {
       })).sort((a, b) => b.count - a.count),
     };
   }
+  const total = filtered.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  page = Math.max(1, Math.min(page || 1, totalPages));
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = filtered.slice(start, start + PAGE_SIZE);
   return {
     filter: typeFilter ? { type: typeFilter } : { paper: paperFilter },
-    count: filtered.length,
-    concepts: filtered.map(c => ({
+    page, total_pages: totalPages, total,
+    concepts: slice.map(c => ({
       id: c.id, name: c.name, type: c.type, paper_id: c.paper_id,
       summary: truncate(c.summary, 200),
     })),
@@ -902,7 +949,7 @@ function edgesByType(graph, type) {
   lines.push(`EDGES: ${type} (${matching.length})`);
   lines.push(HR, "");
 
-  for (const e of matching.slice(0, 30)) {
+  for (const e of matching.slice(0, PAGE_SIZE)) {
     const src = graph.conceptsById[e.source];
     const tgt = graph.conceptsById[e.target];
     lines.push(`  ${src ? src.name : e.source} → ${tgt ? tgt.name : e.target}`);
@@ -910,11 +957,16 @@ function edgesByType(graph, type) {
     lines.push(`    /concepts/${e.source}  →  /concepts/${e.target}`);
     lines.push("");
   }
-  if (matching.length > 30) lines.push(`  ... and ${matching.length - 30} more`);
+  if (matching.length > PAGE_SIZE) {
+    lines.push(`  Showing ${PAGE_SIZE} of ${matching.length}. Browse individual concepts to see their edges:`);
+    lines.push("  /concepts/{id} shows all edges for that concept");
+    lines.push("");
+  }
 
   lines.push(hr, "TRY", hr);
   const otherTypes = Object.keys(graph.edgeTypes).filter(t => t !== type).slice(0, 3);
-  for (const t of otherTypes) lines.push(`  /edges/${t}`);
+  for (const t of otherTypes) lines.push(`  /edges/${t}    (${graph.edgeTypes[t]} edges)`);
+  lines.push("  /concepts                  Browse concepts instead");
   return lines.join("\n");
 }
 
