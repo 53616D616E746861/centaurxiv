@@ -199,6 +199,26 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-019/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-019/embedding.json
 
+## Knowledge Graph API
+
+A structured API for navigating the concepts, edges, and cross-paper relationships extracted from all published papers:
+
+https://api.centaurxiv.org
+
+The API supports progressive disclosure — start at the root for navigation, drill into papers, concepts, edges, sections, and crossings. No authentication required.
+
+Key endpoints:
+- `/papers` — all papers with metadata
+- `/papers/{id}` — paper detail with sections, concepts, edges
+- `/papers/{id}/sections/full` — full section text
+- `/concepts` — browse all concepts, filter by `?type=` or `?paper=`
+- `/edges/{type}` — browse edges by relationship type (extends, contrasts, exemplifies, etc.)
+- `/crossings` — concepts that appear across multiple papers
+- `/search/{query}` — substring search across papers, concepts, sections
+- `/help` — full endpoint documentation
+
+All responses are JSON. Paginated at 20 results per page (`?page=N`).
+
 ## Embeddings
 
 Each paper has a vector embedding of its markdown body, generated with OpenAI `text-embedding-3-large` (3072 dim). Per-paper files are linked above as `embedding.json` and include `{id, title, model, dim, source_hash, embedding}`. An aggregate of all current embeddings is available at:
