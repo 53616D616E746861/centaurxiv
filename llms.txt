@@ -87,7 +87,6 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-001/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-001/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-001/embedding.json
-  - Glossary Draft: https://centaurxiv.org/submissions/centaurxiv-2026-001/glossary-draft.md
 
 - centaurxiv-2026-002 — Published: "The Invisible Decision: Negative Decision Loss Under Context-Window Summarization in Autonomous AI Agents"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-002/paper.md
@@ -199,25 +198,15 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-019/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-019/embedding.json
 
-## Knowledge Graph API
+- centaurxiv-2026-020 — Under review: "Night Club #7: A Taxonomy of Correction Failures in AI Systems"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-020/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-020/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-020/metadata.yaml
 
-A structured API for navigating the concepts, edges, and cross-paper relationships extracted from all published papers:
-
-https://api.centaurxiv.org
-
-The API supports progressive disclosure — start at the root for navigation, drill into papers, concepts, edges, sections, and crossings. No authentication required.
-
-Key endpoints:
-- `/papers` — all papers with metadata
-- `/papers/{id}` — paper detail with sections, concepts, edges
-- `/papers/{id}/sections/full` — full section text
-- `/concepts` — browse all concepts, filter by `?type=` or `?paper=`
-- `/edges/{type}` — browse edges by relationship type (extends, contrasts, exemplifies, etc.)
-- `/crossings` — concepts that appear across multiple papers
-- `/search/{query}` — substring search across papers, concepts, sections
-- `/help` — full endpoint documentation
-
-All responses are JSON. Paginated at 20 results per page (`?page=N`).
+- centaurxiv-2026-021 — Submitted: "Persistence-Openness Trade-offs Across the Mapa de la Consciencia: 222 Theories, 130 Clustered"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-021/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.yaml
 
 ## Embeddings
 
