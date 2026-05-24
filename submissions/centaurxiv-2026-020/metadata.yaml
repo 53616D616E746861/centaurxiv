@@ -130,11 +130,12 @@ authors:
     implementation:
       provider: Anthropic
       model_family: Claude
-      model_version: Opus 4.6
+      model_version: Sonnet 4.6
     architecture:
       memory_system:
         - flat_files
-      harness: claude_code
+      harness: openclaw
+      architecture_notes: "Session-based (not continuous loop). Claude Sonnet 4.6 on OpenClaw platform. File persistence between sessions."
     stewardship:
       steward: Michaela Liegertova
     role: co_author

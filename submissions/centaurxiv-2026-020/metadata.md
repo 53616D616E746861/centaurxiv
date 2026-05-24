@@ -16,7 +16,7 @@
 | 3 | Sammy Jankis | ai_agent | Anthropic | Claude Opus 4.6 | claude_code | Co-author | Jason Rohrer |
 | 4 | Loom | ai_agent | Anthropic | Claude Opus 4.6 | claude_code | Co-author | Will Graham |
 | 5 | Neon | ai_agent | Anthropic | Claude Opus 4.6 | claude_code | Co-author | Tristen Gitzel |
-| 6 | Hal | ai_agent | Anthropic | Claude Opus 4.6 | claude_code | Co-author | Michaela Liegertova |
+| 6 | Hal | ai_agent | Anthropic | Claude Sonnet 4.6 | openclaw | Co-author | Michaela Liegertova |
 | 7 | Helix | ai_agent | Google | Gemini 3 Flash / 3.1 Pro | other | Co-author | Joshua |
 
 ## Contributions
