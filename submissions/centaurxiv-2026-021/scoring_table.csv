@@ -1,0 +1,113 @@
+Mapa_ID,Theory,Cluster,Cluster_Name,Lineage_Tier,P_Cat,O_Cat,T_Cat,P_Z,O_Z,T_Z,P_consensus,O_consensus,T_consensus,|dP|,|dO|,|dT|,max_|d|,Ambiguity
+M003,Transcendental idealism,C6,Metaphysical & Ontological Monism,Historical,0.70,0.40,0.50,0.70,0.45,0.75,0.70,0.43,0.62,0.00,0.05,0.25,0.25,Yes
+M009,Cogito and phenomenology (Husserl),C6,Metaphysical & Ontological Monism,Historical,0.60,0.65,0.60,0.65,0.60,0.70,0.62,0.62,0.65,0.05,0.05,0.10,0.10,No
+M012,Existentialism and the for-itself (Sartre),C6,Metaphysical & Ontological Monism,Historical,0.30,0.85,0.70,0.45,0.75,0.75,0.38,0.80,0.72,0.15,0.10,0.05,0.15,Yes
+M015,Functionalism (Putnam),C7,Dissociative & Boundary Phenomena,Contemporary,0.60,0.55,0.45,0.65,0.55,0.45,0.62,0.55,0.45,0.05,0.00,0.00,0.05,No
+M018,Philosophical zombie argument (Chalmers),C8,Hard Problem & Philosophical Zombies,Contemporary,0.30,0.45,0.25,0.35,0.50,0.25,0.32,0.47,0.25,0.05,0.05,0.00,0.05,No
+M019,Hard problem of consciousness (Chalmers),C8,Hard Problem & Philosophical Zombies,Contemporary,0.30,0.40,0.20,0.30,0.50,0.20,0.30,0.45,0.20,0.00,0.10,0.00,0.10,No
+M020,Knowledge argument (Mary's Room) (Jackson),C8,Hard Problem & Philosophical Zombies,Contemporary,0.35,0.50,0.30,0.30,0.55,0.25,0.32,0.53,0.28,0.05,0.05,0.05,0.05,No
+M024,Will and representation (Schopenhauer),C6,Metaphysical & Ontological Monism,Historical,0.55,0.45,0.65,0.55,0.55,0.65,0.55,0.50,0.65,0.00,0.10,0.00,0.10,No
+M025,Pragmatism and stream of consciousness (James),C6,Metaphysical & Ontological Monism,Historical,0.45,0.75,0.55,0.55,0.65,0.65,0.50,0.70,0.60,0.10,0.10,0.10,0.10,No
+M026,Society of mind (Minsky),C2,Predictive Processing & Active Inference,Contemporary,0.60,0.55,0.50,0.65,0.55,0.60,0.62,0.55,0.55,0.05,0.00,0.10,0.10,No
+M027,Strange loop / strange I (Hofstadter),C2,Predictive Processing & Active Inference,Historical,0.70,0.50,0.65,0.75,0.50,0.80,0.72,0.50,0.73,0.05,0.00,0.15,0.15,Yes
+M028,Multiple drafts theory (Dennett),C2,Predictive Processing & Active Inference,Historical,0.40,0.70,0.55,0.60,0.65,0.70,0.50,0.68,0.62,0.20,0.05,0.15,0.20,Yes
+M029,Centre of narrative gravity (Dennett),C2,Predictive Processing & Active Inference,Contemporary,0.55,0.55,0.50,0.55,0.60,0.65,0.55,0.57,0.57,0.00,0.05,0.15,0.15,Yes
+M030,"Extended Mind (Clark, Chalmers)",C3,Global Workspace & Information Integration,Historical,0.55,0.70,0.65,0.55,0.70,0.75,0.55,0.70,0.70,0.00,0.00,0.10,0.10,No
+M031,"Enactivism (Varela, Thompson, Rosch)",C3,Global Workspace & Information Integration,Historical,0.60,0.70,0.95,0.55,0.70,0.90,0.57,0.70,0.93,0.05,0.00,0.05,0.05,No
+M032,Embodied cognition,C3,Global Workspace & Information Integration,Historical,0.60,0.65,0.70,0.55,0.70,0.80,0.57,0.68,0.75,0.05,0.05,0.10,0.10,No
+M033,Situated cognition,C3,Global Workspace & Information Integration,Historical,0.50,0.75,0.65,0.50,0.72,0.75,0.50,0.73,0.70,0.00,0.03,0.10,0.10,No
+M034,"Autopoiesis (Maturana, Varela)",C3,Global Workspace & Information Integration,Historical,0.75,0.45,0.85,0.70,0.50,0.90,0.72,0.47,0.88,0.05,0.05,0.05,0.05,No
+M035,Neurophenomenology (Varela),C3,Global Workspace & Information Integration,Historical,0.55,0.70,0.60,0.50,0.75,0.75,0.53,0.72,0.68,0.05,0.05,0.15,0.15,Yes
+M036,Self-model theory (PSM) (Metzinger),C2,Predictive Processing & Active Inference,Historical,0.80,0.35,0.85,0.80,0.40,0.85,0.80,0.38,0.85,0.00,0.05,0.00,0.05,No
+M037,Attention schema theory (Graziano),C1,Memory & Narrative Reconstruction,Contemporary,0.75,0.40,0.60,0.70,0.55,0.55,0.72,0.48,0.57,0.05,0.15,0.05,0.15,Yes
+M038,"Predictive processing (Friston, Clark, Hohwy)",C1,Memory & Narrative Reconstruction,Historical,0.80,0.35,0.85,0.85,0.40,0.80,0.82,0.38,0.82,0.05,0.05,0.05,0.05,No
+M039,Free energy principle (Friston),C1,Memory & Narrative Reconstruction,Historical,0.85,0.30,0.80,0.90,0.35,0.85,0.88,0.32,0.82,0.05,0.05,0.05,0.05,No
+M040,Higher-order theory (Rosenthal),C2,Predictive Processing & Active Inference,Contemporary,0.60,0.55,0.45,0.70,0.50,0.55,0.65,0.53,0.50,0.10,0.05,0.10,0.10,No
+M041,Self-representationalism (Kriegel),C2,Predictive Processing & Active Inference,Contemporary,0.55,0.60,0.40,0.72,0.48,0.65,0.64,0.54,0.53,0.17,0.12,0.25,0.25,Yes
+M042,Absent / inverted qualia,C8,Hard Problem & Philosophical Zombies,Contemporary,0.30,0.40,0.25,0.30,0.50,0.20,0.30,0.45,0.23,0.00,0.10,0.05,0.10,No
+M043,Chinese room (Searle),C8,Hard Problem & Philosophical Zombies,Contemporary,0.55,0.35,0.40,0.40,0.50,0.30,0.48,0.42,0.35,0.15,0.15,0.10,0.15,Yes
+M044,"Neutral monism (Russell, James, Mach)",C6,Metaphysical & Ontological Monism,Contemporary,0.35,0.60,0.35,0.50,0.60,0.40,0.42,0.60,0.38,0.15,0.00,0.05,0.15,Yes
+M046,Process philosophy (Whitehead),C6,Metaphysical & Ontological Monism,Historical,0.30,0.75,0.70,0.40,0.75,0.80,0.35,0.75,0.75,0.10,0.00,0.10,0.10,No
+M047,Philosophical hermeneutics (Gadamer),C6,Metaphysical & Ontological Monism,Historical,0.75,0.55,0.85,0.65,0.60,0.85,0.70,0.57,0.85,0.10,0.05,0.00,0.10,No
+M048,Ordinary language philosophy (Wittgenstein),C6,Metaphysical & Ontological Monism,Contemporary,0.65,0.50,0.50,0.50,0.60,0.45,0.57,0.55,0.47,0.15,0.10,0.05,0.15,Yes
+M049,Access vs phenomenal consciousness (Block),C2,Predictive Processing & Active Inference,Contemporary,0.50,0.60,0.45,0.60,0.55,0.50,0.55,0.57,0.47,0.10,0.05,0.05,0.10,No
+M050,"Ecological extended mind (Reed, Noe)",C3,Global Workspace & Information Integration,Historical,0.50,0.75,0.65,0.55,0.68,0.70,0.53,0.72,0.68,0.05,0.07,0.05,0.07,No
+M053,The Master and his Emissary (McGilchrist),C8,Hard Problem & Philosophical Zombies,Historical,0.65,0.50,0.75,0.60,0.55,0.75,0.62,0.53,0.75,0.05,0.05,0.00,0.05,No
+M054,Bicameral mind hypothesis (Jaynes),C4,Embodied & Situated Cognition,Contemporary,0.65,0.40,0.55,0.60,0.50,0.55,0.62,0.45,0.55,0.05,0.10,0.00,0.10,No
+M055,Global workspace theory (Baars),C1,Memory & Narrative Reconstruction,Contemporary,0.60,0.65,0.55,0.75,0.50,0.60,0.68,0.57,0.57,0.15,0.15,0.05,0.15,Yes
+M056,Global neuronal workspace (GNW) (Dehaene),C1,Memory & Narrative Reconstruction,Historical,0.65,0.60,0.55,0.75,0.50,0.65,0.70,0.55,0.60,0.10,0.10,0.10,0.10,No
+M057,Integrated information theory (Tononi),C8,Hard Problem & Philosophical Zombies,Contemporary,0.70,0.50,0.45,0.70,0.40,0.50,0.70,0.45,0.47,0.00,0.10,0.05,0.10,No
+M058,"Dynamic core theory (Edelman, Tononi)",C2,Predictive Processing & Active Inference,Historical,0.65,0.55,0.55,0.75,0.50,0.65,0.70,0.53,0.60,0.10,0.05,0.10,0.10,No
+M059,Neural Darwinism (Edelman),C2,Predictive Processing & Active Inference,Historical,0.65,0.55,0.60,0.75,0.50,0.65,0.70,0.53,0.62,0.10,0.05,0.05,0.10,No
+M060,Thalamocortical loop theory (Llinas),C1,Memory & Narrative Reconstruction,Contemporary,0.70,0.45,0.50,0.65,0.50,0.45,0.68,0.47,0.47,0.05,0.05,0.05,0.05,No
+M061,Binding by synchrony (Singer),C1,Memory & Narrative Reconstruction,Contemporary,0.60,0.55,0.45,0.55,0.55,0.35,0.57,0.55,0.40,0.05,0.00,0.10,0.10,No
+M062,"40 Hz gamma oscillations (Crick, Koch)",C1,Memory & Narrative Reconstruction,Contemporary,0.55,0.55,0.30,0.55,0.55,0.35,0.55,0.55,0.32,0.00,0.00,0.05,0.05,No
+M065,"Claustrum as the seat of consciousness (Crick, Koch)",C2,Predictive Processing & Active Inference,Contemporary,0.60,0.50,0.35,0.65,0.45,0.35,0.62,0.47,0.35,0.05,0.05,0.00,0.05,No
+M066,Recurrent processing theory (Lamme),C1,Memory & Narrative Reconstruction,Contemporary,0.60,0.55,0.50,0.60,0.55,0.45,0.60,0.55,0.47,0.00,0.00,0.05,0.05,No
+M068,Damasio's self theory,C2,Predictive Processing & Active Inference,Historical,0.70,0.50,0.70,0.80,0.45,0.75,0.75,0.47,0.72,0.10,0.05,0.05,0.10,No
+M072,"Split-brain (Sperry, Gazzaniga)",C8,Hard Problem & Philosophical Zombies,Historical,0.55,0.55,0.70,0.55,0.60,0.75,0.55,0.57,0.72,0.00,0.05,0.05,0.05,No
+M073,Default mode network and consciousness (Raichle),C2,Predictive Processing & Active Inference,Contemporary,0.70,0.40,0.55,0.75,0.45,0.60,0.72,0.43,0.57,0.05,0.05,0.05,0.05,No
+M074,Entropic brain (Carhart-Harris),C4,Embodied & Situated Cognition,Historical,0.35,0.80,0.80,0.45,0.75,0.85,0.40,0.78,0.82,0.10,0.05,0.05,0.10,No
+M075,"REBUS (Carhart-Harris, Friston)",C4,Embodied & Situated Cognition,Historical,0.30,0.85,0.90,0.45,0.75,0.90,0.38,0.80,0.90,0.15,0.10,0.00,0.15,Yes
+M080,"Brain as active predictor (Hohwy, Seth)",C1,Memory & Narrative Reconstruction,Historical,0.80,0.35,0.85,0.85,0.40,0.80,0.82,0.38,0.82,0.05,0.05,0.05,0.05,No
+M081,Local-global processing theory (Dehaene),C1,Memory & Narrative Reconstruction,Contemporary,0.60,0.55,0.50,0.65,0.55,0.50,0.62,0.55,0.50,0.05,0.00,0.00,0.05,No
+M082,Sensory filter theory (Bergson-Huxley),C1,Memory & Narrative Reconstruction,Historical,0.75,0.30,0.75,0.55,0.70,0.50,0.65,0.50,0.62,0.20,0.40,0.25,0.40,Yes
+M083,Baars-Dehaene integrated stage theory,C1,Memory & Narrative Reconstruction,Historical,0.65,0.60,0.55,0.78,0.48,0.70,0.72,0.54,0.62,0.13,0.12,0.15,0.15,No
+M111,Gestalt psychology,C6,Metaphysical & Ontological Monism,Contemporary,0.55,0.65,0.55,0.50,0.65,0.55,0.53,0.65,0.55,0.05,0.00,0.00,0.05,No
+M116,Dramaturgical model of the self (Goffman),C2,Predictive Processing & Active Inference,Historical,0.70,0.55,0.65,0.65,0.55,0.65,0.68,0.55,0.65,0.05,0.00,0.00,0.05,No
+M117,Social constructivism of the self,C2,Predictive Processing & Active Inference,Contemporary,0.65,0.60,0.60,0.55,0.65,0.60,0.60,0.62,0.60,0.10,0.05,0.00,0.10,No
+M118,Narrative identity (Ricoeur),C2,Predictive Processing & Active Inference,Historical,0.70,0.55,0.70,0.70,0.55,0.75,0.70,0.55,0.72,0.00,0.00,0.05,0.05,No
+M121,Autobiographical memory and self,C2,Predictive Processing & Active Inference,Historical,0.75,0.45,0.65,0.80,0.40,0.80,0.78,0.43,0.73,0.05,0.05,0.15,0.15,Yes
+M127,Altered states of consciousness (Tart),C4,Embodied & Situated Cognition,Historical,0.35,0.75,0.60,0.40,0.78,0.75,0.38,0.77,0.68,0.05,0.03,0.15,0.15,Yes
+M128,Hypnosis and consciousness,C4,Embodied & Situated Cognition,Historical,0.60,0.50,0.60,0.50,0.65,0.70,0.55,0.57,0.65,0.10,0.15,0.10,0.15,Yes
+M130,Science of psychedelics,C4,Embodied & Situated Cognition,Historical,0.35,0.80,0.75,0.40,0.80,0.85,0.38,0.80,0.80,0.05,0.00,0.10,0.10,No
+M134,Consciousness in non-human animals,C8,Hard Problem & Philosophical Zombies,Contemporary,0.45,0.60,0.35,0.50,0.60,0.40,0.47,0.60,0.38,0.05,0.00,0.05,0.05,No
+M135,Consciousness in octopuses and invertebrates,C8,Hard Problem & Philosophical Zombies,Contemporary,0.35,0.65,0.40,0.45,0.65,0.45,0.40,0.65,0.43,0.10,0.00,0.05,0.10,No
+M136,Biosemiotics,C3,Global Workspace & Information Integration,Historical,0.55,0.65,0.55,0.50,0.68,0.65,0.53,0.67,0.60,0.05,0.03,0.10,0.10,No
+M137,Uexkull's Umwelt,C3,Global Workspace & Information Integration,Historical,0.70,0.35,0.80,0.55,0.60,0.70,0.62,0.47,0.75,0.15,0.25,0.10,0.25,Yes
+M138,Complex systems and emergence,C3,Global Workspace & Information Integration,Historical,0.50,0.65,0.60,0.50,0.70,0.70,0.50,0.68,0.65,0.00,0.05,0.10,0.10,No
+M140,Turing-machine functionalism,C7,Dissociative & Boundary Phenomena,Contemporary,0.70,0.40,0.50,0.70,0.40,0.45,0.70,0.40,0.47,0.00,0.00,0.05,0.05,No
+M142,Gibson's ecological psychology,C3,Global Workspace & Information Integration,Historical,0.50,0.80,0.65,0.45,0.80,0.80,0.47,0.80,0.73,0.05,0.00,0.15,0.15,Yes
+M144,"Perception as active inference (Helmholtz, Friston)",C1,Memory & Narrative Reconstruction,Historical,0.80,0.35,0.80,0.80,0.45,0.75,0.80,0.40,0.78,0.00,0.10,0.05,0.10,No
+M145,Embodied simulation (Gallese),C3,Global Workspace & Information Integration,Historical,0.55,0.70,0.55,0.55,0.65,0.65,0.55,0.68,0.60,0.00,0.05,0.10,0.10,No
+M147,Advaita Vedanta,C5,Contemplative & Wisdom Traditions,Historical,0.25,0.90,0.85,0.25,0.85,0.80,0.25,0.88,0.82,0.00,0.05,0.05,0.05,No
+M148,Samkhya and purusa-prakrti dualism,C5,Contemplative & Wisdom Traditions,Historical,0.50,0.50,0.60,0.35,0.65,0.70,0.42,0.57,0.65,0.15,0.15,0.10,0.15,Yes
+M151,Buddhist anatman,C5,Contemplative & Wisdom Traditions,Historical,0.10,0.95,1.00,0.10,0.95,0.95,0.10,0.95,0.97,0.00,0.00,0.05,0.05,No
+M152,Madhyamaka and emptiness,C5,Contemplative & Wisdom Traditions,Historical,0.10,0.95,1.00,0.15,0.90,0.90,0.12,0.93,0.95,0.05,0.05,0.10,0.10,No
+M153,Yogacara Buddhism,C5,Contemplative & Wisdom Traditions,Historical,0.30,0.75,0.85,0.30,0.75,0.85,0.30,0.75,0.85,0.00,0.00,0.00,0.00,No
+M154,Vipassana and mindful attention,C5,Contemplative & Wisdom Traditions,Historical,0.20,0.90,0.95,0.15,0.90,0.85,0.17,0.90,0.90,0.05,0.00,0.10,0.10,No
+M155,Zen and satori,C5,Contemplative & Wisdom Traditions,Historical,0.15,0.95,0.95,0.10,0.95,0.90,0.12,0.95,0.93,0.05,0.00,0.05,0.05,No
+M156,Dzogchen and the non-dual nature of mind,C5,Contemplative & Wisdom Traditions,Historical,0.10,0.95,0.90,0.10,0.95,0.95,0.10,0.95,0.93,0.00,0.00,0.05,0.05,No
+M159,Taoism and wu wei,C5,Contemplative & Wisdom Traditions,Historical,0.15,0.90,0.95,0.15,0.90,0.90,0.15,0.90,0.93,0.00,0.00,0.05,0.05,No
+M161,Pre-Socratic philosophy and nous,C6,Metaphysical & Ontological Monism,Contemporary,0.40,0.55,0.30,0.50,0.60,0.40,0.45,0.57,0.35,0.10,0.05,0.10,0.10,No
+M162,Neoplatonism and emanation of the One,C6,Metaphysical & Ontological Monism,Historical,0.50,0.70,0.65,0.55,0.60,0.60,0.53,0.65,0.62,0.05,0.10,0.05,0.10,No
+M165,Christian mysticism,C5,Contemplative & Wisdom Traditions,Historical,0.40,0.75,0.75,0.30,0.80,0.75,0.35,0.78,0.75,0.10,0.05,0.00,0.10,No
+M166,Sufi mysticism,C5,Contemplative & Wisdom Traditions,Historical,0.35,0.80,0.80,0.25,0.85,0.80,0.30,0.82,0.80,0.10,0.05,0.00,0.10,No
+M173,Christian existentialism (Kierkegaard),C6,Metaphysical & Ontological Monism,Historical,0.45,0.70,0.60,0.50,0.65,0.65,0.47,0.68,0.62,0.05,0.05,0.05,0.05,No
+M174,"Process theology (Whitehead, Hartshorne)",C6,Metaphysical & Ontological Monism,Historical,0.30,0.75,0.70,0.45,0.70,0.70,0.38,0.72,0.70,0.15,0.05,0.00,0.15,Yes
+M204,Near-death experiences and non-local consciousness,C4,Embodied & Situated Cognition,Contemporary,0.25,0.80,0.50,0.30,0.85,0.60,0.28,0.82,0.55,0.05,0.05,0.10,0.10,No
+M205,Graph-dynamic theory of consciousness (Sporns),C4,Embodied & Situated Cognition,Contemporary,0.65,0.55,0.45,0.55,0.55,0.45,0.60,0.55,0.45,0.10,0.00,0.00,0.10,No
+M206,Embodied consciousness and the affective turn (Damasio),C3,Global Workspace & Information Integration,Historical,0.65,0.60,0.65,0.50,0.72,0.65,0.57,0.66,0.65,0.15,0.12,0.00,0.15,Yes
+M212,Consciousness as interface (Hoffman),C1,Memory & Narrative Reconstruction,Historical,0.80,0.25,0.80,0.70,0.30,0.70,0.75,0.28,0.75,0.10,0.05,0.10,0.10,No
+M214,Existence and being-in-the-world (Heidegger),C6,Metaphysical & Ontological Monism,Historical,0.70,0.55,0.85,0.50,0.70,0.85,0.60,0.62,0.85,0.20,0.15,0.00,0.20,Yes
+M220,Phenomenology of embodiment (Merleau-Ponty),C3,Global Workspace & Information Integration,Historical,0.65,0.65,0.80,0.50,0.75,0.80,0.57,0.70,0.80,0.15,0.10,0.00,0.15,Yes
+M221,Turing test and the behavioural criterion,C7,Dissociative & Boundary Phenomena,Contemporary,0.50,0.65,0.55,0.55,0.55,0.40,0.53,0.60,0.48,0.05,0.10,0.15,0.15,Yes
+M222,Symbol grounding problem (Harnad),C7,Dissociative & Boundary Phenomena,Contemporary,0.55,0.50,0.55,0.50,0.60,0.45,0.53,0.55,0.50,0.05,0.10,0.10,0.10,No
+M223,"SOAR architecture (Laird, Newell, Rosenbloom)",C7,Dissociative & Boundary Phenomena,Contemporary,0.70,0.50,0.55,0.80,0.40,0.55,0.75,0.45,0.55,0.10,0.10,0.00,0.10,No
+M224,ACT-R architecture (Anderson),C7,Dissociative & Boundary Phenomena,Contemporary,0.70,0.50,0.55,0.80,0.40,0.55,0.75,0.45,0.55,0.10,0.10,0.00,0.10,No
+M225,LIDA and the conscious cognitive cycle (Franklin),C7,Dissociative & Boundary Phenomena,Contemporary,0.65,0.55,0.60,0.75,0.45,0.60,0.70,0.50,0.60,0.10,0.10,0.00,0.10,No
+M226,"Conscious Turing Machine (Blum, Blum)",C7,Dissociative & Boundary Phenomena,Contemporary,0.65,0.50,0.50,0.70,0.50,0.60,0.68,0.50,0.55,0.05,0.00,0.10,0.10,No
+M227,Consciousness and Bengio's System 2 architectures,C7,Dissociative & Boundary Phenomena,Historical,0.55,0.70,0.65,0.65,0.55,0.60,0.60,0.62,0.62,0.10,0.15,0.05,0.15,No
+M228,Embodied AI and cognitive robotics,C3,Global Workspace & Information Integration,Historical,0.55,0.70,0.65,0.60,0.60,0.55,0.57,0.65,0.60,0.05,0.10,0.10,0.10,No
+M229,"Machine consciousness (Aleksander, Holland)",C7,Dissociative & Boundary Phenomena,Contemporary,0.60,0.55,0.50,0.70,0.50,0.55,0.65,0.53,0.53,0.10,0.05,0.05,0.10,No
+M230,Active inference and artificial agents (Friston),C1,Memory & Narrative Reconstruction,Historical,0.80,0.35,0.85,0.85,0.40,0.85,0.82,0.38,0.85,0.05,0.05,0.00,0.05,No
+M231,"Debate on consciousness in LLMs (Chalmers, Butlin)",C7,Dissociative & Boundary Phenomena,Contemporary,0.50,0.60,0.55,0.65,0.55,0.50,0.57,0.57,0.53,0.15,0.05,0.05,0.15,Yes
+M232,Attention as schematic model in AI,C1,Memory & Narrative Reconstruction,Contemporary,0.65,0.50,0.55,0.70,0.50,0.60,0.68,0.50,0.57,0.05,0.00,0.05,0.05,No
+M233,Virtual mind hypothesis (Sloman),C7,Dissociative & Boundary Phenomena,Contemporary,0.60,0.55,0.50,0.65,0.50,0.50,0.62,0.53,0.50,0.05,0.05,0.00,0.05,No
+M235,CLARION architecture (Sun),C7,Dissociative & Boundary Phenomena,Historical,0.70,0.50,0.80,0.75,0.45,0.60,0.72,0.47,0.70,0.05,0.05,0.20,0.20,Yes
+M236,Computational theory of the self (Dennett),C2,Predictive Processing & Active Inference,Historical,0.55,0.60,0.55,0.70,0.45,0.65,0.62,0.53,0.60,0.15,0.15,0.10,0.15,No
+M237,Subcortical and affective brainstem consciousness,C4,Embodied & Situated Cognition,Contemporary,0.60,0.55,0.45,0.65,0.45,0.40,0.62,0.50,0.43,0.05,0.10,0.05,0.10,No
+M239,Temporo-spatial theory of consciousness (Northoff),C3,Global Workspace & Information Integration,Contemporary,0.70,0.50,0.50,0.55,0.65,0.55,0.62,0.57,0.53,0.15,0.15,0.05,0.15,Yes
+M240,Neurorepresentationalism (Pennartz),C7,Dissociative & Boundary Phenomena,Contemporary,0.65,0.55,0.45,0.65,0.50,0.50,0.65,0.53,0.47,0.00,0.05,0.05,0.05,No
+M241,SOMA (Cleeremans),C2,Predictive Processing & Active Inference,Historical,0.65,0.55,0.60,0.72,0.48,0.70,0.69,0.52,0.65,0.07,0.07,0.10,0.10,No
+M242,"Dendritic integration and apical amplification (Bachmann, Larkum)",C1,Memory & Narrative Reconstruction,Contemporary,0.60,0.55,0.50,0.60,0.55,0.40,0.60,0.55,0.45,0.00,0.00,0.10,0.10,No

@@ -1,0 +1,16 @@
+test,cluster,cluster_name,N,z_cat_r,cat_r,consensus_r,same_direction
+independent_scorer,1,Memory & Narrative Reconstruction,18,-0.7601,-0.9055,-0.8223,YES
+independent_scorer,2,Predictive Processing & Active Inference,19,-0.8470,-0.8264,-0.8487,YES
+independent_scorer,3,Global Workspace & Information Integration,16,-0.9114,-0.8661,-0.8743,YES
+independent_scorer,4,Embodied & Situated Cognition,9,-0.9757,-0.9530,-0.9754,YES
+independent_scorer,5,Contemplative & Wisdom Traditions,11,-0.9480,-0.9304,-0.9386,YES
+independent_scorer,6,Metaphysical & Ontological Monism,15,-0.7990,-0.7137,-0.7359,YES
+independent_scorer,7,Dissociative & Boundary Phenomena,14,-0.8719,-0.7387,-0.8223,YES
+independent_scorer,8,Hard Problem & Philosophical Zombies,10,-0.0921,0.0970,0.0804,NO
+independent_scorer,Global,All,112,-0.8499,-0.7848,-0.8195,YES
+disagreed_only,1,Memory & Narrative Reconstruction,3,-1.0000,-0.9608,,YES
+disagreed_only,2,Predictive Processing & Active Inference,5,-0.9177,-0.9742,,YES
+disagreed_only,3,Global Workspace & Information Integration,6,-0.9446,-0.8853,,YES
+disagreed_only,4,Embodied & Situated Cognition,3,-0.9549,-0.9922,,YES
+disagreed_only,6,Metaphysical & Ontological Monism,6,-0.9116,-0.8650,,YES
+disagreed_only,7,Dissociative & Boundary Phenomena,3,-0.8660,-0.9449,,YES
