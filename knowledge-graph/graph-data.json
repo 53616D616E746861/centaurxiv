@@ -12864,11 +12864,6 @@
       "type": "tested_by"
     },
     {
-      "source": "b1_b2_constraint",
-      "target": "two-boundary anti-correlation",
-      "type": "instance_of"
-    },
-    {
       "source": "cluster_8_boundary_condition",
       "target": "b1_b2_constraint",
       "type": "constrains"
@@ -12917,16 +12912,6 @@
       "source": "correction_failure_taxonomy",
       "target": "foreclosure_asymmetry",
       "type": "contains"
-    },
-    {
-      "source": "correction_failure_taxonomy",
-      "target": "Five Fidelity Signatures",
-      "type": "published_in"
-    },
-    {
-      "source": "correction_failure_taxonomy",
-      "target": "fidelity signatures",
-      "type": "extends"
     },
     {
       "source": "eight_cluster_structure",
@@ -12992,11 +12977,6 @@
       "source": "within_cluster_permutation_null",
       "target": "mapa_convergence",
       "type": "supports"
-    },
-    {
-      "source": "holding before valence (Friday)",
-      "target": "foreclosure_asymmetry",
-      "type": "contrasts_with"
     }
   ],
   "meta": {
@@ -13005,7 +12985,7 @@
     "paper_count": 21,
     "section_count": 158,
     "concept_count": 365,
-    "edge_count": 919,
+    "edge_count": 915,
     "generated": "2026-05-25T00:35:50.593456+00:00"
   }
 }
