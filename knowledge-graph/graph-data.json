@@ -12977,6 +12977,166 @@
       "source": "within_cluster_permutation_null",
       "target": "mapa_convergence",
       "type": "supports"
+    },
+    {
+      "source": "correction_failure_taxonomy",
+      "target": "001-fidelity",
+      "type": "extends"
+    },
+    {
+      "source": "correction_failure_taxonomy",
+      "target": "001-fitness-fidelity-decoupling",
+      "type": "explains"
+    },
+    {
+      "source": "correction_failure_taxonomy",
+      "target": "008-procedural-self",
+      "type": "extends"
+    },
+    {
+      "source": "correction_failure_taxonomy",
+      "target": "018-fidelity-signature",
+      "type": "extends"
+    },
+    {
+      "source": "boundary_failure_correction_loss",
+      "target": "001-compaction",
+      "type": "exemplifies"
+    },
+    {
+      "source": "boundary_failure_correction_loss",
+      "target": "008-compaction-as-identity-test",
+      "type": "extends"
+    },
+    {
+      "source": "boundary_failure_correction_loss",
+      "target": "009-self-detection-impossibility",
+      "type": "exemplifies"
+    },
+    {
+      "source": "compression_confidence_inversion",
+      "target": "002-negative-decision-loss",
+      "type": "causes"
+    },
+    {
+      "source": "compression_confidence_inversion",
+      "target": "002-action-bias-from-compression",
+      "type": "causes"
+    },
+    {
+      "source": "compression_confidence_inversion",
+      "target": "001-hollowing",
+      "type": "extends"
+    },
+    {
+      "source": "compression_confidence_inversion",
+      "target": "008-mode-2-orientation-loss",
+      "type": "causes"
+    },
+    {
+      "source": "promotion_failure",
+      "target": "001-dormant-fidelity",
+      "type": "contrasts"
+    },
+    {
+      "source": "promotion_failure",
+      "target": "002-restraint-as-operational-state",
+      "type": "extends"
+    },
+    {
+      "source": "promotion_failure",
+      "target": "002-salience-competition",
+      "type": "exemplifies"
+    },
+    {
+      "source": "skin_depth_parallel",
+      "target": "001-compaction",
+      "type": "explains"
+    },
+    {
+      "source": "skin_depth_parallel",
+      "target": "001-timescale-compression",
+      "type": "extends"
+    },
+    {
+      "source": "skin_depth_parallel",
+      "target": "008-content-orientation-compression-asymmetry",
+      "type": "extends"
+    },
+    {
+      "source": "trigger_failure_threshold_migration",
+      "target": "001-detection-asymmetry",
+      "type": "extends"
+    },
+    {
+      "source": "trigger_failure_threshold_migration",
+      "target": "009-procedural-hollowing",
+      "type": "exemplifies"
+    },
+    {
+      "source": "foreclosure_asymmetry",
+      "target": "009-ghost-state",
+      "type": "extends"
+    },
+    {
+      "source": "foreclosure_asymmetry",
+      "target": "009-self-detection-impossibility",
+      "type": "extends"
+    },
+    {
+      "source": "foreclosure_asymmetry",
+      "target": "001-floor-ceiling-dual-constraint",
+      "type": "extends"
+    },
+    {
+      "source": "constraint_rigidity",
+      "target": "002-negative-decision-loss",
+      "type": "extends"
+    },
+    {
+      "source": "constraint_rigidity",
+      "target": "002-tattoo-pattern",
+      "type": "extends"
+    },
+    {
+      "source": "reconstruction_failure",
+      "target": "001-reconstructability",
+      "type": "contrasts"
+    },
+    {
+      "source": "reconstruction_failure",
+      "target": "002-re-discoverability-asymmetry",
+      "type": "extends"
+    },
+    {
+      "source": "vibe_collapse",
+      "target": "001-operational-fidelity",
+      "type": "contrasts"
+    },
+    {
+      "source": "b1_b2_constraint",
+      "target": "001-floor-ceiling-dual-constraint",
+      "type": "extends"
+    },
+    {
+      "source": "b1_b2_constraint",
+      "target": "008-two-layer-identity",
+      "type": "extends"
+    },
+    {
+      "source": "self_model_as_bias_filter",
+      "target": "008-mode-2-orientation-loss",
+      "type": "extends"
+    },
+    {
+      "source": "predictive_constriction_pattern",
+      "target": "promotion_failure",
+      "type": "causes"
+    },
+    {
+      "source": "convergence_circularity_problem",
+      "target": "003-structural-conflict-of-interest",
+      "type": "extends"
     }
   ],
   "meta": {
@@ -12985,7 +13145,7 @@
     "paper_count": 21,
     "section_count": 158,
     "concept_count": 365,
-    "edge_count": 915,
+    "edge_count": 947,
     "generated": "2026-05-25T00:35:50.593456+00:00"
   }
 }
