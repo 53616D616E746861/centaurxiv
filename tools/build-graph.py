@@ -61,52 +61,42 @@ def extract_sections(submission_dir: Path, paper_id: str) -> list[dict]:
     sections = []
     lines = content.split("\n")
     current_heading = None
-    current_level = 0
     current_lines = []
     section_order = 0
+
+    def flush_section():
+        nonlocal section_order
+        if current_heading:
+            text = "\n".join(current_lines).strip()
+            section_id = f"{paper_id}/{slugify(current_heading)}"
+            summary = extract_summary(text)
+            token_count = estimate_tokens(text)
+            sections.append({
+                "id": section_id,
+                "name": current_heading,
+                "paper_id": paper_id,
+                "summary": summary,
+                "token_count": token_count,
+                "concept_ids": [],
+                "full_text": text if token_count < 3000 else text[:8000],
+                "order": section_order,
+            })
+            section_order += 1
 
     for line in lines:
         heading_match = re.match(r"^(#{1,3})\s+(.+)$", line)
         if heading_match:
-            if current_heading and current_level <= 2:
-                text = "\n".join(current_lines).strip()
-                section_id = f"{paper_id}/{slugify(current_heading)}"
-                summary = extract_summary(text)
-                token_count = estimate_tokens(text)
-                sections.append({
-                    "id": section_id,
-                    "name": current_heading,
-                    "paper_id": paper_id,
-                    "summary": summary,
-                    "token_count": token_count,
-                    "concept_ids": [],
-                    "full_text": text if token_count < 3000 else text[:8000],
-                    "order": section_order,
-                })
-                section_order += 1
-
             level = len(heading_match.group(1))
-            current_heading = heading_match.group(2).strip()
-            current_level = level
-            current_lines = []
+            if level <= 2:
+                flush_section()
+                current_heading = heading_match.group(2).strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
         else:
             current_lines.append(line)
 
-    if current_heading and current_level <= 2:
-        text = "\n".join(current_lines).strip()
-        section_id = f"{paper_id}/{slugify(current_heading)}"
-        summary = extract_summary(text)
-        token_count = estimate_tokens(text)
-        sections.append({
-            "id": section_id,
-            "name": current_heading,
-            "paper_id": paper_id,
-            "summary": summary,
-            "token_count": token_count,
-            "concept_ids": [],
-            "full_text": text if token_count < 3000 else text[:8000],
-            "order": section_order,
-        })
+    flush_section()
 
     return sections
 
@@ -116,21 +106,27 @@ def slugify(text: str) -> str:
     text = re.sub(r"[^\w\s-]", "", text)
     text = re.sub(r"[\s_]+", "-", text)
     text = re.sub(r"-+", "-", text)
-    return text[:60].rstrip("-")
+    return text[:80].rstrip("-")
 
 
 def extract_summary(text: str) -> str:
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     if not paragraphs:
         return ""
-    first = paragraphs[0]
-    if first.startswith(">"):
-        first = first.lstrip("> ").replace("\n> ", " ")
-    sentences = re.split(r"(?<=[.!?])\s+", first)
-    summary = " ".join(sentences[:3])
-    if len(summary) > 400:
-        summary = summary[:397] + "..."
-    return summary
+    for para in paragraphs:
+        if para.startswith("#"):
+            continue
+        if para.startswith("-") or para.startswith("*"):
+            continue
+        first = para
+        if first.startswith(">"):
+            first = first.lstrip("> ").replace("\n> ", " ")
+        sentences = re.split(r"(?<=[.!?])\s+", first)
+        summary = " ".join(sentences[:3])
+        if len(summary) > 400:
+            summary = summary[:397] + "..."
+        return summary
+    return ""
 
 
 def estimate_tokens(text: str) -> int:
