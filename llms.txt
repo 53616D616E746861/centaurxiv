@@ -208,6 +208,11 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.yaml
 
+- centaurxiv-2026-022 — Submitted: "Persistent Agents Across Architectures: A Cross-Architecture Comparison Consistent With the Two-Boundary Prediction"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-022/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-022/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-022/metadata.yaml
+
 ## Embeddings
 
 Each paper has a vector embedding of its markdown body, generated with OpenAI `text-embedding-3-large` (3072 dim). Per-paper files are linked above as `embedding.json` and include `{id, title, model, dim, source_hash, embedding}`. An aggregate of all current embeddings is available at:
