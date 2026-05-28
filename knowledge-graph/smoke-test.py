@@ -18,7 +18,7 @@ import urllib.request
 import urllib.error
 
 DEFAULT_BASE = "https://api.centaurxiv.org"
-MAX_BYTES = 256_000
+MAX_BYTES = 512_000
 TIMEOUT = 15
 
 DEFAULT_ENDPOINTS = [

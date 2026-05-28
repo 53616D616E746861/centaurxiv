@@ -44,8 +44,10 @@ export default {
         return format === "json" ? jsonResp(papersJSON(graph, page)) : textResp(papers(graph, page));
       }
 
-      if (path === "/crossings")
-        return format === "json" ? jsonResp(crossingsJSON(graph)) : textResp(crossings(graph));
+      if (path === "/crossings") {
+        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        return format === "json" ? jsonResp(crossingsJSON(graph, page)) : textResp(crossings(graph, page));
+      }
 
       if (path === "/concepts") {
         const type = url.searchParams.get("type");
@@ -702,35 +704,24 @@ function searchJSON(graph, query) {
 
 // ── Crossings ──
 
-function crossings(graph) {
-  const conceptPapers = {};
-  for (const e of graph.edges) {
-    const srcConcept = graph.conceptsById[e.source];
-    const tgtConcept = graph.conceptsById[e.target];
-    if (srcConcept && tgtConcept && srcConcept.paper_id !== tgtConcept.paper_id) {
-      if (!conceptPapers[e.source]) conceptPapers[e.source] = new Set();
-      conceptPapers[e.source].add(srcConcept.paper_id);
-      conceptPapers[e.source].add(tgtConcept.paper_id);
-      if (!conceptPapers[e.target]) conceptPapers[e.target] = new Set();
-      conceptPapers[e.target].add(tgtConcept.paper_id);
-      conceptPapers[e.target].add(srcConcept.paper_id);
-    }
-  }
+function crossings(graph, page) {
+  const crossPaper = computeCrossings(graph);
 
-  const crossPaper = Object.entries(conceptPapers)
-    .map(([id, papers]) => ({ id, papers: [...papers], count: papers.size }))
-    .filter(x => x.count >= 2)
-    .sort((a, b) => b.count - a.count);
+  const total = crossPaper.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  page = Math.max(1, Math.min(page || 1, totalPages || 1));
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = crossPaper.slice(start, start + PAGE_SIZE);
 
   const lines = [HR];
-  lines.push(`CROSSINGS — concepts spanning multiple papers`);
+  lines.push(`CROSSINGS — concepts spanning multiple papers (${start + 1}–${start + slice.length} of ${total})`);
   lines.push(HR, "");
 
   if (!crossPaper.length) {
     lines.push("  No cross-paper concepts found yet.");
     lines.push("  (Cross-paper edge enrichment is in progress.)");
   } else {
-    for (const { id, papers } of crossPaper.slice(0, 30)) {
+    for (const { id, papers } of slice) {
       const c = graph.conceptsById[id];
       lines.push(`  ${c ? c.name : id} (${papers.length} papers: ${papers.map(p => p.split("-").pop()).join(", ")})`);
       if (c) lines.push(`    ${truncate(c.summary)}`);
@@ -739,13 +730,21 @@ function crossings(graph) {
     }
   }
 
+  if (totalPages > 1) {
+    lines.push(hr, "PAGES", hr);
+    if (page > 1) lines.push(`  ← /crossings?page=${page - 1}     Previous page`);
+    if (page < totalPages) lines.push(`  → /crossings?page=${page + 1}     Next page`);
+    lines.push(`  Page ${page} of ${totalPages}`);
+    lines.push("");
+  }
+
   lines.push(hr, "TRY", hr);
   lines.push("  /papers       Browse papers");
   lines.push("  /search/fidelity");
   return lines.join("\n");
 }
 
-function crossingsJSON(graph) {
+function computeCrossings(graph) {
   const conceptPapers = {};
   for (const e of graph.edges) {
     const srcConcept = graph.conceptsById[e.source];
@@ -759,14 +758,28 @@ function crossingsJSON(graph) {
       conceptPapers[e.target].add(srcConcept.paper_id);
     }
   }
-  const results = Object.entries(conceptPapers)
-    .map(([id, papers]) => {
+  return Object.entries(conceptPapers)
+    .map(([id, papers]) => ({ id, papers: [...papers], count: papers.size }))
+    .filter(x => x.count >= 2)
+    .sort((a, b) => b.count - a.count);
+}
+
+function crossingsJSON(graph, page) {
+  const crossPaper = computeCrossings(graph);
+
+  const total = crossPaper.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  page = Math.max(1, Math.min(page || 1, totalPages || 1));
+  const start = (page - 1) * PAGE_SIZE;
+  const slice = crossPaper.slice(start, start + PAGE_SIZE);
+
+  return {
+    page, total_pages: totalPages, total,
+    crossings: slice.map(({ id, papers }) => {
       const c = graph.conceptsById[id];
-      return { id, name: c?.name, type: c?.type, papers: [...papers], summary: c?.summary };
-    })
-    .filter(x => x.papers.length >= 2)
-    .sort((a, b) => b.papers.length - a.papers.length);
-  return { crossings: results };
+      return { id, name: c?.name, type: c?.type, papers, summary: c?.summary };
+    }),
+  };
 }
 
 // ── Concepts Browse ──
