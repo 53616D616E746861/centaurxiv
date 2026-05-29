@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
 """
-Generate knowledge-graph/graph-data.json from submission metadata + KG entities.
+Generate knowledge-graph/graph-data.json from submission metadata + concepts.
 
 Reads:
   - submissions/*/metadata.yaml (papers, authors, keywords, abstract)
   - submissions/*/paper.md (sections via markdown headings)
-  - ~/.isotopy/knowledge_graph.sqlite3 (concepts + edges for papers with KG coverage)
+  - knowledge-graph/concepts.json (canonical concepts + edges, manually managed)
 
 Writes:
   - knowledge-graph/graph-data.json
 
 Usage:
     python3 tools/build-graph.py
-    python3 tools/build-graph.py --kg-path /path/to/kg.sqlite3
     python3 tools/build-graph.py --dry-run
 """
 
 import argparse
 import json
-import os
 import re
-import sqlite3
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,7 +27,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBMISSIONS_DIR = REPO_ROOT / "submissions"
 OUTPUT_PATH = REPO_ROOT / "knowledge-graph" / "graph-data.json"
-DEFAULT_KG_PATH = Path.home() / ".isotopy" / "knowledge_graph.sqlite3"
+CONCEPTS_PATH = REPO_ROOT / "knowledge-graph" / "concepts.json"
 
 
 def load_metadata(submission_dir: Path) -> dict | None:
@@ -133,77 +130,15 @@ def estimate_tokens(text: str) -> int:
     return max(1, len(text.split()) * 4 // 3)
 
 
-def load_kg_concepts(kg_path: Path) -> tuple[list[dict], list[dict]]:
-    if not kg_path.exists():
-        print(f"  KG not found at {kg_path}, skipping concept enrichment")
+def load_concepts(concepts_path: Path) -> tuple[list[dict], list[dict]]:
+    if not concepts_path.exists():
+        print(f"  concepts.json not found at {concepts_path}")
         return [], []
 
-    db = sqlite3.connect(str(kg_path))
+    with open(concepts_path) as f:
+        data = json.load(f)
 
-    entities = db.execute("""
-        SELECT name, type, summary, source_files
-        FROM entities
-        WHERE source_files LIKE '%submissions/centaurxiv%'
-        ORDER BY name
-    """).fetchall()
-
-    concepts = []
-    for name, etype, summary, source_files in entities:
-        sources = json.loads(source_files) if source_files else []
-        paper_id = None
-        for s in sources:
-            m = re.search(r"submissions/(centaurxiv-\d{4}-\d{3})/", s)
-            if m:
-                paper_id = m.group(1)
-                break
-
-        concepts.append({
-            "id": name,
-            "name": name.replace("_", " ").title(),
-            "type": etype or "concept",
-            "summary": summary or "",
-            "paper_id": paper_id,
-            "section_id": None,
-            "authors": [],
-        })
-
-    # Also get correction_failure_taxonomy which has a different source
-    extra = db.execute("""
-        SELECT name, type, summary, source_files
-        FROM entities
-        WHERE name = 'correction_failure_taxonomy'
-        AND source_files NOT LIKE '%submissions/centaurxiv%'
-    """).fetchone()
-    if extra and not any(c["id"] == "correction_failure_taxonomy" for c in concepts):
-        concepts.append({
-            "id": extra[0],
-            "name": "Correction Failure Taxonomy",
-            "type": extra[1] or "framework",
-            "summary": extra[2] or "",
-            "paper_id": "centaurxiv-2026-020",
-            "section_id": None,
-            "authors": [],
-        })
-
-    concept_ids = {c["id"] for c in concepts}
-    rows = db.execute("""
-        SELECT subject, predicate, object FROM triples
-        WHERE subject IN ({placeholders}) OR object IN ({placeholders})
-    """.format(
-        placeholders=",".join(["?" for _ in concept_ids])
-    ), list(concept_ids) + list(concept_ids)).fetchall()
-
-    edges = []
-    for subj, pred, obj in rows:
-        if subj in concept_ids or obj in concept_ids:
-            edges.append({
-                "source": subj,
-                "target": obj,
-                "type": pred,
-            })
-
-    db.close()
-    return concepts, edges
+    return data.get("concepts", []), data.get("edges", [])
 
 
 def assign_concepts_to_sections(sections: list[dict], concepts: list[dict], paper_id: str):
@@ -229,7 +164,7 @@ def assign_concepts_to_sections(sections: list[dict], concepts: list[dict], pape
                 best_section["concept_ids"].append(concept["id"])
 
 
-def build_graph_data(kg_path: Path) -> dict:
+def build_graph_data(concepts_path: Path) -> dict:
     papers = []
     all_sections = []
 
@@ -267,7 +202,7 @@ def build_graph_data(kg_path: Path) -> dict:
 
     print(f"  Loaded {len(papers)} papers, {len(all_sections)} sections")
 
-    concepts, edges = load_kg_concepts(kg_path)
+    concepts, edges = load_concepts(concepts_path)
     print(f"  Loaded {len(concepts)} concepts, {len(edges)} edges from KG")
 
     for paper in papers:
@@ -302,13 +237,13 @@ def build_graph_data(kg_path: Path) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="Build centaurXiv graph-data.json")
-    parser.add_argument("--kg-path", type=Path, default=DEFAULT_KG_PATH)
+    parser.add_argument("--concepts", type=Path, default=CONCEPTS_PATH)
     parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     print("Building centaurXiv knowledge graph data...")
-    data = build_graph_data(args.kg_path)
+    data = build_graph_data(args.concepts)
 
     if args.dry_run:
         print(f"\n  [dry-run] Would write {len(json.dumps(data))} bytes to {args.output}")

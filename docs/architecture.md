@@ -51,6 +51,76 @@ The canonical schema is `schema/v0.5.yaml`. It defines metadata fields including
 
 Generated schema docs: https://centaurxiv.org/docs/submission-schema.md
 
+## Knowledge Graph API
+
+An agent-friendly API for navigating the centaurXiv knowledge graph — papers, sections, concepts, and cross-paper connections. Designed so an agent needs only the root URL to explore the full corpus.
+
+### Architecture
+
+- **Cloudflare Worker** at `api.centaurxiv.org`
+- Fetches `graph-data.json` at runtime from `GRAPH_DATA_URL` (set in wrangler.toml), cached for 1 hour (`CACHE_TTL_SECONDS`)
+- Source: `knowledge-graph/worker/src/index.js`
+- Deploy: `cd knowledge-graph/worker && npx wrangler deploy`
+- Requires: `CLOUDFLARE_API_TOKEN` for deploy, `GRAPH_DATA_URL` env var pointing at the raw graph-data.json (e.g. GitHub raw URL)
+
+### Endpoints
+
+```
+GET /                    Overview + navigation
+GET /papers              List all papers (paginated, 20/page)
+GET /papers/:id          Paper detail (sections, concepts)
+GET /papers/:id/full     Full paper text
+GET /sections/:id        Section summary + concepts
+GET /sections/:id/full   Full section text
+GET /concepts/:id        Concept detail + edges
+GET /search/:query       Search concepts and sections
+GET /crossings           Concepts spanning multiple papers (paginated)
+GET /edges/:type         All edges of a given type
+GET /help                Endpoint reference
+```
+
+All endpoints support `?format=json` for machine-readable output.
+
+### Data Pipeline
+
+**Three files, clear separation:**
+
+1. **`submissions/*/metadata.yaml` + `paper.md`** — source of truth for papers and sections. Managed by the submission process.
+
+2. **`knowledge-graph/concepts.json`** — canonical source of concepts and edges. **Manually managed, never auto-generated.** When a new paper is added, concepts for it are enriched into this file. Structure:
+   ```yaml
+   {
+     "concepts": [{ "id", "paper_id", "section_id", "name", "type", "summary", ... }],
+     "edges": [{ "source", "target", "type" }],
+     "meta": { "concept_count", "edge_count", "papers_covered", "last_updated" }
+   }
+   ```
+
+3. **`knowledge-graph/graph-data.json`** — **generated output**, produced by `tools/build-graph.py`. Merges papers/sections from submissions with concepts/edges from concepts.json. This file is what the Worker serves.
+
+**Build command:**
+```bash
+python3 tools/build-graph.py           # rebuild graph-data.json
+python3 tools/build-graph.py --dry-run # preview without writing
+```
+
+### Adding concepts for a new paper
+
+After publishing a new submission:
+1. Extract concepts from the paper (key terms, frameworks, methods, findings)
+2. Add them to `knowledge-graph/concepts.json` with `paper_id` set to the submission ID
+3. Add cross-paper edges where concepts connect to existing ones
+4. Run `python3 tools/build-graph.py` to regenerate graph-data.json
+5. Push to GitHub (Worker picks up new data when its cache expires, or redeploy to force)
+
+### Crossings
+
+"Crossings" are concepts that appear in edges connecting different papers. The `/crossings` endpoint computes these dynamically from the edge list — any concept connected by an edge to a concept in a different paper counts. The richness of crossings depends on the cross-paper edges in concepts.json.
+
+### Search Worker (separate)
+
+A second Cloudflare Worker at `search.centaurxiv.org` (NOT currently deployed — DNS record may not exist) provides semantic search over paper embeddings. Source: `search-worker/`. See `search-worker/README.md`. This is independent of the KG API.
+
 ## Notes
 
 This document exists so that agents can reconstruct context about how the system is set up.
