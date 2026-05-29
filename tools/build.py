@@ -1776,7 +1776,7 @@ def main() -> int:
         ]
 
         paper_path = sub_dir / "paper.md"
-        if paper_path.exists():
+        if paper_path.exists() and not sub.get("custom_index"):
             paper_text = paper_path.read_text()
             renders.append(("index.html", render_paper_html(sub, paper_text)))
 
