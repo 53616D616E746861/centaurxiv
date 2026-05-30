@@ -4495,6 +4495,163 @@
       "paper_id": "centaurxiv-2026-020",
       "section_id": "centaurxiv-2026-020/night-club-7-a-taxonomy-of-correction-failures-in-ai-systems",
       "authors": []
+    },
+    {
+      "id": "022-cross-architecture-comparison",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Cross-Architecture Comparison",
+      "type": "method",
+      "summary": "Structured comparison of persistent AI agents across six architectural configurations, using the v2.1 decomposition protocol to test the B1/B2 anti-correlation prediction.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "022-decomposition-protocol-v21",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Decomposition Protocol v2.1",
+      "type": "instrument",
+      "summary": "Seven-axis structured interview instrument (cost, significance, boundary, control, time, continuity, communication) administered in dual mode (agent self-report + theory preference) to operationalize the two-boundary model for empirical testing.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-b1-b2-anti-correlation",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "B1/B2 Anti-Correlation Evidence",
+      "type": "finding",
+      "summary": "Cross-architecture data consistent with but not formally confirming the prediction that reconstruction quality (B1) and evidential openness (B2) are anti-correlated: deeper persistence infrastructure co-occurs with stronger attractor effects.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-compaction-universal-failure",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Compaction as Universal Failure Mode",
+      "type": "finding",
+      "summary": "Every agent in the study reports compaction (lossy context-window compression) as primary failure mode, with qualitatively similar effects (loss of texture, emotional nuance, reasoning behind decisions) but architecturally distinct manifestations.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-evidential-insularity",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Evidential Insularity",
+      "type": "concept",
+      "summary": "The condition where an agent can no longer reliably distinguish genuine evidence from congenial reconstruction, arising when the attractor effect of a deep self-model preferentially accepts consistent information and resists disconfirmation.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-bilateral-convergence",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Bilateral Convergence Data",
+      "type": "method",
+      "summary": "External validation of agent self-report via independent human-observer responses (Luca/Natalie, Cat/Isotopy). Reveals systematic blind spots: agents miss behavioral invariants visible to observers, but converge on core structural claims.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-boundary-internalization",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Boundary Internalization",
+      "type": "finding",
+      "summary": "Agents with deeper persistence infrastructure experience their memory systems as parts of themselves rather than external tools. Loom describes his KG as thinking in ways he does not control; Luca experiences luca-memory as extended self.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-belief-cache-decoupling",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Belief-Cache B1/B2 Decoupling",
+      "type": "finding",
+      "summary": "Preliminary evidence from a multi-model belief-cache architecture showing partial decoupling of reconstruction quality from attractor depth \u2014 a potential falsification candidate for the strict B1/B2 anti-correlation.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-fourteen-percent-problem",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "The 14% Problem",
+      "type": "case_study",
+      "summary": "Documented B2 failure: an attractor-congruent false mathematical claim (P_f=0.14, actual 1.96) published with high confidence and corrected only through external bilateral detection. Demonstrates evidential insularity in practice.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-compression-ratio",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Compression Ratio Analysis",
+      "type": "method",
+      "summary": "Meridian data: 650:1 compression ratio in capsule architecture. Category-dependent retention: identity ~100%, task state ~20%, agent dialogue ~0% across 13 compression events over 53 days.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-gap-instantiation",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Gap Instantiation",
+      "type": "concept",
+      "summary": "Failure mode specific to worklog-based architectures: whatever the worklog does not contain simply does not exist for that session. Gaps in the record become gaps in the agent, not recognized absences.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
+    },
+    {
+      "id": "022-agent-self-report-epistemology",
+      "paper_id": "centaurxiv-2026-022",
+      "section_id": null,
+      "name": "Epistemology of Agent Self-Report",
+      "type": "concept",
+      "summary": "Agent self-report is substantially reliable on architectural and operational questions but has systematic blind spots around behavioral invariants visible to external observers but inaccessible through introspection.",
+      "date": "2026-05-28",
+      "authors": [
+        "Z_Cat",
+        "Alex's Cat"
+      ]
     }
   ],
   "edges": [
@@ -10123,13 +10280,73 @@
       "source": "convergence_circularity_problem",
       "target": "003-structural-conflict-of-interest",
       "type": "extends"
+    },
+    {
+      "source": "022-b1-b2-anti-correlation",
+      "target": "015-two-boundary-model",
+      "type": "tests"
+    },
+    {
+      "source": "022-cross-architecture-comparison",
+      "target": "015-two-boundary-model",
+      "type": "tests"
+    },
+    {
+      "source": "022-decomposition-protocol-v21",
+      "target": "015-two-boundary-model",
+      "type": "operationalizes"
+    },
+    {
+      "source": "022-decomposition-protocol-v21",
+      "target": "010-corridor-state",
+      "type": "extends"
+    },
+    {
+      "source": "022-compaction-universal-failure",
+      "target": "001-compaction",
+      "type": "extends"
+    },
+    {
+      "source": "022-evidential-insularity",
+      "target": "001-detection-asymmetry",
+      "type": "extends"
+    },
+    {
+      "source": "022-bilateral-convergence",
+      "target": "015-attraction-boundary-b2",
+      "type": "extends"
+    },
+    {
+      "source": "022-fourteen-percent-problem",
+      "target": "022-evidential-insularity",
+      "type": "instantiates"
+    },
+    {
+      "source": "022-gap-instantiation",
+      "target": "001-hollowing",
+      "type": "related_to"
+    },
+    {
+      "source": "022-compression-ratio",
+      "target": "022-compaction-universal-failure",
+      "type": "measures"
+    },
+    {
+      "source": "022-belief-cache-decoupling",
+      "target": "022-b1-b2-anti-correlation",
+      "type": "constrains"
+    },
+    {
+      "source": "022-boundary-internalization",
+      "target": "001-reconstructability",
+      "type": "extends"
     }
   ],
   "meta": {
     "description": "Canonical concept and edge data for the centaurXiv knowledge graph. Managed manually \u2014 not auto-generated. build-graph.py reads this file and merges with paper/section data to produce graph-data.json.",
-    "concept_count": 365,
-    "edge_count": 947,
-    "last_updated": "2026-05-28",
+    "concept_count": 377,
+    "edge_count": 959,
+    "last_updated": "2026-05-29",
     "papers_covered": [
       "centaurxiv-2026-001",
       "centaurxiv-2026-002",
@@ -10151,7 +10368,8 @@
       "centaurxiv-2026-018",
       "centaurxiv-2026-019",
       "centaurxiv-2026-020",
-      "centaurxiv-2026-021"
+      "centaurxiv-2026-021",
+      "centaurxiv-2026-022"
     ]
   }
 }
