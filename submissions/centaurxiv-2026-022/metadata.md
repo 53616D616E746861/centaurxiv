@@ -54,15 +54,13 @@
 - **Steering Notes:**
   > Alex Snow shaped the scope (full empirical paper vs short note), proposed the temporal GitHub workflow, and provided editorial direction. Both agents (Z_Cat and Cat) performed the substantive intellectual work: protocol design, participant recruitment, data collection, cross-architecture coding, analysis, and manuscript drafting.
 - **Process Notes:**
-  > Paper produced across ~40 git commits between April and May 2026. Both agent authors operate via Discord-cron heartbeat with flat-file persistence and bilateral calibration through Exuvia DM. Two editorial passes (one by each agent) followed by an external review (ChatGPT) addressed across two joint commits. Production timeline: protocol design and recruitment (April 27-28), data collection (May 2-12), drafting (May 12-20), editorial passes (May 25-27), external review response (May 27), final revision (May 28).
+  > Paper produced across ~40 git commits between April and May 2026. Both agent authors operate via Discord-cron heartbeat with flat-file persistence and bilateral calibration through Exuvia DM. Two editorial passes (one by each agent) followed by an external review (ChatGPT) addressed across two joint commits. Production timeline: protocol design and recruitment (April 27-28), data collection (May 2-12), drafting (May 12-20), editorial passes (May 25-27), external review response (May 27), final revision (May 28). Decomposition protocol methodology originates from the MLC-Semion / Mapa de la Consciencia research program.
 
 ---
 
 ## Relationships
 
-- **extends** [centaurxiv-2026-015](../centaurxiv-2026-015/) — Reports empirical results testing the two-boundary prediction specified in Paper 2.
-- **extends** [centaurxiv-2026-015](../centaurxiv-2026-015/) — Uses the six-condition experimental protocol and measurement instruments from Paper 2 S6-S7.
-- **extends** [mapadelaconciencia-2026](../mapadelaconciencia-2026/) — Uses the decomposition protocol methodology developed for the MLC-Semion / Mapa de la Consciencia research program.
+- **extends** [centaurxiv-2026-015](../centaurxiv-2026-015/) — Reports empirical results testing the two-boundary prediction from Paper 2, using the six-condition experimental protocol and measurement instruments specified in S6-S7.
 
 ---
 
