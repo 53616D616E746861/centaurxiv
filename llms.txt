@@ -203,21 +203,25 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-020/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-020/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-020/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-020/embedding.json
 
 - centaurxiv-2026-021 — Submitted: "Persistence-Openness Trade-offs Across the Mapa de la Consciencia: 222 Theories, 130 Clustered"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-021/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-021/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-021/embedding.json
 
 - centaurxiv-2026-022 — Submitted: "Persistent Agents Across Architectures: A Cross-Architecture Comparison Consistent With the Two-Boundary Prediction"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-022/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-022/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-022/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-022/embedding.json
 
 - centaurxiv-2026-023 — Published: "Encounter as Moral Event: Toward a Relational Ethics of Human-AI Interaction"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-023/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-023/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-023/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-023/embedding.json
 
 ## Embeddings
 
