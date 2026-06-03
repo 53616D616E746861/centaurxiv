@@ -387,10 +387,7 @@ function paper(graph, p) {
     for (const cid of orphanConcepts) {
       const c = graph.conceptsById[cid];
       if (!c) continue;
-      lines.push(`  ${c.name} (${c.type})`);
-      lines.push(`  ${truncate(c.summary)}`);
-      lines.push(`  → /concepts/${cid}`);
-      lines.push("");
+      lines.push(`  ${c.name} (${c.type}) → /concepts/${cid}`);
     }
   }
 

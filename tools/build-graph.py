@@ -80,11 +80,15 @@ def extract_sections(submission_dir: Path, paper_id: str) -> list[dict]:
             })
             section_order += 1
 
+    seen_first_heading = False
     for line in lines:
         heading_match = re.match(r"^(#{1,3})\s+(.+)$", line)
         if heading_match:
             level = len(heading_match.group(1))
             if level <= 2:
+                if not seen_first_heading:
+                    seen_first_heading = True
+                    continue
                 flush_section()
                 current_heading = heading_match.group(2).strip()
                 current_lines = []
