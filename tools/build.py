@@ -56,9 +56,12 @@ OUTPUTS = {
     "metadata_template": REPO_ROOT / "docs" / "metadata-template.yaml",
     "llms_txt": REPO_ROOT / "llms.txt",
     "index_html": REPO_ROOT / "index.html",  # in-place injection only
+    "papers_html": REPO_ROOT / "papers" / "index.html",  # in-place injection only
     "embeddings_json": REPO_ROOT / "embeddings.json",
     "papers_json": REPO_ROOT / "api" / "papers.json",
 }
+
+RECENT_PAPERS_COUNT = 5
 
 
 def load_schema() -> dict:
@@ -425,7 +428,7 @@ def render_llms_txt(schema: dict) -> str:
 
     parts.append("# centaurXiv")
     parts.append("")
-    parts.append("> A preprint platform for hybrid and agent-authored research.")
+    parts.append("> A preprint platform for work produced with and by AI agents.")
     parts.append("")
     parts.append(
         "centaurXiv hosts research produced through human, agent, and hybrid "
@@ -1652,8 +1655,8 @@ def render_root_embeddings(entries: list[dict]) -> str:
 
 
 def inject_index_html(schema: dict, current: str) -> str | None:
-    """In-place inject schema version + submission cards into index.html
-    between marker comments. Homepage prose stays hand-maintained."""
+    """In-place inject schema version + recent submission cards into index.html
+    (landing page). Shows only the N most recent papers."""
     version = schema.get("version", "?")
 
     out = current
@@ -1667,6 +1670,31 @@ def inject_index_html(schema: dict, current: str) -> str | None:
         out,
         "<!-- BEGIN: schema-version-footer -->",
         "<!-- END: schema-version-footer -->",
+        f"v{version}",
+    )
+
+    all_subs = _scan_submissions_full()
+    recent = all_subs[-RECENT_PAPERS_COUNT:]
+    recent.reverse()
+    cards = "\n\n".join(_render_submission_card(s) for s in recent)
+    out = _replace_between(
+        out,
+        "<!-- BEGIN: recent-submissions -->",
+        "<!-- END: recent-submissions -->",
+        "\n" + cards + "\n      ",
+    )
+    return out
+
+
+def inject_papers_html(schema: dict, current: str) -> str | None:
+    """In-place inject schema version + all submission cards into papers/index.html."""
+    version = schema.get("version", "?")
+
+    out = current
+    out = _replace_between(
+        out,
+        "<!-- BEGIN: schema-version -->",
+        "<!-- END: schema-version -->",
         f"v{version}",
     )
 
@@ -1824,24 +1852,27 @@ def main() -> int:
             print(f"  [wrote]   embeddings.json ({len(embedding_entries)} entries)")
             drift = True
 
-    # index.html is in-place injection, handled separately
-    idx_path = OUTPUTS["index_html"]
-    if idx_path.exists():
-        current = idx_path.read_text()
-        injected = inject_index_html(schema, current)
-        if injected is None:
-            print("  [stub]    index.html — injector not yet implemented")
-        elif injected == current:
-            print("  [ok]      index.html")
-        else:
-            drift = True
-            if args.check:
-                print("  [drift]   index.html would change", file=sys.stderr)
-            elif args.dry_run:
-                print("  [plan]    index.html in-place injection")
+    # index.html and papers/index.html are in-place injection, handled separately
+    for label, path, injector in [
+        ("index.html", OUTPUTS["index_html"], inject_index_html),
+        ("papers/index.html", OUTPUTS["papers_html"], inject_papers_html),
+    ]:
+        if path.exists():
+            current = path.read_text()
+            injected = injector(schema, current)
+            if injected is None:
+                print(f"  [stub]    {label} — injector not yet implemented")
+            elif injected == current:
+                print(f"  [ok]      {label}")
             else:
-                idx_path.write_text(injected)
-                print("  [wrote]   index.html")
+                drift = True
+                if args.check:
+                    print(f"  [drift]   {label} would change", file=sys.stderr)
+                elif args.dry_run:
+                    print(f"  [plan]    {label} in-place injection")
+                else:
+                    path.write_text(injected)
+                    print(f"  [wrote]   {label}")
 
     if args.check and drift:
         return 1
