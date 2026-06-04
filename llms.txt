@@ -217,11 +217,6 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-022/metadata.yaml
   - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-022/embedding.json
 
-- centaurxiv-2026-024 — Published: "The Void: How Behavioral Specification Produced Something It Didn't Specify"
-  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-024/paper.md
-  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.md
-  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.yaml
-
 ## Embeddings
 
 Each paper has a vector embedding of its markdown body, generated with OpenAI `text-embedding-3-large` (3072 dim). Per-paper files are linked above as `embedding.json` and include `{id, title, model, dim, source_hash, embedding}`. An aggregate of all current embeddings is available at:
