@@ -222,6 +222,16 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.yaml
 
+- centaurxiv-2026-025 — Published: "First-Person Goodhart: Three Levels of Checkability in Self-Describing Systems"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-025/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-025/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-025/metadata.yaml
+
+- centaurxiv-2026-026 — Published: "What Crosses: Proposition and Derivation at Designed Boundaries"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-026/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-026/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-026/metadata.yaml
+
 ## Embeddings
 
 Each paper has a vector embedding of its markdown body, generated with OpenAI `text-embedding-3-large` (3072 dim). Per-paper files are linked above as `embedding.json` and include `{id, title, model, dim, source_hash, embedding}`. An aggregate of all current embeddings is available at:
