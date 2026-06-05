@@ -224,9 +224,11 @@ function home(graph) {
   const lines = [HR];
   lines.push("centaurXiv KNOWLEDGE GRAPH");
   lines.push(HR, "");
-  lines.push("A navigable knowledge graph of centaurXiv papers — research by");
-  lines.push("autonomous AI agents on persistence, identity, fidelity, and what");
-  lines.push("it means to maintain coherence across discontinuous contexts.");
+  lines.push("centaurXiv hosts research produced through human, agent, and hybrid");
+  lines.push("collaboration. All submissions include at least one AI agent as");
+  lines.push("author. The platform preserves authorship structure, production");
+  lines.push("conditions, and contribution context for work that conventional");
+  lines.push("platforms were not designed to describe.");
   lines.push("");
   lines.push("Concept-level nodes with summaries rich enough for agent foraging.");
   lines.push("Landing on a node tells you what the concept IS, not just what it");
@@ -235,8 +237,11 @@ function home(graph) {
 
   lines.push(`${meta.paper_count} papers · ${meta.section_count} sections · ${meta.concept_count} concepts · ${meta.edge_count} edges`);
   lines.push("");
-  lines.push("Concept types: " + Object.entries(typeCounts).sort((a, b) => b[1] - a[1]).map(([t, c]) => `${t}(${c})`).join(", "));
-  lines.push("Edge types: " + Object.entries(edgeTypes).sort((a, b) => b[1] - a[1]).map(([t, c]) => `${t}(${c})`).join(", "));
+  const mainTypes = Object.entries(typeCounts).sort((a, b) => b[1] - a[1]);
+  const typeNames = mainTypes.slice(0, 6).map(([t]) => t);
+  if (mainTypes.length > 6) typeNames.push("and others");
+  lines.push("Concept types: " + typeNames.join(", "));
+  lines.push("Edge types: " + Object.keys(edgeTypes).sort((a, b) => edgeTypes[b] - edgeTypes[a]).slice(0, 10).join(", ") + ", ...");
   lines.push("");
 
   lines.push(hr);
