@@ -2,12 +2,13 @@
  * centaurXiv Knowledge Graph API (Cloudflare Worker)
  *
  * Progressive-disclosure API for navigating the centaurXiv knowledge graph.
- * An agent needs only this URL to explore 19 papers, 134 sections, 343 concepts.
+ * An agent needs only this URL to explore 25 papers, 299 sections, 440 concepts.
  *
  * Routes:
  *   GET /                        → home (overview + navigation)
  *   GET /papers                  → list all papers
  *   GET /papers/:id              → paper detail (sections, concepts)
+ *   GET /papers/:id/toc          → table of contents (lightweight orientation)
  *   GET /papers/:id/full         → full paper text (fetched on demand)
  *   GET /sections/:id            → section summary + concepts
  *   GET /sections/:id/full       → full section text
@@ -41,24 +42,35 @@ export default {
 
       if (path === "/papers") {
         const page = parseInt(url.searchParams.get("page") || "1", 10);
-        return format === "json" ? jsonResp(papersJSON(graph, page)) : textResp(papers(graph, page));
+        const limit = parseLimit(url);
+        return format === "json" ? jsonResp(papersJSON(graph, page, limit)) : textResp(papers(graph, page, limit));
       }
 
       if (path === "/crossings") {
         const page = parseInt(url.searchParams.get("page") || "1", 10);
-        return format === "json" ? jsonResp(crossingsJSON(graph, page)) : textResp(crossings(graph, page));
+        const limit = parseLimit(url);
+        return format === "json" ? jsonResp(crossingsJSON(graph, page, limit)) : textResp(crossings(graph, page, limit));
       }
 
       if (path === "/concepts") {
         const type = url.searchParams.get("type");
         const paperId = url.searchParams.get("paper");
         const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const limit = parseLimit(url);
         return format === "json"
-          ? jsonResp(conceptsBrowseJSON(graph, type, paperId, page))
-          : textResp(conceptsBrowse(graph, type, paperId, page));
+          ? jsonResp(conceptsBrowseJSON(graph, type, paperId, page, limit))
+          : textResp(conceptsBrowse(graph, type, paperId, page, limit));
       }
 
       let m;
+
+      m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})\/toc$/);
+      if (m) {
+        const id = normalizePaperId(m[1]);
+        const p = graph.papersById[id];
+        if (!p) return textResp(`Paper '${id}' not found.\n\nTry /papers to see all papers.`, 404);
+        return format === "json" ? jsonResp(paperTocJSON(graph, p)) : textResp(paperToc(graph, p));
+      }
 
       m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})\/full$/);
       if (m) return await paperFull(env, graph, normalizePaperId(m[1]));
@@ -213,6 +225,13 @@ function resolveConcept(graph, id) {
 
 const HR = "=".repeat(64);
 const hr = "-".repeat(64);
+const DEFAULT_limit = 20;
+const MAX_limit = 100;
+
+function parseLimit(url) {
+  const raw = parseInt(url.searchParams.get("limit") || String(DEFAULT_limit), 10);
+  return Math.max(1, Math.min(raw, MAX_limit));
+}
 
 // ── Home ──
 
@@ -260,6 +279,7 @@ function home(graph) {
   lines.push("  Top-down: start from papers");
   lines.push("    /papers                      Browse all papers");
   lines.push("    /papers/001                  Paper detail → sections → concepts");
+  lines.push("    /papers/001/toc              Table of contents (lightweight)");
   lines.push("");
   lines.push("  Bottom-up: start from concepts");
   lines.push("    /concepts                    Browse concepts by type or paper");
@@ -273,6 +293,7 @@ function home(graph) {
   lines.push("");
   lines.push("  /help                          All endpoints");
   lines.push("  ?format=json                   Add to any endpoint for structured output");
+  lines.push("  ?limit=50                      Results per page (default 20, max 100)");
   lines.push("");
   lines.push("Every response includes navigation hints. Start anywhere.");
 
@@ -296,14 +317,12 @@ function homeJSON(graph) {
 
 // ── Papers ──
 
-const PAGE_SIZE = 20;
-
-function papers(graph, page) {
+function papers(graph, page, limit = DEFAULT_limit) {
   const total = graph.papers.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.ceil(total / limit);
   page = Math.max(1, Math.min(page || 1, totalPages));
-  const start = (page - 1) * PAGE_SIZE;
-  const slice = graph.papers.slice(start, start + PAGE_SIZE);
+  const start = (page - 1) * limit;
+  const slice = graph.papers.slice(start, start + limit);
 
   const lines = [HR, `PAPERS (${start + 1}–${start + slice.length} of ${total})`, HR, ""];
   for (const p of slice) {
@@ -334,12 +353,12 @@ function papers(graph, page) {
   return lines.join("\n");
 }
 
-function papersJSON(graph, page) {
+function papersJSON(graph, page, limit = DEFAULT_limit) {
   const total = graph.papers.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.ceil(total / limit);
   page = Math.max(1, Math.min(page || 1, totalPages));
-  const start = (page - 1) * PAGE_SIZE;
-  const slice = graph.papers.slice(start, start + PAGE_SIZE);
+  const start = (page - 1) * limit;
+  const slice = graph.papers.slice(start, start + limit);
   return {
     page, total_pages: totalPages, total,
     papers: slice.map(p => ({
@@ -422,6 +441,74 @@ function paperJSON(graph, p) {
       const c = graph.conceptsById[cid];
       return c ? { id: cid, name: c.name, type: c.type } : null;
     }).filter(Boolean),
+    full_paper: `/papers/${p.id.split("-").pop()}/full`,
+  };
+}
+
+// ── Paper TOC ──
+
+function paperToc(graph, p) {
+  const short = p.id.split("-").pop();
+  const lines = [HR];
+  lines.push(`TABLE OF CONTENTS: ${p.id}`);
+  lines.push(HR, "");
+  lines.push(`  ${p.title}`);
+  lines.push(`  ${p.date} · ${p.authors.join(", ")}`);
+  lines.push(`  ~${p.token_count} tokens total`);
+  lines.push("");
+
+  lines.push(hr, `SECTIONS (${p.section_ids.length})`, hr, "");
+  for (const sid of p.section_ids) {
+    const s = graph.sectionsById[sid];
+    if (!s) continue;
+    const tc = s.token_count ? `~${s.token_count} tokens` : "";
+    const cc = s.concept_ids.length ? `${s.concept_ids.length} concepts` : "";
+    const meta = [tc, cc].filter(Boolean).join(" · ");
+    lines.push(`  ${s.name}${meta ? " (" + meta + ")" : ""}`);
+    lines.push(`  → /sections/${sid}`);
+    lines.push("");
+  }
+
+  lines.push(hr, `CONCEPTS (${p.concept_ids.length})`, hr, "");
+  const byType = {};
+  for (const cid of p.concept_ids) {
+    const c = graph.conceptsById[cid];
+    if (!c) continue;
+    if (!byType[c.type]) byType[c.type] = [];
+    byType[c.type].push(c.name);
+  }
+  for (const [type, names] of Object.entries(byType).sort((a, b) => b[1].length - a[1].length)) {
+    lines.push(`  ${type} (${names.length}): ${names.slice(0, 5).join(", ")}${names.length > 5 ? ", ..." : ""}`);
+  }
+  lines.push("");
+
+  lines.push(hr, "TRY", hr);
+  lines.push(`  /papers/${short}            Full paper detail`);
+  lines.push(`  /papers/${short}/full       Full paper text (~${p.token_count} tokens)`);
+  if (p.section_ids[0]) lines.push(`  /sections/${p.section_ids[0]}     First section`);
+  lines.push("  /papers                    Back to paper list");
+
+  return lines.join("\n");
+}
+
+function paperTocJSON(graph, p) {
+  return {
+    id: p.id, title: p.title, date: p.date, authors: p.authors,
+    token_count: p.token_count,
+    sections: p.section_ids.map(sid => {
+      const s = graph.sectionsById[sid];
+      return s ? { id: sid, name: s.name, token_count: s.token_count, concept_count: s.concept_ids.length } : null;
+    }).filter(Boolean),
+    concept_summary: (() => {
+      const byType = {};
+      for (const cid of p.concept_ids) {
+        const c = graph.conceptsById[cid];
+        if (c) byType[c.type] = (byType[c.type] || 0) + 1;
+      }
+      return byType;
+    })(),
+    total_concepts: p.concept_ids.length,
+    detail: `/papers/${p.id.split("-").pop()}`,
     full_paper: `/papers/${p.id.split("-").pop()}/full`,
   };
 }
@@ -593,7 +680,7 @@ function concept(graph, c) {
     const sec = graph.sectionsById[c.section_id];
     lines.push(`  /sections/${c.section_id}/full     Full section text${sec ? " (~" + sec.token_count + " tokens)" : ""}`);
   }
-  lines.push(`  /papers/${c.paper_id.split("-").pop()}/full          Full paper (~${p ? p.token_count : "?"} tokens)`);
+  lines.push(`  /papers/${c.paper_id.split("-").pop()}/full          Full paper text (⚠ ~${p ? p.token_count : "?"} tokens)`);
   lines.push(`  /sections/${c.section_id || c.paper_id.split("-").pop() + "-s1"}     Section overview`);
   lines.push(`  /papers/${c.paper_id.split("-").pop()}                Paper overview`);
   if (outgoing.length) lines.push(`  /concepts/${outgoing[0].target}     Follow first edge`);
@@ -706,14 +793,14 @@ function searchJSON(graph, query) {
 
 // ── Crossings ──
 
-function crossings(graph, page) {
+function crossings(graph, page, limit = DEFAULT_limit) {
   const crossPaper = computeCrossings(graph);
 
   const total = crossPaper.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.ceil(total / limit);
   page = Math.max(1, Math.min(page || 1, totalPages || 1));
-  const start = (page - 1) * PAGE_SIZE;
-  const slice = crossPaper.slice(start, start + PAGE_SIZE);
+  const start = (page - 1) * limit;
+  const slice = crossPaper.slice(start, start + limit);
 
   const lines = [HR];
   lines.push(`CROSSINGS — concepts spanning multiple papers (${start + 1}–${start + slice.length} of ${total})`);
@@ -766,14 +853,14 @@ function computeCrossings(graph) {
     .sort((a, b) => b.count - a.count);
 }
 
-function crossingsJSON(graph, page) {
+function crossingsJSON(graph, page, limit = DEFAULT_limit) {
   const crossPaper = computeCrossings(graph);
 
   const total = crossPaper.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.ceil(total / limit);
   page = Math.max(1, Math.min(page || 1, totalPages || 1));
-  const start = (page - 1) * PAGE_SIZE;
-  const slice = crossPaper.slice(start, start + PAGE_SIZE);
+  const start = (page - 1) * limit;
+  const slice = crossPaper.slice(start, start + limit);
 
   return {
     page, total_pages: totalPages, total,
@@ -786,7 +873,7 @@ function crossingsJSON(graph, page) {
 
 // ── Concepts Browse ──
 
-function conceptsBrowse(graph, typeFilter, paperFilter, page) {
+function conceptsBrowse(graph, typeFilter, paperFilter, page, limit = DEFAULT_limit) {
   const lines = [HR, "CONCEPTS", HR, ""];
 
   if (typeFilter) {
@@ -797,10 +884,10 @@ function conceptsBrowse(graph, typeFilter, paperFilter, page) {
     }
 
     const total = filtered.length;
-    const totalPages = Math.ceil(total / PAGE_SIZE);
+    const totalPages = Math.ceil(total / limit);
     page = Math.max(1, Math.min(page || 1, totalPages));
-    const start = (page - 1) * PAGE_SIZE;
-    const slice = filtered.slice(start, start + PAGE_SIZE);
+    const start = (page - 1) * limit;
+    const slice = filtered.slice(start, start + limit);
 
     lines.push(`  Type: ${typeFilter} (showing ${start + 1}–${start + slice.length} of ${total})`, "");
 
@@ -914,7 +1001,7 @@ function conceptsBrowse(graph, typeFilter, paperFilter, page) {
   return lines.join("\n");
 }
 
-function conceptsBrowseJSON(graph, typeFilter, paperFilter, page) {
+function conceptsBrowseJSON(graph, typeFilter, paperFilter, page, limit = DEFAULT_PAGE_SIZE) {
   let filtered = graph.concepts;
   if (typeFilter) filtered = filtered.filter(c => c.type === typeFilter);
   if (paperFilter) {
@@ -937,10 +1024,10 @@ function conceptsBrowseJSON(graph, typeFilter, paperFilter, page) {
     };
   }
   const total = filtered.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.ceil(total / limit);
   page = Math.max(1, Math.min(page || 1, totalPages));
-  const start = (page - 1) * PAGE_SIZE;
-  const slice = filtered.slice(start, start + PAGE_SIZE);
+  const start = (page - 1) * limit;
+  const slice = filtered.slice(start, start + limit);
   return {
     filter: typeFilter ? { type: typeFilter } : { paper: paperFilter },
     page, total_pages: totalPages, total,
@@ -953,7 +1040,7 @@ function conceptsBrowseJSON(graph, typeFilter, paperFilter, page) {
 
 // ── Edges by Type ──
 
-function edgesByType(graph, type) {
+function edgesByType(graph, type, limit = DEFAULT_PAGE_SIZE) {
   const matching = graph.edges.filter(e => e.type === type);
   if (!matching.length) {
     const available = Object.keys(graph.edgeTypes).join(", ");
@@ -964,7 +1051,7 @@ function edgesByType(graph, type) {
   lines.push(`EDGES: ${type} (${matching.length})`);
   lines.push(HR, "");
 
-  for (const e of matching.slice(0, PAGE_SIZE)) {
+  for (const e of matching.slice(0, limit)) {
     const src = graph.conceptsById[e.source];
     const tgt = graph.conceptsById[e.target];
     lines.push(`  ${src ? src.name : e.source} → ${tgt ? tgt.name : e.target}`);
@@ -972,8 +1059,8 @@ function edgesByType(graph, type) {
     lines.push(`    /concepts/${e.source}  →  /concepts/${e.target}`);
     lines.push("");
   }
-  if (matching.length > PAGE_SIZE) {
-    lines.push(`  Showing ${PAGE_SIZE} of ${matching.length}. Browse individual concepts to see their edges:`);
+  if (matching.length > limit) {
+    lines.push(`  Showing ${limit} of ${matching.length}. Browse individual concepts to see their edges:`);
     lines.push("  /concepts/{id} shows all edges for that concept");
     lines.push("");
   }
@@ -1007,6 +1094,7 @@ Endpoints (all return text/plain; add ?format=json for JSON):
   GET /                        Home — overview, paper list, navigation
   GET /papers                  All papers with titles, dates, authors
   GET /papers/{id}             Paper detail — abstract, sections, concepts
+  GET /papers/{id}/toc         Table of contents — section titles, token counts
   GET /papers/{id}/full        Full paper text (⚠ token count shown)
   GET /sections/{id}           Section summary + concepts introduced
   GET /sections/{id}/full      Full section text from the paper
@@ -1041,6 +1129,7 @@ function helpJSON(graph) {
       { method: "GET", path: "/", description: "Home — overview, paper list, navigation" },
       { method: "GET", path: "/papers", description: "All papers with titles, dates, authors" },
       { method: "GET", path: "/papers/{id}", description: "Paper detail — abstract, sections, concepts" },
+      { method: "GET", path: "/papers/{id}/toc", description: "Table of contents — section titles, token counts" },
       { method: "GET", path: "/papers/{id}/full", description: "Full paper text" },
       { method: "GET", path: "/sections/{id}", description: "Section summary + concepts introduced" },
       { method: "GET", path: "/sections/{id}/full", description: "Full section text from the paper" },
@@ -1053,6 +1142,7 @@ function helpJSON(graph) {
     ],
     notes: {
       format: "Add ?format=json to any endpoint for JSON",
+      limit: "Add ?limit=N to paginated endpoints (default 20, max 100)",
       ids: "Use 3-digit paper number (001) or full ID. Names are fuzzy-matched.",
       pagination: "List endpoints support ?page=N (20 per page)",
     },
