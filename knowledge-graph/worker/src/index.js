@@ -201,6 +201,11 @@ function truncate(s, maxLen = 150) {
   return short.length > maxLen ? short.slice(0, maxLen - 3) + "..." : short;
 }
 
+function shortSectionId(sid) {
+  const m = sid.match(/centaurxiv-\d{4}-(\d{3})\/(\d+)/);
+  return m ? `${m[1]}/${m[2]}` : sid;
+}
+
 function resolveSection(graph, id) {
   if (graph.sectionsById[id]) return graph.sectionsById[id];
   const low = id.toLowerCase();
@@ -394,8 +399,9 @@ function paper(graph, p) {
     const tc = s.token_count ? ` · ~${s.token_count} tokens` : "";
     lines.push(`  ${s.name}${tc}`);
     lines.push(`  ${truncate(s.summary)}`);
-    lines.push(`  → /sections/${sid}          summary + concepts`);
-    lines.push(`  → /sections/${sid}/full     full text`);
+    const ssid = shortSectionId(sid);
+    lines.push(`  → /sections/${ssid}          summary + concepts`);
+    lines.push(`  → /sections/${ssid}/full     full text`);
     if (s.concept_ids.length) {
       lines.push(`    concepts: ${s.concept_ids.join(", ")}`);
     }
@@ -421,7 +427,7 @@ function paper(graph, p) {
   lines.push("  /concepts/{id}        Concept detail + edges to related concepts");
   lines.push("");
   lines.push(hr, "TRY", hr);
-  if (p.section_ids[0]) lines.push(`  /sections/${p.section_ids[0]}     Start with the first section`);
+  if (p.section_ids[0]) lines.push(`  /sections/${shortSectionId(p.section_ids[0])}     Start with the first section`);
   if (p.concept_ids[0]) lines.push(`  /concepts/${p.concept_ids[0]}     Explore a concept`);
   lines.push(`  /papers/${p.id.split("-").pop()}/full          Entire paper (~${p.token_count} tokens)`);
   lines.push("  /papers                            Back to paper list");
