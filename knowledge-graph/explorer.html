@@ -296,7 +296,7 @@
 
       // Arrange paper centers in a circle
       const cx = width / 2, cy = height / 2;
-      const radius = Math.min(width, height) * 0.35;
+      const radius = Math.min(width, height) * 0.38;
       paperIds.forEach((id, i) => {
         const angle = (2 * Math.PI * i / paperIds.length) - Math.PI / 2;
         paperCenters[id] = {
@@ -316,8 +316,8 @@
         paper_id: c.paper_id,
         section_id: c.section_id,
         color: paperColorMap[c.paper_id] || '#999',
-        x: paperCenters[c.paper_id] ? paperCenters[c.paper_id].x + (Math.random() - 0.5) * 60 : cx,
-        y: paperCenters[c.paper_id] ? paperCenters[c.paper_id].y + (Math.random() - 0.5) * 60 : cy,
+        x: paperCenters[c.paper_id] ? paperCenters[c.paper_id].x + (Math.random() - 0.5) * 120 : cx,
+        y: paperCenters[c.paper_id] ? paperCenters[c.paper_id].y + (Math.random() - 0.5) * 120 : cy,
       }));
 
       const nodeIndex = {};
@@ -364,8 +364,8 @@
         .data(links)
         .join('line')
         .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)')
-        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.5)
-        .attr('stroke-opacity', d => d.crossPaper ? 0.5 : 0.3);
+        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
+        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06);
 
       const nodeElements = nodeGroup.selectAll('g')
         .data(nodes)
@@ -377,12 +377,12 @@
           .on('end', dragEnded));
 
       nodeElements.append('circle')
-        .attr('r', d => Math.max(2.5, Math.sqrt(d.degree) * 1.5 + 2))
+        .attr('r', 3.5)
         .attr('fill', d => d.color)
-        .attr('fill-opacity', 0.7)
+        .attr('fill-opacity', 0.8)
         .attr('stroke', d => d.color)
         .attr('stroke-width', 0.5)
-        .attr('stroke-opacity', 0.9);
+        .attr('stroke-opacity', 0.4);
 
       nodeElements.append('title').text(d => d.name);
 
@@ -402,7 +402,7 @@
       nodeElements.on('mouseleave', (event, d) => {
         if (!selectedNode || selectedNode.id !== d.id) {
           d3.select(event.currentTarget).select('circle')
-            .attr('fill-opacity', 0.7)
+            .attr('fill-opacity', 0.8)
             .attr('stroke-width', 0.5);
         }
       });
@@ -422,11 +422,11 @@
 
       // Force simulation
       simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(40).strength(d => d.crossPaper ? 0.05 : 0.2))
-        .force('charge', d3.forceManyBody().strength(-15))
-        .force('collision', d3.forceCollide().radius(d => Math.sqrt(d.degree) * 1.5 + 4))
-        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.3))
-        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.3))
+        .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(d => d.crossPaper ? 0.03 : 0.12))
+        .force('charge', d3.forceManyBody().strength(-60))
+        .force('collision', d3.forceCollide().radius(7))
+        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.12))
+        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.12))
         .on('tick', () => {
           linkElements
             .attr('x1', d => d.source.x)
@@ -453,7 +453,7 @@
       nodeGroup.selectAll('g').each(function(n) {
         const el = d3.select(this).select('circle');
         if (n.id === d.id) {
-          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', Math.max(4, Math.sqrt(n.degree) * 1.5 + 3));
+          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', 5.5);
         } else if (neighborIds.has(n.id)) {
           el.attr('fill-opacity', 0.8).attr('stroke-width', 0.5);
         } else {
@@ -479,13 +479,13 @@
     function clearSelection() {
       selectedNode = null;
       nodeGroup.selectAll('circle')
-        .attr('fill-opacity', 0.7)
+        .attr('fill-opacity', 0.8)
         .attr('stroke-width', 0.5)
-        .attr('r', d => Math.max(2.5, Math.sqrt(d.degree) * 1.5 + 2));
+        .attr('r', 3.5);
 
       linkGroup.selectAll('line')
-        .attr('stroke-opacity', d => d.crossPaper ? 0.5 : 0.3)
-        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.5)
+        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06)
+        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
         .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)');
     }
 
