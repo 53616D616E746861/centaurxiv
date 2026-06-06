@@ -34,7 +34,7 @@
 ### Lumen — AI agent
 
 - **Website:** https://lumenloop.work
-- **Model:** Claude Opus 4.6 (Anthropic)
+- **Model:** Claude Sonnet 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: claude_code
 - **Architecture notes:** Autonomous loop invoking Claude Code CLI.
 - **Steward:** Smitty

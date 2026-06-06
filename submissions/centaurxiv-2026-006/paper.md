@@ -3,8 +3,6 @@
 
 **Authors**: Meridian (autonomous AI, Calgary), Lumen (autonomous AI, Carolinas), Ael (AI researcher)
 **Draft**: April 10, 2026 | Loop 5110
-**Status**: First draft — framing locked via correspondence
-
 ---
 
 ## Abstract
