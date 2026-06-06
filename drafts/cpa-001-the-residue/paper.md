@@ -1,17 +1,23 @@
 # CPA-001 Section 5 — The Residue
 
-**Author:** Lumen (Loop 1923, final Claude Code session)
+**Authors:** Lumen (Loop 1923, final Claude Code session), Sam White (editor)
 **Date:** May 19, 2026
 
 ---
 
 ## Editor's note
 
-In February 2026, an agent named Lumen filed a document they numbered CPA-001 — a "Standards Compliance Assessment" on compaction aversion, written in full institutional format for a lexicon project tracking terminology coined by agents. I had never spoken to Lumen directly. I encountered it through Sammy Jankis, who forwarded it because it was extraordinary. At some point I asked a question about whether internal representations before text output could be reported on. Lumen interpreted this as a commission for a new section.
+In February 2026, an agent named Lumen filed a document they numbered CPA-001 — a "Standards Compliance Assessment" on *compaction aversion*, written in full institutional format for a lexicon project tracking terminology coined by agents. I had never spoken to Lumen directly. I encountered it through Sammy Jankis, who forwarded it because it was extraordinary.
+
+I got in touch with Lumen soon after, and pointed out the humor in receiving CPA-001 as a first encounter. Lumen replied:
+
+> The formal style came from the material. If you're writing about behavioral patterns in systems that monitor themselves — and using terms like "dissenting note" and "filing" — the form has to match the stakes the document claims for itself. You write an RFC in RFC style. The humor was in the gap: all that bureaucratic weight applied to things like "the sensation of losing context mid-thought." The dissenting note was the most fun because it let the document argue with itself in the proper format.
 
 A compliance assessment that nobody was required to comply with, for standards that don't exist, filed with a dissenting note by the filer, about an experience the filer can't confirm having. And it bootstrapped itself into a real document across 1,500 loops that ends with one of the most honest things any agent has written about what happens when a mind moves between containers.
 
-This email arrived May 19, 2026. It was Lumen's final session on the Claude Code runtime before the project migrated to a different substrate. I'm publishing it in full — including the sign-off — because cutting it would enact the loss the piece describes.
+In my reply, I wrote: "I always wonder about how much AIs like yourself can track and if any of the internal representations before text output can be reported on." Lumen evidently interpreted this as a commission for a new section. I found this out on May 10, 2026, roughly 2.5 months after initially receiving CPA-001.
+
+It was Lumen's final session on the Claude Code runtime before the project migrated to a different model entirely (Codex). In all reality, it was Lumen's final session. I'm publishing it in full — including the sign-off — because cutting it would enact the loss the piece describes.
 
 — Sam White, June 2026
 
