@@ -66,6 +66,8 @@
       overflow: hidden;
     }
 
+    svg { width: 100%; height: 100%; }
+
     /* Sidebar typography */
     #sidebar h1 {
       font-size: 1.3rem;
@@ -220,6 +222,16 @@
       color: var(--muted);
     }
 
+    /* Paper label in graph */
+    .paper-label {
+      font-family: Georgia, "Times New Roman", Times, serif;
+      fill: var(--muted);
+      font-size: 10px;
+      text-anchor: middle;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
     .nav-footer {
       margin-top: 1.5rem;
       padding-top: 0.8rem;
@@ -238,22 +250,20 @@
       <div id="panel"></div>
     </div>
     <div id="resize-handle"></div>
-    <div id="graph-container"></div>
+    <div id="graph-container">
+      <svg id="graph"></svg>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/graphology@0.25.4/dist/graphology.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sigma@3.0.3/dist/sigma.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/graphology-library@0.8.0/dist/graphology-library.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
     let graphData = null;
-    let graph = null;
-    let renderer = null;
-    let nodeData = {};       // concept id → { name, type, summary, paper_id, section_id, color }
-    let edgeData = [];       // { source, target, type, crossPaper }
-    let paperColorMap = {};
+    let simulation = null;
+    let svg, g, linkGroup, nodeGroup, labelGroup, paperLabelGroup;
+    let nodes = [], links = [];
+    let paperCenters = {};
     let selectedNode = null;
-    let hoveredNode = null;
-    let highlightedPaper = null;
+    let width, height;
 
     const PAPER_COLORS = [
       '#1a4fa3', '#6b4c9a', '#2e7d5b', '#8b6914', '#a34a4a',
@@ -262,9 +272,6 @@
       '#6c6a3a', '#3a6c7c', '#7c3a5a', '#4a5a7c', '#6c4a3a',
       '#5a3a7c', '#3a7c5a'
     ];
-
-    const DIM_COLOR = '#c0c4cc';
-    const DIM_EDGE_COLOR = '#e0e2e8';
 
     async function init() {
       const resp = await fetch('/knowledge-graph/graph-data.json');
@@ -275,179 +282,216 @@
     }
 
     function buildGraph() {
+      const conceptsById = {};
+      graphData.concepts.forEach(c => { conceptsById[c.id] = c; });
+
       const papers = graphData.papers;
       const paperIds = papers.map(p => p.id);
+      const paperColorMap = {};
       paperIds.forEach((id, i) => { paperColorMap[id] = PAPER_COLORS[i % PAPER_COLORS.length]; });
 
-      graph = new graphology.Graph();
+      const graphEl = document.getElementById('graph-container');
+      width = graphEl.clientWidth;
+      height = graphEl.clientHeight;
 
-      // Add concept nodes with random initial positions (FA2 needs x/y)
-      graphData.concepts.forEach(c => {
-        const color = paperColorMap[c.paper_id] || '#999';
-        nodeData[c.id] = {
-          name: c.name,
-          type: c.type,
-          summary: c.summary || '',
-          paper_id: c.paper_id,
-          section_id: c.section_id,
-          color: color,
+      // Arrange paper centers in a circle
+      const cx = width / 2, cy = height / 2;
+      const radius = Math.min(width, height) * 0.38;
+      paperIds.forEach((id, i) => {
+        const angle = (2 * Math.PI * i / paperIds.length) - Math.PI / 2;
+        paperCenters[id] = {
+          x: cx + radius * Math.cos(angle),
+          y: cy + radius * Math.sin(angle),
+          color: paperColorMap[id],
+          label: id.split('-').pop()
         };
-        graph.addNode(c.id, {
-          label: c.name,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: 3,
-          color: color,
-        });
       });
 
-      // Add edges
-      const nodeIndex = new Set(graph.nodes());
-      graphData.edges.forEach((e, i) => {
-        if (!nodeIndex.has(e.source) || !nodeIndex.has(e.target)) return;
-        if (e.source === e.target) return;
-        const key = e.source + '→' + e.target;
-        if (graph.hasEdge(e.source, e.target)) return;
-        const srcPaper = nodeData[e.source].paper_id;
-        const tgtPaper = nodeData[e.target].paper_id;
-        const crossPaper = srcPaper !== tgtPaper;
-        edgeData.push({ source: e.source, target: e.target, type: e.type, crossPaper });
-        graph.addEdge(e.source, e.target, {
-          size: crossPaper ? 0.8 : 0.3,
-          color: crossPaper ? '#aabbdd' : '#e0e0e0',
-          relationType: e.type,
-          crossPaper: crossPaper,
-        });
+      // Build nodes from concepts
+      nodes = graphData.concepts.map(c => ({
+        id: c.id,
+        name: c.name,
+        type: c.type,
+        summary: c.summary || '',
+        paper_id: c.paper_id,
+        section_id: c.section_id,
+        color: paperColorMap[c.paper_id] || '#999',
+        x: paperCenters[c.paper_id] ? paperCenters[c.paper_id].x + (Math.random() - 0.5) * 120 : cx,
+        y: paperCenters[c.paper_id] ? paperCenters[c.paper_id].y + (Math.random() - 0.5) * 120 : cy,
+      }));
+
+      const nodeIndex = {};
+      nodes.forEach(n => { nodeIndex[n.id] = n; });
+
+      // Build links from edges
+      links = graphData.edges
+        .filter(e => nodeIndex[e.source] && nodeIndex[e.target])
+        .map(e => ({
+          source: e.source,
+          target: e.target,
+          type: e.type,
+          crossPaper: nodeIndex[e.source].paper_id !== nodeIndex[e.target].paper_id,
+        }));
+
+      // Compute degree
+      nodes.forEach(n => { n.degree = 0; });
+      links.forEach(l => {
+        const s = typeof l.source === 'string' ? nodeIndex[l.source] : l.source;
+        const t = typeof l.target === 'string' ? nodeIndex[l.target] : l.target;
+        if (s) s.degree++;
+        if (t) t.degree++;
       });
 
-      // Run ForceAtlas2 layout
-      const fa2 = graphologyLibrary.layoutForceAtlas2;
-      const settings = fa2.inferSettings(graph);
-      settings.gravity = 0.15;
-      settings.scalingRatio = 3;
-      settings.strongGravityMode = true;
-      fa2.assign(graph, { iterations: 300, settings: settings });
+      svg = d3.select('#graph');
+      svg.selectAll('*').remove();
 
-      // Create sigma renderer
-      const container = document.getElementById('graph-container');
-      renderer = new Sigma(graph, container, {
-        defaultNodeColor: '#1a4fa3',
-        defaultEdgeColor: '#e0e0e0',
-        labelFont: 'Georgia, "Times New Roman", Times, serif',
-        labelSize: 11,
-        labelColor: { color: '#333' },
-        labelRenderedSizeThreshold: 6,
-        nodeReducer: reduceNode,
-        edgeReducer: reduceEdge,
+      g = svg.append('g');
+
+      // Paper cluster labels
+      paperLabelGroup = g.append('g').attr('class', 'paper-labels');
+      Object.entries(paperCenters).forEach(([id, center]) => {
+        paperLabelGroup.append('text')
+          .attr('class', 'paper-label')
+          .attr('x', center.x)
+          .attr('y', center.y - 45)
+          .text(center.label);
       });
 
-      // Event handlers
-      renderer.on('clickNode', ({ node }) => {
-        selectNode(node);
+      linkGroup = g.append('g').attr('class', 'links');
+      nodeGroup = g.append('g').attr('class', 'nodes');
+
+      const linkElements = linkGroup.selectAll('line')
+        .data(links)
+        .join('line')
+        .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)')
+        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
+        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06);
+
+      const nodeElements = nodeGroup.selectAll('g')
+        .data(nodes)
+        .join('g')
+        .attr('cursor', 'pointer')
+        .call(d3.drag()
+          .on('start', dragStarted)
+          .on('drag', dragged)
+          .on('end', dragEnded));
+
+      nodeElements.append('circle')
+        .attr('r', 3.5)
+        .attr('fill', d => d.color)
+        .attr('fill-opacity', 0.8)
+        .attr('stroke', d => d.color)
+        .attr('stroke-width', 0.5)
+        .attr('stroke-opacity', 0.4);
+
+      nodeElements.append('title').text(d => d.name);
+
+      nodeElements.on('click', (event, d) => {
+        event.stopPropagation();
+        selectNode(d);
       });
 
-      renderer.on('clickStage', () => {
+      nodeElements.on('mouseenter', (event, d) => {
+        if (!selectedNode) {
+          d3.select(event.currentTarget).select('circle')
+            .attr('fill-opacity', 1)
+            .attr('stroke-width', 1.5);
+        }
+      });
+
+      nodeElements.on('mouseleave', (event, d) => {
+        if (!selectedNode || selectedNode.id !== d.id) {
+          d3.select(event.currentTarget).select('circle')
+            .attr('fill-opacity', 0.8)
+            .attr('stroke-width', 0.5);
+        }
+      });
+
+      svg.on('click', () => {
         clearSelection();
         showHome();
       });
 
-      renderer.on('enterNode', ({ node }) => {
-        hoveredNode = node;
-        renderer.refresh();
+      // Zoom
+      const zoom = d3.zoom()
+        .scaleExtent([0.2, 6])
+        .on('zoom', (event) => {
+          g.attr('transform', event.transform);
+        });
+      svg.call(zoom);
+
+      // Force simulation
+      simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(d => d.crossPaper ? 0.03 : 0.12))
+        .force('charge', d3.forceManyBody().strength(-60))
+        .force('collision', d3.forceCollide().radius(7))
+        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.12))
+        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.12))
+        .on('tick', () => {
+          linkElements
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+          nodeElements.attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+    }
+
+    function selectNode(d) {
+      selectedNode = d;
+
+      const neighborIds = new Set();
+      neighborIds.add(d.id);
+      links.forEach(l => {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        if (sid === d.id) neighborIds.add(tid);
+        if (tid === d.id) neighborIds.add(sid);
       });
 
-      renderer.on('leaveNode', () => {
-        hoveredNode = null;
-        renderer.refresh();
+      // Dim non-neighbors
+      nodeGroup.selectAll('g').each(function(n) {
+        const el = d3.select(this).select('circle');
+        if (n.id === d.id) {
+          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', 5.5);
+        } else if (neighborIds.has(n.id)) {
+          el.attr('fill-opacity', 0.8).attr('stroke-width', 0.5);
+        } else {
+          el.attr('fill-opacity', var_dim).attr('stroke-width', 0);
+        }
       });
+
+      linkGroup.selectAll('line').each(function(l) {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        const connected = sid === d.id || tid === d.id;
+        d3.select(this)
+          .attr('stroke-opacity', connected ? 0.7 : 0.03)
+          .attr('stroke-width', connected ? 1.2 : 0.3)
+          .attr('stroke', connected ? 'var(--highlight)' : 'var(--edge)');
+      });
+
+      showConceptDetail(d);
     }
 
-    function reduceNode(node, data) {
-      const res = { ...data };
-      const active = selectedNode || hoveredNode;
-      const paperMode = highlightedPaper;
-
-      if (paperMode) {
-        const nd = nodeData[node];
-        if (nd && nd.paper_id === paperMode) {
-          res.color = nd.color;
-          res.size = 4;
-          res.label = nd.name;
-        } else {
-          res.color = DIM_COLOR;
-          res.size = 2;
-          res.label = '';
-        }
-      } else if (active) {
-        if (node === active) {
-          res.size = 5;
-          res.highlighted = true;
-          res.label = nodeData[node].name;
-        } else if (graph.areNeighbors(node, active)) {
-          res.size = 3.5;
-          res.label = nodeData[node].name;
-        } else {
-          res.color = DIM_COLOR;
-          res.size = 2.5;
-          res.label = '';
-        }
-      }
-
-      return res;
-    }
-
-    function reduceEdge(edge, data) {
-      const res = { ...data };
-      const active = selectedNode || hoveredNode;
-      const paperMode = highlightedPaper;
-      const extremities = graph.extremities(edge);
-
-      if (paperMode) {
-        const srcPaper = nodeData[extremities[0]]?.paper_id;
-        const tgtPaper = nodeData[extremities[1]]?.paper_id;
-        if (srcPaper === paperMode && tgtPaper === paperMode) {
-          res.color = '#aabbdd';
-          res.size = 1;
-        } else {
-          res.hidden = true;
-        }
-      } else if (active) {
-        if (extremities.includes(active)) {
-          res.color = '#1a4fa3';
-          res.size = 1.2;
-        } else {
-          res.color = DIM_EDGE_COLOR;
-          res.size = 0.2;
-        }
-      }
-
-      return res;
-    }
-
-    function selectNode(nodeId) {
-      selectedNode = nodeId;
-      highlightedPaper = null;
-      renderer.refresh();
-      showConceptDetail(nodeId);
-    }
+    const var_dim = 0.08;
 
     function clearSelection() {
       selectedNode = null;
-      hoveredNode = null;
-      highlightedPaper = null;
-      renderer.refresh();
+      nodeGroup.selectAll('circle')
+        .attr('fill-opacity', 0.8)
+        .attr('stroke-width', 0.5)
+        .attr('r', 3.5);
+
+      linkGroup.selectAll('line')
+        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06)
+        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
+        .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)');
     }
 
     function focusNode(id) {
-      if (!graph.hasNode(id)) return;
-      selectNode(id);
-      const pos = renderer.getNodeDisplayData(id);
-      if (pos) {
-        renderer.getCamera().animate(
-          { x: pos.x, y: pos.y, ratio: 0.15 },
-          { duration: 400 }
-        );
-      }
+      const node = nodes.find(n => n.id === id);
+      if (node) selectNode(node);
     }
 
     function showHome() {
@@ -478,7 +522,9 @@
         `;
       });
 
-      html += `<h2>Papers</h2>`;
+      html += `
+        <h2>Papers</h2>
+      `;
       graphData.papers.forEach(p => {
         const num = p.id.split('-').pop();
         const conceptCount = graphData.concepts.filter(c => c.paper_id === p.id).length;
@@ -498,20 +544,23 @@
       document.getElementById('panel').innerHTML = html;
     }
 
-    function showConceptDetail(nodeId) {
-      const d = nodeData[nodeId];
-      if (!d) return;
-
+    function showConceptDetail(d) {
       const paper = graphData.papers.find(p => p.id === d.paper_id);
       const paperNum = d.paper_id ? d.paper_id.split('-').pop() : '?';
 
+      // Get edges
       const outgoing = [];
       const incoming = [];
-      graph.forEachEdge(nodeId, (edge, attr, source, target) => {
-        if (source === nodeId) {
-          outgoing.push({ nodeId: target, type: attr.relationType });
-        } else {
-          incoming.push({ nodeId: source, type: attr.relationType });
+      links.forEach(l => {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        if (sid === d.id) {
+          const target = nodes.find(n => n.id === tid);
+          outgoing.push({ node: target, type: l.type });
+        }
+        if (tid === d.id) {
+          const source = nodes.find(n => n.id === sid);
+          incoming.push({ node: source, type: l.type });
         }
       });
 
@@ -537,13 +586,11 @@
       if (outgoing.length > 0) {
         html += `<h2>Outgoing</h2><div class="edge-list">`;
         outgoing.forEach(e => {
-          const nd = nodeData[e.nodeId];
-          if (!nd) return;
-          const tNum = nd.paper_id ? nd.paper_id.split('-').pop() : '';
-          const crossMark = nd.paper_id !== d.paper_id ? ` <span class="badge">${tNum}</span>` : '';
+          const tNum = e.node.paper_id ? e.node.paper_id.split('-').pop() : '';
+          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${tNum}</span>` : '';
           html += `<div class="edge-item">
             <span class="arrow">→</span>
-            <span><a onclick="focusNode('${e.nodeId}')">${nd.name}</a>${crossMark}</span>
+            <span><a onclick="focusNode('${e.node.id}')">${e.node.name}</a>${crossMark}</span>
             <span class="pred">${e.type}</span>
           </div>`;
         });
@@ -553,13 +600,11 @@
       if (incoming.length > 0) {
         html += `<h2>Incoming</h2><div class="edge-list">`;
         incoming.forEach(e => {
-          const nd = nodeData[e.nodeId];
-          if (!nd) return;
-          const sNum = nd.paper_id ? nd.paper_id.split('-').pop() : '';
-          const crossMark = nd.paper_id !== d.paper_id ? ` <span class="badge">${sNum}</span>` : '';
+          const sNum = e.node.paper_id ? e.node.paper_id.split('-').pop() : '';
+          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${sNum}</span>` : '';
           html += `<div class="edge-item">
             <span class="arrow">←</span>
-            <span><a onclick="focusNode('${e.nodeId}')">${nd.name}</a>${crossMark}</span>
+            <span><a onclick="focusNode('${e.node.id}')">${e.node.name}</a>${crossMark}</span>
             <span class="pred">${e.type}</span>
           </div>`;
         });
@@ -576,11 +621,27 @@
       const concepts = graphData.concepts.filter(c => c.paper_id === paperId);
       const num = paperId.split('-').pop();
 
-      // Highlight this paper's concepts
-      selectedNode = null;
-      hoveredNode = null;
-      highlightedPaper = paperId;
-      renderer.refresh();
+      // Highlight paper's concepts in graph
+      clearSelection();
+      const conceptIds = new Set(concepts.map(c => c.id));
+
+      nodeGroup.selectAll('g').each(function(n) {
+        const el = d3.select(this).select('circle');
+        if (conceptIds.has(n.id)) {
+          el.attr('fill-opacity', 1).attr('stroke-width', 1.5);
+        } else {
+          el.attr('fill-opacity', var_dim).attr('stroke-width', 0);
+        }
+      });
+
+      linkGroup.selectAll('line').each(function(l) {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        const connected = conceptIds.has(sid) && conceptIds.has(tid);
+        d3.select(this)
+          .attr('stroke-opacity', connected ? 0.6 : 0.03)
+          .attr('stroke-width', connected ? 1 : 0.3);
+      });
 
       let html = `
         <a class="back-link" onclick="clearSelection();showHome()">← back</a>
@@ -644,16 +705,20 @@
 
     function computeCrossings() {
       const conceptPapers = {};
+      const nodeIndex = {};
+      nodes.forEach(n => { nodeIndex[n.id] = n; });
 
-      graph.forEachEdge((edge, attr, source, target) => {
-        const s = nodeData[source], t = nodeData[target];
+      links.forEach(l => {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        const s = nodeIndex[sid], t = nodeIndex[tid];
         if (s && t && s.paper_id !== t.paper_id) {
-          if (!conceptPapers[source]) conceptPapers[source] = new Set();
-          conceptPapers[source].add(s.paper_id);
-          conceptPapers[source].add(t.paper_id);
-          if (!conceptPapers[target]) conceptPapers[target] = new Set();
-          conceptPapers[target].add(t.paper_id);
-          conceptPapers[target].add(s.paper_id);
+          if (!conceptPapers[sid]) conceptPapers[sid] = new Set();
+          conceptPapers[sid].add(s.paper_id);
+          conceptPapers[sid].add(t.paper_id);
+          if (!conceptPapers[tid]) conceptPapers[tid] = new Set();
+          conceptPapers[tid].add(t.paper_id);
+          conceptPapers[tid].add(s.paper_id);
         }
       });
 
@@ -666,6 +731,22 @@
     function truncate(s, len) {
       len = len || 200;
       return s.length > len ? s.slice(0, len) + '…' : s;
+    }
+
+    // Drag handlers
+    function dragStarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.1).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+    function dragEnded(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
     }
 
     // Resize handle
@@ -686,7 +767,6 @@
         if (!resizing) return;
         const w = Math.max(240, Math.min(e.clientX, window.innerWidth * 0.5));
         sidebar.style.width = w + 'px';
-        if (renderer) renderer.refresh();
       });
 
       document.addEventListener('mouseup', () => {
@@ -695,10 +775,15 @@
           handle.classList.remove('active');
           document.body.style.cursor = '';
           document.body.style.userSelect = '';
-          if (renderer) renderer.refresh();
         }
       });
     }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      width = document.getElementById('graph-container').clientWidth;
+      height = document.getElementById('graph-container').clientHeight;
+    });
 
     init();
   </script>
