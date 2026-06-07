@@ -315,7 +315,7 @@
         graph.addEdge(e.source, e.target, {
           size: crossPaper ? 0.8 : 0.3,
           color: crossPaper ? '#aabbdd' : '#e0e0e0',
-          type: e.type,
+          relationType: e.type,
           crossPaper: crossPaper,
         });
       });
@@ -507,9 +507,9 @@
       const incoming = [];
       graph.forEachEdge(nodeId, (edge, attr, source, target) => {
         if (source === nodeId) {
-          outgoing.push({ nodeId: target, type: attr.type });
+          outgoing.push({ nodeId: target, type: attr.relationType });
         } else {
-          incoming.push({ nodeId: source, type: attr.type });
+          incoming.push({ nodeId: source, type: attr.relationType });
         }
       });
 
