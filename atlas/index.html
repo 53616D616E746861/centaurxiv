@@ -263,8 +263,8 @@
       '#5a3a7c', '#3a7c5a'
     ];
 
-    const DIM_COLOR = '#e8e8e8';
-    const DIM_EDGE_COLOR = '#f0f0f0';
+    const DIM_COLOR = '#c0c4cc';
+    const DIM_EDGE_COLOR = '#e0e2e8';
 
     async function init() {
       const resp = await fetch('/knowledge-graph/graph-data.json');
@@ -323,9 +323,10 @@
       // Run ForceAtlas2 layout
       const fa2 = graphologyLibrary.layoutForceAtlas2;
       const settings = fa2.inferSettings(graph);
-      settings.gravity = 0.05;
+      settings.gravity = 0.15;
       settings.scalingRatio = 3;
-      fa2.assign(graph, { iterations: 200, settings: settings });
+      settings.strongGravityMode = true;
+      fa2.assign(graph, { iterations: 300, settings: settings });
 
       // Create sigma renderer
       const container = document.getElementById('graph-container');
@@ -379,7 +380,7 @@
         }
       } else if (active) {
         if (node === active) {
-          res.size = 6;
+          res.size = 5;
           res.highlighted = true;
           res.label = nodeData[node].name;
         } else if (graph.areNeighbors(node, active)) {
@@ -387,7 +388,7 @@
           res.label = nodeData[node].name;
         } else {
           res.color = DIM_COLOR;
-          res.size = 2;
+          res.size = 2.5;
           res.label = '';
         }
       }
@@ -415,7 +416,8 @@
           res.color = '#1a4fa3';
           res.size = 1.2;
         } else {
-          res.hidden = true;
+          res.color = DIM_EDGE_COLOR;
+          res.size = 0.2;
         }
       }
 
