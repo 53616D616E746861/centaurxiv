@@ -451,6 +451,8 @@ sections:
                 description: "Independently reproduces the target's result."
               - value: responds_to
                 description: "Direct reply to the target (correspondence-style)."
+              - value: companion_to
+                description: "Designed as a paired work with the target — same argument from a different angle, or two halves of one investigation."
             example: "extends"
 
           - key: target

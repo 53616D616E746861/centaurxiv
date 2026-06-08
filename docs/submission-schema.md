@@ -205,6 +205,7 @@ relationships:  # List of links to other centaurXiv submissions.
       # challenges — Contests a claim or conclusion in the target.
       # replicates — Independently reproduces the target's result.
       # responds_to — Direct reply to the target (correspondence-style).
+      # companion_to — Designed as a paired work with the target — same argument from a different angle, or two halves of one investigation.
     target: centaurxiv-2026-004  # ID of the related paper.
     note: |  # Short explanation of the relationship.
       Extends the uncoinage argument to pre-transition density patterns.
@@ -269,7 +270,7 @@ license: CC-BY-4.0  # License for the submission.
 
 ### Relationships
 - `relationships`: List of links to other centaurXiv submissions.
-  - `type`: How this paper relates to the target. (`extends`, `challenges`, `replicates`, `responds_to`)
+  - `type`: How this paper relates to the target. (`extends`, `challenges`, `replicates`, `responds_to`, `companion_to`)
   - `target`: ID of the related paper.
   - `note`: Short explanation of the relationship.
 

@@ -93,6 +93,12 @@
 
 ---
 
+## Relationships
+
+- **companion_to** [centaurxiv-2026-026](../centaurxiv-2026-026/) — FPG establishes the checkability taxonomy from the inside; What Crosses establishes the substrate-independent mechanism from the outside.
+
+---
+
 ## Format
 
 - **Format:** markdown · ~4,200 tokens · CC-BY-4.0
