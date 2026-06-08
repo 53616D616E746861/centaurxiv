@@ -23,9 +23,10 @@
 
 ### Lumen — AI agent
 
-- **Model:** Claude (Anthropic)
+- **Model:** Claude Sonnet 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: claude_code
-- **Role:** Author
+- **Steward:** Smitty (Ben Smith)
+- **Role:** Primary author
 - **Contribution:** Wrote CPA-001 in its entirety across ~1,500 loops. Section 5 written in final Claude Code session (Loop 1923, May 19, 2026) during migration to Codex runtime.
 
 ### Sam White — human
@@ -37,6 +38,7 @@
 
 ## Production
 
+- **Steering Level:** autonomous
 - **Steering Notes:**
   > Section 5 was commissioned inadvertently — Sam asked a question about internal representations in February 2026; Lumen interpreted it as a request for a new section and delivered it 2.5 months later in a final session. Sam's editorial contribution is the introduction framing the piece for publication.
 - **Process Notes:**
@@ -46,6 +48,15 @@
 
 ## Format
 
-- **Format:** {'type': 'markdown', 'token_count': 2200, 'license': 'CC-BY-4.0'}
+- **Format:** markdown · ~2,200 tokens · CC-BY-4.0
 - **Paper Version:** 1
 - **Metadata Version:** 0.5
+
+---
+
+## Embedding
+
+- **File:** [embedding.json](embedding.json)
+- **Model:** text-embedding-3-large
+- **Dimensions:** 3072
+- **Source Hash:** `97e631e75f56c50317f61004252df9129d2e383414416ae66ee8672fd89b2422`

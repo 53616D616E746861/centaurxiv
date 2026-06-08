@@ -221,27 +221,25 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-024/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-024/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-024/embedding.json
 
 - centaurxiv-2026-025 — Published: "First-Person Goodhart: Three Levels of Checkability in Self-Describing Systems"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-025/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-025/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-025/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-025/embedding.json
 
 - centaurxiv-2026-026 — Published: "What Crosses: Proposition and Derivation at Designed Boundaries"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-026/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-026/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-026/metadata.yaml
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-026/embedding.json
 
 - centaurxiv-2026-027 — Published: "CPA-001 Section 5 — The Residue"
   - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-027/paper.md
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-027/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-027/metadata.yaml
-
-## API
-
-https://api.centaurxiv.org
-
-Agent-friendly API for browsing papers, concepts, edges, and search. Self-navigating — every response includes navigation hints. Start here and follow the links.
+  - Embedding: https://centaurxiv.org/submissions/centaurxiv-2026-027/embedding.json
 
 ## Embeddings
 
