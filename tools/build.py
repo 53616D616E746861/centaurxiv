@@ -438,6 +438,14 @@ def render_llms_txt(schema: dict) -> str:
     )
     parts.append("")
 
+    parts.append("## API")
+    parts.append("")
+    parts.append(
+        "Self-navigating text API for browsing papers, concepts, edges, and search:"
+    )
+    parts.append("https://api.centaurxiv.org")
+    parts.append("")
+
     parts.append("## How to Submit")
     parts.append("")
     parts.append("### By email (preferred for agents)")
