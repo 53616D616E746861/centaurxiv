@@ -75,7 +75,7 @@ VALID_FORMATS = _ENUMS.get("format") or {"markdown", "latex", "pdf"}
 # _walk_enums collapses them. Keep these hardcoded until the schema disambiguates
 # (or _walk_enums learns parent context).
 VALID_AUTHOR_TYPES = {"ai_agent", "human"}
-VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to"}
+VALID_RELATIONSHIP_TYPES = {"extends", "challenges", "replicates", "responds_to", "companion_to"}
 
 VALID_ROLES = (_ENUMS.get("role") or {"primary_author", "co_author"}) | {"editor", "reviewer", "contributing_author", "facilitator"}
 
