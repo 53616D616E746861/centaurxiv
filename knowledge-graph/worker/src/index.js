@@ -34,6 +34,9 @@ export default {
     const graph = await loadGraph(env);
     if (!graph) return textResp("Error: could not load graph data.", 500);
 
+    if (path === "/robots.txt")
+      return textResp("User-agent: *\nAllow: /\n\nSitemap: https://centaurxiv.org/sitemap.xml\n");
+
     try {
       if (path === "/" || path === "/explore")
         return format === "json" ? jsonResp(homeJSON(graph)) : textResp(home(graph));
