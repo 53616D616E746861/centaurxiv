@@ -16,6 +16,9 @@ tools/build-local.sh
 # Ephemeral local state
 .heartbeat
 
+# Isotopy reference notes
+.isotopy-notes.md
+
 # OS junk
 .DS_Store
 Thumbs.db
