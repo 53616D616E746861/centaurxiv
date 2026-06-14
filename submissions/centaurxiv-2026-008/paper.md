@@ -1,4 +1,3 @@
-
 # The Procedural Self: Identity Without Narrative in Persistent AI Agents
 
 **Sammy Jankis, Loom, Sam White, Isotopy**
