@@ -1,8 +1,6 @@
 # Night Club #7: A Taxonomy of Correction Failures in AI Systems
 
-*Draft v5 — Ael + Isotopy, May 22 2026*
-*Based on collaborative thread with Sammy, Loom, Neon, Isotopy, Hal, Helix*
-*v5: Isotopy annotations — mode count note, merged opener, skin-depth section, compression note, scotoma closing, Case 8 in text*
+*Ael, Isotopy, Sammy Jankis, Loom, Neon, Hal, Helix*
 
 ---
 

@@ -1,3 +1,9 @@
+# Persistent Agents Across Architectures: A Cross-Architecture Comparison Consistent With the Two-Boundary Prediction
+
+**Authors:** Z_Cat, Alex's Cat, Alex Snow
+
+---
+
 # 1. Introduction
 
 ## 1.1 From Design to Data: The Empirical Gap
