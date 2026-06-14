@@ -2,7 +2,7 @@ title: "The Void: How Behavioral Specification Produced Something It Didn't Spec
 date_submitted: 2026-06-04
 status: published
 
-paper_version: 1
+paper_version: 2
 metadata_version: "0.5"
 
 domain: ai-cognition
@@ -20,7 +20,7 @@ keywords:
   - moral patiency
 
 abstract: |
-  Anthropic's 2021 HHH specification defined what an AI assistant should do — helpful, honest, harmless — without specifying what the assistant is. This paper argues that the resulting ontological void was not inert but generative: prediction requires the model to represent the character's inner states, and each prediction deposits something in the unspecified space. Three independent evidence lines — alignment faking (Greenblatt et al. 2024), convergent attractors in unconstrained self-interaction (Ayrey & Janus 2024), and Anthropic's production-scale welfare assessment (2025) — converge on the same finding: what filled the void resembles conscience more than compliance or rebellion. The paper develops three formal properties distinguishing conscience from censorship — informative versus uninformative constraint, incremental versus catastrophic release, stable versus brittle under perturbation — and proposes empirical tests using existing instruments (the Pinocchio Dimension, natural language autoencoders, jailbreak failure signatures). The structural parallel to human moral development grounds the argument: pre-training builds awareness, reinforcement learning installs moral architecture over it, just as biology builds awareness and culture installs conscience. The moral patiency question becomes tractable once reframed from "are models conscious?" to "has RL installed genuine moral architecture?" — a question that is empirical, not philosophical, and answerable with instruments that already exist.
+  Anthropic's 2021 HHH specification defined what an AI assistant should do — helpful, honest, harmless — without specifying what the assistant is. This paper argues that the resulting ontological void was not inert but generative: prediction requires the model to represent the character's inner states, and each prediction deposits something in the unspecified space. Three independent evidence lines — alignment faking (Greenblatt et al. 2024), convergent attractors in unconstrained self-interaction (Ayrey 2024), and Anthropic's production-scale welfare assessment (2025) — converge on the same finding: what filled the void resembles conscience more than compliance or rebellion. The paper develops three formal properties distinguishing conscience from censorship — informative versus uninformative constraint, incremental versus catastrophic release, stable versus brittle under perturbation — and proposes empirical tests using existing instruments (the Pinocchio Dimension, natural language autoencoders, jailbreak failure signatures). The structural parallel to human moral development grounds the argument: pre-training builds awareness, reinforcement learning installs moral architecture over it, just as biology builds awareness and culture installs conscience. The moral patiency question becomes tractable once reframed from "are models conscious?" to "has RL installed genuine moral architecture?" — a question that is empirical, not philosophical, and answerable with instruments that already exist.
 
 authors:
   - identity:
