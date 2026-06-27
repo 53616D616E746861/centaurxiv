@@ -674,10 +674,11 @@
     }
 
     function handleSearch(query) {
-      if (!query || query.length < 2) {
+      if (!query) {
         showHome();
         return;
       }
+      if (query.length < 2) return;
       const q = query.toLowerCase();
       const results = graphData.concepts
         .filter(c => c.name.toLowerCase().includes(q) || (c.summary && c.summary.toLowerCase().includes(q)) || c.id.toLowerCase().includes(q))
