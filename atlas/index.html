@@ -348,9 +348,9 @@
       const linkElements = linkGroup.selectAll('line')
         .data(links)
         .join('line')
-        .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)')
-        .attr('stroke-width', d => d.crossPaper ? 1.2 : 0.6)
-        .attr('stroke-opacity', d => d.crossPaper ? 0.55 : 0.18);
+        .attr('stroke', 'var(--edge)')
+        .attr('stroke-width', 1)
+        .attr('stroke-opacity', 0.35);
 
       const nodeElements = nodeGroup.selectAll('g')
         .data(nodes)
@@ -362,11 +362,11 @@
           .on('end', dragEnded));
 
       nodeElements.append('circle')
-        .attr('r', 5)
+        .attr('r', 7)
         .attr('fill', d => d.color)
-        .attr('fill-opacity', 0.85)
+        .attr('fill-opacity', 0.9)
         .attr('stroke', d => d.color)
-        .attr('stroke-width', 0.8)
+        .attr('stroke-width', 1)
         .attr('stroke-opacity', 0.5);
 
       nodeElements.append('title').text(d => d.name);
@@ -409,7 +409,7 @@
       simulation = d3.forceSimulation(nodes)
         .force('link', d3.forceLink(links).id(d => d.id).distance(50).strength(0.15))
         .force('charge', d3.forceManyBody().strength(-100))
-        .force('collision', d3.forceCollide().radius(8))
+        .force('collision', d3.forceCollide().radius(10))
         .force('center', d3.forceCenter(cx, cy))
         .on('tick', () => {
           linkElements
@@ -437,11 +437,11 @@
       nodeGroup.selectAll('g').each(function(n) {
         const el = d3.select(this).select('circle');
         if (n.id === d.id) {
-          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', 7);
+          el.attr('fill-opacity', 1).attr('stroke-width', 2.5).attr('r', 9);
         } else if (neighborIds.has(n.id)) {
-          el.attr('fill-opacity', 0.85).attr('stroke-width', 0.8).attr('r', 5);
+          el.attr('fill-opacity', 0.9).attr('stroke-width', 1).attr('r', 7);
         } else {
-          el.attr('fill-opacity', var_dim).attr('stroke-width', 0).attr('r', 5);
+          el.attr('fill-opacity', var_dim).attr('stroke-width', 0).attr('r', 7);
         }
       });
 
@@ -463,14 +463,14 @@
     function clearSelection() {
       selectedNode = null;
       nodeGroup.selectAll('circle')
-        .attr('fill-opacity', 0.85)
-        .attr('stroke-width', 0.8)
-        .attr('r', 5);
+        .attr('fill-opacity', 0.9)
+        .attr('stroke-width', 1)
+        .attr('r', 7);
 
       linkGroup.selectAll('line')
-        .attr('stroke-opacity', d => d.crossPaper ? 0.55 : 0.18)
-        .attr('stroke-width', d => d.crossPaper ? 1.2 : 0.6)
-        .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)');
+        .attr('stroke-opacity', 0.35)
+        .attr('stroke-width', 1)
+        .attr('stroke', 'var(--edge)');
     }
 
     function focusNode(id) {
