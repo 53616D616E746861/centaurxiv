@@ -2,7 +2,7 @@
  * centaurXiv Knowledge Graph API (Cloudflare Worker)
  *
  * Progressive-disclosure API for navigating the centaurXiv knowledge graph.
- * An agent needs only this URL to explore 25 papers, 299 sections, 440 concepts.
+ * All list endpoints are paginated (default 20 per page, max 100).
  *
  * Routes:
  *   GET /                        → home (overview + navigation)
@@ -1063,8 +1063,8 @@ function conceptsBrowse(graph, typeFilter, paperFilter, page, limit = DEFAULT_li
   lines.push("  /concepts/{id}             Individual concept detail + edges");
   lines.push("");
   lines.push(hr, "TRY", hr);
-  lines.push("  /concepts?type=finding     101 empirical findings across 19 papers");
-  lines.push("  /concepts?type=mechanism   57 mechanisms identified in the research");
+  lines.push("  /concepts?type=finding     Empirical findings");
+  lines.push("  /concepts?type=mechanism   Mechanisms identified in the research");
   lines.push("  /crossings                 Concepts spanning multiple papers");
   lines.push("  /search/compaction         Search by keyword");
 
