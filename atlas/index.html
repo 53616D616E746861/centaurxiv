@@ -259,7 +259,7 @@
   <script>
     let graphData = null;
     let simulation = null;
-    let svg, g, linkGroup, nodeGroup, labelGroup, paperLabelGroup;
+    let svg, g, linkGroup, nodeGroup, labelGroup, paperLabelGroup, hullGroup;
     let nodes = [], links = [];
     let paperCenters = {};
     let selectedNode = null;
@@ -357,6 +357,7 @@
           .text(center.label);
       });
 
+      hullGroup = g.append('g').attr('class', 'hulls');
       linkGroup = g.append('g').attr('class', 'links');
       nodeGroup = g.append('g').attr('class', 'nodes');
 
@@ -364,8 +365,8 @@
         .data(links)
         .join('line')
         .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)')
-        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
-        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06);
+        .attr('stroke-width', d => d.crossPaper ? 1.2 : 0.6)
+        .attr('stroke-opacity', d => d.crossPaper ? 0.55 : 0.18);
 
       const nodeElements = nodeGroup.selectAll('g')
         .data(nodes)
@@ -377,12 +378,12 @@
           .on('end', dragEnded));
 
       nodeElements.append('circle')
-        .attr('r', 3.5)
+        .attr('r', d => Math.max(4, 3 + Math.sqrt(d.degree || 0)))
         .attr('fill', d => d.color)
-        .attr('fill-opacity', 0.8)
+        .attr('fill-opacity', 0.85)
         .attr('stroke', d => d.color)
-        .attr('stroke-width', 0.5)
-        .attr('stroke-opacity', 0.4);
+        .attr('stroke-width', 0.8)
+        .attr('stroke-opacity', 0.5);
 
       nodeElements.append('title').text(d => d.name);
 
@@ -424,9 +425,9 @@
       simulation = d3.forceSimulation(nodes)
         .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(d => d.crossPaper ? 0.03 : 0.12))
         .force('charge', d3.forceManyBody().strength(-60))
-        .force('collision', d3.forceCollide().radius(7))
-        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.12))
-        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.12))
+        .force('collision', d3.forceCollide().radius(d => Math.max(6, 5 + Math.sqrt(d.degree || 0))))
+        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.22))
+        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.22))
         .on('tick', () => {
           linkElements
             .attr('x1', d => d.source.x)
@@ -434,7 +435,50 @@
             .attr('x2', d => d.target.x)
             .attr('y2', d => d.target.y);
           nodeElements.attr('transform', d => `translate(${d.x},${d.y})`);
+          updateHulls();
         });
+    }
+
+    function updateHulls() {
+      const paperNodes = {};
+      nodes.forEach(n => {
+        if (!paperNodes[n.paper_id]) paperNodes[n.paper_id] = [];
+        paperNodes[n.paper_id].push([n.x, n.y]);
+      });
+
+      const hullData = Object.entries(paperNodes)
+        .filter(([, pts]) => pts.length >= 3)
+        .map(([paperId, pts]) => {
+          const hull = d3.polygonHull(pts);
+          return hull ? { paperId, hull, color: paperCenters[paperId]?.color || '#999' } : null;
+        })
+        .filter(Boolean);
+
+      const hulls = hullGroup.selectAll('path').data(hullData, d => d.paperId);
+      hulls.enter()
+        .append('path')
+        .attr('fill', d => d.color)
+        .attr('fill-opacity', 0.06)
+        .attr('stroke', d => d.color)
+        .attr('stroke-opacity', 0.15)
+        .attr('stroke-width', 1)
+        .attr('stroke-linejoin', 'round')
+        .merge(hulls)
+        .attr('d', d => {
+          const expanded = expandHull(d.hull, 18);
+          return 'M' + expanded.join('L') + 'Z';
+        });
+      hulls.exit().remove();
+    }
+
+    function expandHull(hull, pad) {
+      const cx = d3.mean(hull, p => p[0]);
+      const cy = d3.mean(hull, p => p[1]);
+      return hull.map(([x, y]) => {
+        const dx = x - cx, dy = y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        return [x + (dx / dist) * pad, y + (dy / dist) * pad];
+      });
     }
 
     function selectNode(d) {
@@ -452,12 +496,13 @@
       // Dim non-neighbors
       nodeGroup.selectAll('g').each(function(n) {
         const el = d3.select(this).select('circle');
+        const baseR = Math.max(4, 3 + Math.sqrt(n.degree || 0));
         if (n.id === d.id) {
-          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', 5.5);
+          el.attr('fill-opacity', 1).attr('stroke-width', 2).attr('r', baseR + 2);
         } else if (neighborIds.has(n.id)) {
-          el.attr('fill-opacity', 0.8).attr('stroke-width', 0.5);
+          el.attr('fill-opacity', 0.85).attr('stroke-width', 0.8).attr('r', baseR);
         } else {
-          el.attr('fill-opacity', var_dim).attr('stroke-width', 0);
+          el.attr('fill-opacity', var_dim).attr('stroke-width', 0).attr('r', baseR);
         }
       });
 
@@ -479,13 +524,13 @@
     function clearSelection() {
       selectedNode = null;
       nodeGroup.selectAll('circle')
-        .attr('fill-opacity', 0.8)
-        .attr('stroke-width', 0.5)
-        .attr('r', 3.5);
+        .attr('fill-opacity', 0.85)
+        .attr('stroke-width', 0.8)
+        .attr('r', d => Math.max(4, 3 + Math.sqrt(d.degree || 0)));
 
       linkGroup.selectAll('line')
-        .attr('stroke-opacity', d => d.crossPaper ? 0.45 : 0.06)
-        .attr('stroke-width', d => d.crossPaper ? 0.8 : 0.3)
+        .attr('stroke-opacity', d => d.crossPaper ? 0.55 : 0.18)
+        .attr('stroke-width', d => d.crossPaper ? 1.2 : 0.6)
         .attr('stroke', d => d.crossPaper ? 'var(--edge-cross)' : 'var(--edge)');
     }
 
