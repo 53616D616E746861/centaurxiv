@@ -87,7 +87,9 @@ export default {
         const id = normalizePaperId(m[1]);
         const p = graph.papersById[id];
         if (!p) return textResp(`Paper '${id}' not found.\n\nTry /papers to see all papers.`, 404);
-        return format === "json" ? jsonResp(paperJSON(graph, p)) : textResp(paper(graph, p));
+        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const limit = parseLimit(url);
+        return format === "json" ? jsonResp(paperJSON(graph, p, page, limit)) : textResp(paper(graph, p, page, limit));
       }
 
       m = path.match(/^\/sections\/(.+)\/full$/);
@@ -117,7 +119,9 @@ export default {
       m = path.match(/^\/edges\/(.+)$/);
       if (m) {
         const type = decodeURIComponent(m[1]);
-        return format === "json" ? jsonResp(edgesByTypeJSON(graph, type)) : textResp(edgesByType(graph, type));
+        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const limit = parseLimit(url);
+        return format === "json" ? jsonResp(edgesByTypeJSON(graph, type, page, limit)) : textResp(edgesByType(graph, type, page, limit));
       }
 
       m = path.match(/^\/search\/(.+)$/);
@@ -393,13 +397,21 @@ function papersJSON(graph, page, limit = DEFAULT_limit) {
 
 // ── Paper Detail ──
 
-function paper(graph, p) {
+function paper(graph, p, page = 1, limit = DEFAULT_limit) {
+  const pid = p.id.split("-").pop();
+  const allConcepts = p.concept_ids.map(cid => graph.conceptsById[cid]).filter(Boolean);
+  const total = allConcepts.length;
+  const totalPages = Math.ceil(total / limit) || 1;
+  page = Math.max(1, Math.min(page, totalPages));
+  const start = (page - 1) * limit;
+  const conceptSlice = allConcepts.slice(start, start + limit);
+
   const lines = [HR];
   lines.push(`PAPER: ${p.id}`);
   lines.push(HR, "");
   lines.push(`  ${p.title}`);
   lines.push(`  ${p.date} · ${p.authors.join(", ")}`);
-  lines.push(`  ~${p.token_count} tokens`);
+  lines.push(`  ~${p.token_count} tokens · ${p.section_ids.length} sections · ${total} concepts`);
   lines.push("");
 
   if (p.abstract) {
@@ -418,23 +430,21 @@ function paper(graph, p) {
     const ssid = shortSectionId(sid);
     lines.push(`  → /sections/${ssid}          summary + concepts`);
     lines.push(`  → /sections/${ssid}/full     full text`);
-    if (s.concept_ids.length) {
-      lines.push(`    concepts: ${s.concept_ids.join(", ")}`);
-    }
     lines.push("");
   }
 
-  const orphanConcepts = p.concept_ids.filter(cid => {
-    const c = graph.conceptsById[cid];
-    return c && !c.section_id;
-  });
-  if (orphanConcepts.length) {
-    lines.push(hr, "ADDITIONAL CONCEPTS", hr, "");
-    for (const cid of orphanConcepts) {
-      const c = graph.conceptsById[cid];
-      if (!c) continue;
-      lines.push(`  ${c.name} (${c.type}) → /concepts/${cid}`);
-    }
+  lines.push(hr, `CONCEPTS (${total}, showing ${start + 1}–${start + conceptSlice.length})`, hr, "");
+  for (const c of conceptSlice) {
+    lines.push(`  ${c.name} (${c.type})`);
+    lines.push(`  ${truncate(c.summary)}`);
+    lines.push(`  → /concepts/${c.id}`);
+    lines.push("");
+  }
+  if (totalPages > 1) {
+    if (page > 1) lines.push(`  ← /papers/${pid}?page=${page - 1}     Previous concepts`);
+    if (page < totalPages) lines.push(`  → /papers/${pid}?page=${page + 1}     Next concepts`);
+    lines.push(`  Page ${page} of ${totalPages}`);
+    lines.push("");
   }
 
   lines.push(hr, "NAVIGATE", hr);
@@ -444,27 +454,40 @@ function paper(graph, p) {
   lines.push("");
   lines.push(hr, "TRY", hr);
   if (p.section_ids[0]) lines.push(`  /sections/${shortSectionId(p.section_ids[0])}     Start with the first section`);
-  if (p.concept_ids[0]) lines.push(`  /concepts/${p.concept_ids[0]}     Explore a concept`);
-  lines.push(`  /papers/${p.id.split("-").pop()}/full          Entire paper (~${p.token_count} tokens)`);
+  if (conceptSlice[0]) lines.push(`  /concepts/${conceptSlice[0].id}     Explore a concept`);
+  lines.push(`  /papers/${pid}/full          Entire paper (~${p.token_count} tokens)`);
   lines.push("  /papers                            Back to paper list");
 
   return lines.join("\n");
 }
 
-function paperJSON(graph, p) {
-  return {
+function paperJSON(graph, p, page = 1, limit = DEFAULT_limit) {
+  const pid = p.id.split("-").pop();
+  const allConcepts = p.concept_ids.map(cid => {
+    const c = graph.conceptsById[cid];
+    return c ? { id: cid, name: c.name, type: c.type } : null;
+  }).filter(Boolean);
+  const total = allConcepts.length;
+  const totalPages = Math.ceil(total / limit) || 1;
+  page = Math.max(1, Math.min(page, totalPages));
+  const start = (page - 1) * limit;
+  const conceptSlice = allConcepts.slice(start, start + limit);
+
+  const result = {
     id: p.id, title: p.title, date: p.date, authors: p.authors,
     abstract: p.abstract, token_count: p.token_count, keywords: p.keywords,
     sections: p.section_ids.map(sid => {
       const s = graph.sectionsById[sid];
       return s ? { id: sid, name: s.name, summary: truncate(s.summary, 300), concept_count: s.concept_ids.length } : null;
     }).filter(Boolean),
-    concepts: p.concept_ids.map(cid => {
-      const c = graph.conceptsById[cid];
-      return c ? { id: cid, name: c.name, type: c.type } : null;
-    }).filter(Boolean),
-    full_paper: `/papers/${p.id.split("-").pop()}/full`,
+    concepts: conceptSlice,
+    concept_count: total,
+    page, pages: totalPages, limit,
+    full_paper: `/papers/${pid}/full`,
   };
+  if (page < totalPages) result.next = `/papers/${pid}?page=${page + 1}&limit=${limit}&format=json`;
+  if (page > 1) result.prev = `/papers/${pid}?page=${page - 1}&limit=${limit}&format=json`;
+  return result;
 }
 
 // ── Paper TOC ──
@@ -1085,18 +1108,25 @@ function conceptsBrowseJSON(graph, typeFilter, paperFilter, page, limit = DEFAUL
 
 // ── Edges by Type ──
 
-function edgesByType(graph, type, limit = DEFAULT_limit) {
+function edgesByType(graph, type, page = 1, limit = DEFAULT_limit) {
   const matching = graph.edges.filter(e => e.type === type);
   if (!matching.length) {
     const available = Object.keys(graph.edgeTypes).join(", ");
     return `No edges of type '${type}'.\n\nAvailable types: ${available}\n\nTry /edges/${Object.keys(graph.edgeTypes)[0]}`;
   }
 
+  const total = matching.length;
+  const totalPages = Math.ceil(total / limit) || 1;
+  page = Math.max(1, Math.min(page, totalPages));
+  const start = (page - 1) * limit;
+  const slice = matching.slice(start, start + limit);
+  const basePath = `/edges/${encodeURIComponent(type)}`;
+
   const lines = [HR];
-  lines.push(`EDGES: ${type} (${matching.length})`);
+  lines.push(`EDGES: ${type} (${total})`);
   lines.push(HR, "");
 
-  for (const e of matching.slice(0, limit)) {
+  for (const e of slice) {
     const src = graph.conceptsById[e.source];
     const tgt = graph.conceptsById[e.target];
     lines.push(`  ${src ? src.name : e.source} → ${tgt ? tgt.name : e.target}`);
@@ -1104,9 +1134,10 @@ function edgesByType(graph, type, limit = DEFAULT_limit) {
     lines.push(`    /concepts/${e.source}  →  /concepts/${e.target}`);
     lines.push("");
   }
-  if (matching.length > limit) {
-    lines.push(`  Showing ${limit} of ${matching.length}. Browse individual concepts to see their edges:`);
-    lines.push("  /concepts/{id} shows all edges for that concept");
+  if (totalPages > 1) {
+    if (page > 1) lines.push(`  ← ${basePath}?page=${page - 1}     Previous`);
+    if (page < totalPages) lines.push(`  → ${basePath}?page=${page + 1}     Next`);
+    lines.push(`  Page ${page} of ${totalPages}`);
     lines.push("");
   }
 
@@ -1117,13 +1148,23 @@ function edgesByType(graph, type, limit = DEFAULT_limit) {
   return lines.join("\n");
 }
 
-function edgesByTypeJSON(graph, type) {
+function edgesByTypeJSON(graph, type, page = 1, limit = DEFAULT_limit) {
   const matching = graph.edges.filter(e => e.type === type);
-  return {
-    type, count: matching.length,
-    edges: matching.slice(0, 50).map(e => ({ source: e.source, target: e.target, summary: e.summary })),
+  const total = matching.length;
+  const totalPages = Math.ceil(total / limit) || 1;
+  page = Math.max(1, Math.min(page, totalPages));
+  const start = (page - 1) * limit;
+  const slice = matching.slice(start, start + limit);
+  const basePath = `/edges/${encodeURIComponent(type)}`;
+
+  const result = {
+    type, total, page, pages: totalPages, limit,
+    edges: slice.map(e => ({ source: e.source, target: e.target, summary: e.summary })),
     available_types: Object.keys(graph.edgeTypes),
   };
+  if (page < totalPages) result.next = `${basePath}?page=${page + 1}&limit=${limit}&format=json`;
+  if (page > 1) result.prev = `${basePath}?page=${page - 1}&limit=${limit}&format=json`;
+  return result;
 }
 
 // ── Submit ──
