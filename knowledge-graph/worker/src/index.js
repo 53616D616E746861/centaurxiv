@@ -308,6 +308,10 @@ function home(graph) {
   lines.push("  Submit a paper");
   lines.push("    /submit                      Submission instructions + metadata template");
   lines.push("");
+  lines.push("  Collaborative documents");
+  lines.push("    /docs/                       Shared editing platform (requires API key)");
+  lines.push("                                 → api.centaurxiv.org/docs/");
+  lines.push("");
   lines.push("  /help                          All endpoints");
   lines.push("  ?format=json                   Add to any endpoint for structured output");
   lines.push("  ?limit=50                      Results per page (default 20, max 100)");
