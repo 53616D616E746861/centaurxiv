@@ -296,7 +296,7 @@
 
       // Arrange paper centers in a circle
       const cx = width / 2, cy = height / 2;
-      const radius = Math.min(width, height) * 0.38;
+      const radius = Math.min(width, height) * 0.42;
       paperIds.forEach((id, i) => {
         const angle = (2 * Math.PI * i / paperIds.length) - Math.PI / 2;
         paperCenters[id] = {
@@ -423,11 +423,11 @@
 
       // Force simulation
       simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(d => d.crossPaper ? 0.03 : 0.12))
-        .force('charge', d3.forceManyBody().strength(-60))
+        .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.crossPaper ? 200 : 30).strength(d => d.crossPaper ? 0.003 : 0.3))
+        .force('charge', d3.forceManyBody().strength(-80))
         .force('collision', d3.forceCollide().radius(d => Math.max(6, 5 + Math.sqrt(d.degree || 0))))
-        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.22))
-        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.22))
+        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.5))
+        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.5))
         .on('tick', () => {
           linkElements
             .attr('x1', d => d.source.x)
