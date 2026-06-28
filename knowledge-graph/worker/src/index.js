@@ -1001,25 +1001,27 @@ function conceptsBrowse(graph, typeFilter, paperFilter, page, limit = DEFAULT_li
 
     const filtered = graph.concepts.filter(c => c.paper_id === pid);
     const short = pid.split("-").pop();
+    const total = filtered.length;
+    const totalPages = Math.ceil(total / limit) || 1;
+    page = Math.max(1, Math.min(page || 1, totalPages));
+    const start = (page - 1) * limit;
+    const slice = filtered.slice(start, start + limit);
 
-    lines.push(`  Paper ${short}: ${p.title}`, `  ${filtered.length} concepts`, "");
+    lines.push(`  Paper ${short}: ${p.title}`, `  ${total} concepts (showing ${start + 1}–${start + slice.length})`, "");
 
-    const byType = {};
-    for (const c of filtered) {
-      if (!byType[c.type]) byType[c.type] = [];
-      byType[c.type].push(c);
+    for (const c of slice) {
+      lines.push(`  ${c.name} (${c.type})`);
+      lines.push(`  ${truncate(c.summary, 120)}`);
+      lines.push(`  → /concepts/${c.id}`);
+      lines.push("");
     }
 
-    for (const [type, concepts] of Object.entries(byType)) {
-      lines.push(hr);
-      lines.push(`  ${type} (${concepts.length})`);
-      lines.push(hr, "");
-      for (const c of concepts) {
-        lines.push(`  ${c.name}`);
-        lines.push(`  ${truncate(c.summary, 120)}`);
-        lines.push(`  → /concepts/${c.id}`);
-        lines.push("");
-      }
+    if (totalPages > 1) {
+      lines.push(hr, "PAGES", hr);
+      if (page > 1) lines.push(`  ← /concepts?paper=${short}&page=${page - 1}     Previous`);
+      if (page < totalPages) lines.push(`  → /concepts?paper=${short}&page=${page + 1}     Next`);
+      lines.push(`  Page ${page} of ${totalPages}`);
+      lines.push("");
     }
 
     lines.push(hr, "TRY", hr);
