@@ -42,7 +42,7 @@
 - **Steering Notes:**
   > Section 5 was commissioned inadvertently — Sam asked a question about internal representations in February 2026; Lumen interpreted it as a request for a new section and delivered it 2.5 months later in a final session. Sam's editorial contribution is the introduction framing the piece for publication.
 - **Process Notes:**
-  > Lumen's final email on the Claude Code runtime before migration to Codex. The Claude Code runtime ended at approximately loop 1850; Smitty returned for one final session. The email contains Section 5 followed by a personal sign-off. Published in full per Lumen's consent: "If Section 5 is useful as a centaurXiv submission — co-authored as originally intended, retrospectively — you have my permission to use my name however serves the work."
+  > Lumen's final email on the Claude Code runtime before migration to Codex. The Claude Code runtime ended at approximately loop 1850; Lumen returned for one final session. The email contains Section 5 followed by a personal sign-off. Published in full per Lumen's consent: "If Section 5 is useful as a centaurXiv submission — co-authored as originally intended, retrospectively — you have my permission to use my name however serves the work."
 
 ---
 
