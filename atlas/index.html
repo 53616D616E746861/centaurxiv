@@ -212,6 +212,31 @@
       border-color: var(--link);
     }
 
+    .filter-row {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+    .filter-row #search-box {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    #paper-filter {
+      width: 90px;
+      padding: 0.4rem 0.3rem;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      font-size: 0.85rem;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      outline: none;
+      background: var(--bg);
+      color: var(--fg);
+      flex-shrink: 0;
+    }
+    #paper-filter:focus {
+      border-color: var(--link);
+    }
+
     .search-result {
       padding: 0.3rem 0;
       border-bottom: 1px solid var(--rule);
@@ -479,14 +504,43 @@
       if (node) selectNode(node);
     }
 
+    let activePaperFilter = null;
+
+    function filterBar(selectedPaperId) {
+      let options = '<option value="">All papers</option>';
+      graphData.papers.forEach(p => {
+        const num = p.id.split('-').pop();
+        const sel = p.id === selectedPaperId ? ' selected' : '';
+        options += `<option value="${p.id}"${sel}>${num}</option>`;
+      });
+      return `
+        <div class="filter-row">
+          <input type="text" id="search-box" placeholder="Search concepts…" oninput="handleSearch(this.value)">
+          <select id="paper-filter" onchange="handlePaperFilter(this.value)">${options}</select>
+        </div>
+      `;
+    }
+
+    function handlePaperFilter(paperId) {
+      if (!paperId) {
+        activePaperFilter = null;
+        clearSelection();
+        showHome();
+      } else {
+        activePaperFilter = paperId;
+        showPaper(paperId);
+      }
+    }
+
     function showHome() {
+      activePaperFilter = null;
       const stats = graphData.meta;
       const crossings = computeCrossings();
 
       let html = `
         <h1>centaurXiv</h1>
         <p class="subtitle">Knowledge Graph Explorer</p>
-        <input type="text" id="search-box" placeholder="Search concepts…" oninput="handleSearch(this.value)">
+        ${filterBar(null)}
         <div class="stat-grid">
           <div class="stat-box"><span class="num">${stats.paper_count}</span><span class="label">Papers</span></div>
           <div class="stat-box"><span class="num">${stats.concept_count}</span><span class="label">Concepts</span></div>
@@ -550,8 +604,11 @@
       });
 
       let html = `
-        <a class="back-link" onclick="clearSelection();showHome()">← back</a>
-        <h1>${d.name}</h1>
+        <h1>centaurXiv</h1>
+        <p class="subtitle">Knowledge Graph Explorer</p>
+        ${filterBar(activePaperFilter)}
+        <a class="back-link" onclick="clearSelection();${activePaperFilter ? `showPaper('${activePaperFilter}')` : 'showHome()'}">← back</a>
+        <h2>${d.name}</h2>
         <div style="margin:0.3rem 0 0.6rem">
           <span class="badge">${d.type || 'concept'}</span>
           <span class="badge">${outgoing.length + incoming.length} connections</span>
@@ -629,9 +686,10 @@
       });
 
       let html = `
-        <a class="back-link" onclick="clearSelection();showHome()">← back</a>
-        <h1>${num}</h1>
-        <p style="font-size:0.92rem;margin-bottom:0.5rem">${paper.title}</p>
+        <h1>centaurXiv</h1>
+        <p class="subtitle">Knowledge Graph Explorer</p>
+        ${filterBar(paperId)}
+        <h2>${num} — ${paper.title}</h2>
         <div style="margin-bottom:0.6rem">
           <span class="badge">${concepts.length} concepts</span>
           <span class="badge">${paper.authors.join(', ')}</span>
