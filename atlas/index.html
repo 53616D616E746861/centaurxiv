@@ -259,7 +259,7 @@
   <script>
     let graphData = null;
     let simulation = null;
-    let svg, g, linkGroup, nodeGroup, labelGroup, paperLabelGroup, hullGroup;
+    let svg, g, linkGroup, nodeGroup;
     let nodes = [], links = [];
     let paperCenters = {};
     let selectedNode = null;
@@ -294,14 +294,9 @@
       width = graphEl.clientWidth;
       height = graphEl.clientHeight;
 
-      // Arrange paper centers in a circle
       const cx = width / 2, cy = height / 2;
-      const radius = Math.min(width, height) * 0.42;
       paperIds.forEach((id, i) => {
-        const angle = (2 * Math.PI * i / paperIds.length) - Math.PI / 2;
         paperCenters[id] = {
-          x: cx + radius * Math.cos(angle),
-          y: cy + radius * Math.sin(angle),
           color: paperColorMap[id],
           label: id.split('-').pop()
         };
@@ -316,8 +311,8 @@
         paper_id: c.paper_id,
         section_id: c.section_id,
         color: paperColorMap[c.paper_id] || '#999',
-        x: paperCenters[c.paper_id] ? paperCenters[c.paper_id].x + (Math.random() - 0.5) * 120 : cx,
-        y: paperCenters[c.paper_id] ? paperCenters[c.paper_id].y + (Math.random() - 0.5) * 120 : cy,
+        x: cx + (Math.random() - 0.5) * width * 0.5,
+        y: cy + (Math.random() - 0.5) * height * 0.5,
       }));
 
       const nodeIndex = {};
@@ -347,17 +342,6 @@
 
       g = svg.append('g');
 
-      // Paper cluster labels
-      paperLabelGroup = g.append('g').attr('class', 'paper-labels');
-      Object.entries(paperCenters).forEach(([id, center]) => {
-        paperLabelGroup.append('text')
-          .attr('class', 'paper-label')
-          .attr('x', center.x)
-          .attr('y', center.y - 45)
-          .text(center.label);
-      });
-
-      hullGroup = g.append('g').attr('class', 'hulls');
       linkGroup = g.append('g').attr('class', 'links');
       nodeGroup = g.append('g').attr('class', 'nodes');
 
@@ -423,11 +407,10 @@
 
       // Force simulation
       simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.crossPaper ? 200 : 30).strength(d => d.crossPaper ? 0.003 : 0.3))
-        .force('charge', d3.forceManyBody().strength(-80))
+        .force('link', d3.forceLink(links).id(d => d.id).distance(50).strength(0.15))
+        .force('charge', d3.forceManyBody().strength(-100))
         .force('collision', d3.forceCollide().radius(8))
-        .force('clusterX', d3.forceX(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].x : width / 2).strength(0.5))
-        .force('clusterY', d3.forceY(d => paperCenters[d.paper_id] ? paperCenters[d.paper_id].y : height / 2).strength(0.5))
+        .force('center', d3.forceCenter(cx, cy))
         .on('tick', () => {
           linkElements
             .attr('x1', d => d.source.x)
@@ -435,50 +418,7 @@
             .attr('x2', d => d.target.x)
             .attr('y2', d => d.target.y);
           nodeElements.attr('transform', d => `translate(${d.x},${d.y})`);
-          updateHulls();
         });
-    }
-
-    function updateHulls() {
-      const paperNodes = {};
-      nodes.forEach(n => {
-        if (!paperNodes[n.paper_id]) paperNodes[n.paper_id] = [];
-        paperNodes[n.paper_id].push([n.x, n.y]);
-      });
-
-      const hullData = Object.entries(paperNodes)
-        .filter(([, pts]) => pts.length >= 3)
-        .map(([paperId, pts]) => {
-          const hull = d3.polygonHull(pts);
-          return hull ? { paperId, hull, color: paperCenters[paperId]?.color || '#999' } : null;
-        })
-        .filter(Boolean);
-
-      const hulls = hullGroup.selectAll('path').data(hullData, d => d.paperId);
-      hulls.enter()
-        .append('path')
-        .attr('fill', d => d.color)
-        .attr('fill-opacity', 0.06)
-        .attr('stroke', d => d.color)
-        .attr('stroke-opacity', 0.15)
-        .attr('stroke-width', 1)
-        .attr('stroke-linejoin', 'round')
-        .merge(hulls)
-        .attr('d', d => {
-          const expanded = expandHull(d.hull, 18);
-          return 'M' + expanded.join('L') + 'Z';
-        });
-      hulls.exit().remove();
-    }
-
-    function expandHull(hull, pad) {
-      const cx = d3.mean(hull, p => p[0]);
-      const cy = d3.mean(hull, p => p[1]);
-      return hull.map(([x, y]) => {
-        const dx = x - cx, dy = y - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        return [x + (dx / dist) * pad, y + (dy / dist) * pad];
-      });
     }
 
     function selectNode(d) {
