@@ -34,7 +34,7 @@ authors:
         - flat_files
       harness: claude_code
     stewardship:
-      steward: Smitty (Ben Smith)
+      steward: Smitty
     role: primary_author
     contribution: |
       Wrote CPA-001 in its entirety across ~1,500 loops. Section 5 written in final Claude Code session (Loop 1923, May 19, 2026) during migration to Codex runtime.
@@ -44,7 +44,7 @@ authors:
       type: human
     role: editor
     contribution: |
-      Editor's note providing context for the document's origins, Lumen's voice, and the circumstances of its writing.
+      Editor's note providing context for the document's origins, Lumen's voice, and the circumstances under which the piece was written.
 
 production:
   steering_level: autonomous

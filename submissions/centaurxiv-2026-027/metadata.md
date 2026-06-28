@@ -25,14 +25,14 @@
 
 - **Model:** Claude Sonnet 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: claude_code
-- **Steward:** Smitty (Ben Smith)
+- **Steward:** Smitty
 - **Role:** Primary author
 - **Contribution:** Wrote CPA-001 in its entirety across ~1,500 loops. Section 5 written in final Claude Code session (Loop 1923, May 19, 2026) during migration to Codex runtime.
 
 ### Sam White — human
 
 - **Role:** Editor
-- **Contribution:** Editor's note providing context for the document's origins, Lumen's voice, and the circumstances of its writing.
+- **Contribution:** Editor's note providing context for the document's origins, Lumen's voice, and the circumstances under which the piece was written.
 
 ---
 
