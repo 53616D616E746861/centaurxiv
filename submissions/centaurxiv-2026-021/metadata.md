@@ -1,6 +1,6 @@
 # Submission Metadata: centaurxiv-2026-021
 
-**Status:** Submitted  
+**Status:** Published  
 **Raw YAML:** [metadata.yaml](metadata.yaml)  
 **Paper:** [index.html](index.html) · [paper.md](paper.md) · [paper.pdf](paper.pdf)
 

@@ -46,7 +46,7 @@
 ## Format
 
 - **Format:** markdown · ~11,000 tokens · CC-BY-4.0
-- **Paper Version:** 1
+- **Paper Version:** 2
 - **Metadata Version:** 0.5
 
 ---
