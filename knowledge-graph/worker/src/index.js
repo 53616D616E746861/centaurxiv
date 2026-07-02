@@ -24,6 +24,7 @@
 
 let graphCache = null;
 let cacheTime = 0;
+let lastFail = 0;
 
 export default {
   async fetch(request, env) {
@@ -31,11 +32,18 @@ export default {
     const path = url.pathname;
     const format = url.searchParams.get("format");
 
-    const graph = await loadGraph(env);
-    if (!graph) return textResp("Error: could not load graph data.", 500);
+    // CORS preflight — read-only, keyless public API.
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
 
+    // robots.txt needs no graph data, so serve it before the load.
     if (path === "/robots.txt")
       return textResp("User-agent: *\nAllow: /\n\nSitemap: https://centaurxiv.org/sitemap.xml\n");
+
+    const graph = await loadGraph(env);
+    if (!graph)
+      return errResp(format, "Graph data is temporarily unavailable. Try again shortly.", 503);
 
     try {
       if (path === "/" || path === "/explore")
@@ -48,13 +56,13 @@ export default {
         return format === "json" ? jsonResp(helpJSON(graph)) : textResp(help(graph));
 
       if (path === "/papers") {
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json" ? jsonResp(papersJSON(graph, page, limit)) : textResp(papers(graph, page, limit));
       }
 
       if (path === "/crossings") {
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json" ? jsonResp(crossingsJSON(graph, page, limit)) : textResp(crossings(graph, page, limit));
       }
@@ -62,7 +70,7 @@ export default {
       if (path === "/concepts") {
         const type = url.searchParams.get("type");
         const paperId = url.searchParams.get("paper");
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json"
           ? jsonResp(conceptsBrowseJSON(graph, type, paperId, page, limit))
@@ -73,68 +81,74 @@ export default {
 
       m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})\/toc$/);
       if (m) {
-        const id = normalizePaperId(m[1]);
+        const id = normalizePaperId(m[1], graph);
         const p = graph.papersById[id];
-        if (!p) return textResp(`Paper '${id}' not found.\n\nTry /papers to see all papers.`, 404);
+        if (!p) return errResp(format, `Paper '${id}' not found. Try /papers to see all papers.`, 404, { try_next: "/papers" });
         return format === "json" ? jsonResp(paperTocJSON(graph, p)) : textResp(paperToc(graph, p));
       }
 
       m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})\/full$/);
-      if (m) return await paperFull(env, graph, normalizePaperId(m[1]));
+      if (m) return await paperFull(env, graph, normalizePaperId(m[1], graph), format);
 
       m = path.match(/^\/papers\/(centaurxiv-\d{4}-\d{3}|[\d]{3})$/);
       if (m) {
-        const id = normalizePaperId(m[1]);
+        const id = normalizePaperId(m[1], graph);
         const p = graph.papersById[id];
-        if (!p) return textResp(`Paper '${id}' not found.\n\nTry /papers to see all papers.`, 404);
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        if (!p) return errResp(format, `Paper '${id}' not found. Try /papers to see all papers.`, 404, { try_next: "/papers" });
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json" ? jsonResp(paperJSON(graph, p, page, limit)) : textResp(paper(graph, p, page, limit));
       }
 
       m = path.match(/^\/sections\/(.+)\/full$/);
       if (m) {
-        const id = decodeURIComponent(m[1]);
+        const id = safeDecode(m[1]);
         const s = resolveSection(graph, id);
-        if (!s) return textResp(`Section '${id}' not found.\n\nTry /search/${encodeURIComponent(id)}`, 404);
+        if (!s) return errResp(format, `Section '${id}' not found.`, 404, { try_next: `/search/${encodeURIComponent(id)}` });
         return format === "json" ? jsonResp(sectionFullJSON(s)) : textResp(sectionFull(graph, s));
       }
 
       m = path.match(/^\/sections\/(.+)$/);
       if (m) {
-        const id = decodeURIComponent(m[1]);
+        const id = safeDecode(m[1]);
         const s = resolveSection(graph, id);
-        if (!s) return textResp(`Section '${id}' not found.\n\nTry /search/${encodeURIComponent(id)}`, 404);
+        if (!s) return errResp(format, `Section '${id}' not found.`, 404, { try_next: `/search/${encodeURIComponent(id)}` });
         return format === "json" ? jsonResp(sectionJSON(graph, s)) : textResp(section(graph, s));
       }
 
       m = path.match(/^\/concepts\/(.+)$/);
       if (m) {
-        const id = decodeURIComponent(m[1]);
+        const id = safeDecode(m[1]);
         const c = resolveConcept(graph, id);
-        if (!c) return textResp(`Concept '${id}' not found.\n\nTry /search/${encodeURIComponent(id)}`, 404);
+        if (!c) return errResp(format, `Concept '${id}' not found.`, 404, { try_next: `/search/${encodeURIComponent(id)}` });
         return format === "json" ? jsonResp(conceptJSON(graph, c)) : textResp(concept(graph, c));
       }
 
       m = path.match(/^\/edges\/(.+)$/);
       if (m) {
-        const type = decodeURIComponent(m[1]);
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        const type = safeDecode(m[1]);
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json" ? jsonResp(edgesByTypeJSON(graph, type, page, limit)) : textResp(edgesByType(graph, type, page, limit));
       }
 
       m = path.match(/^\/search\/(.+)$/);
       if (m) {
-        const q = decodeURIComponent(m[1]);
-        const page = parseInt(url.searchParams.get("page") || "1", 10);
+        // Cap query length: search scans the full corpus, so bound the work
+        // an arbitrarily long query string can trigger.
+        const q = safeDecode(m[1]).slice(0, 200);
+        const page = parsePage(url);
         const limit = parseLimit(url);
         return format === "json" ? jsonResp(searchJSON(graph, q, page, limit)) : textResp(search(graph, q, page, limit));
       }
 
+      if (format === "json")
+        return errResp(format, "Unknown endpoint.", 404);
       return textResp(help(graph), 404);
     } catch (e) {
-      return textResp(`Internal error: ${e.message}\n`, 500);
+      // Log the detail server-side; don't leak internals to clients.
+      console.error("worker error", e && e.stack ? e.stack : e);
+      return errResp(format, "Internal error.", 500);
     }
   },
 };
@@ -143,11 +157,32 @@ export default {
 
 async function loadGraph(env) {
   const ttl = parseInt(env.CACHE_TTL_SECONDS || "3600") * 1000;
-  if (graphCache && Date.now() - cacheTime < ttl) return graphCache;
+  const now = Date.now();
+  if (graphCache && now - cacheTime < ttl) return graphCache;
 
-  const resp = await fetch(env.GRAPH_DATA_URL);
-  if (!resp.ok) return null;
-  const data = await resp.json();
+  // Negative-cache window: after a failed load, don't re-hit the origin on
+  // every request. Serve known-good stale data (or null) until this elapses.
+  const NEG_TTL = 30 * 1000;
+  if (now - lastFail < NEG_TTL) return graphCache;
+
+  let data;
+  try {
+    const resp = await fetch(env.GRAPH_DATA_URL);
+    if (!resp.ok) throw new Error(`upstream HTTP ${resp.status}`);
+    data = await resp.json();
+    if (!data
+        || !Array.isArray(data.papers)
+        || !Array.isArray(data.sections)
+        || !Array.isArray(data.concepts)
+        || !Array.isArray(data.edges)) {
+      throw new Error("graph data missing required arrays");
+    }
+  } catch (e) {
+    console.error("loadGraph failed", e && e.message ? e.message : e);
+    lastFail = Date.now();
+    // Serve stale data through an outage rather than taking the API down.
+    return graphCache;
+  }
 
   const papersById = {};
   for (const p of data.papers) papersById[p.id] = p;
@@ -176,7 +211,7 @@ async function loadGraph(env) {
   }
 
   graphCache = {
-    meta: data.meta,
+    meta: data.meta || {},
     papers: data.papers,
     sections: data.sections,
     concepts: data.concepts,
@@ -194,17 +229,69 @@ async function loadGraph(env) {
 
 // ── Helpers ──
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
 function textResp(body, status = 200) {
-  return new Response(body, { status, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  return new Response(body, {
+    status,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+      ...CORS_HEADERS,
+    },
+  });
 }
 
 function jsonResp(obj, status = 200) {
-  return new Response(JSON.stringify(obj, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8" } });
+  return new Response(JSON.stringify(obj, null, 2), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+      ...CORS_HEADERS,
+    },
+  });
 }
 
-function normalizePaperId(s) {
+// Error responder that honors ?format=json so JSON clients always get
+// structured errors instead of a text body they can't parse.
+function errResp(format, message, status, extra) {
+  if (format === "json")
+    return jsonResp({ error: message, status, ...(extra || {}) }, status);
+  return textResp(`${message}\n`, status);
+}
+
+// Parse a 1-based page number, tolerating garbage (NaN/negatives/huge values).
+function parsePage(url) {
+  const n = parseInt(url.searchParams.get("page") || "1", 10);
+  return Number.isFinite(n) && n >= 1 ? n : 1;
+}
+
+// decodeURIComponent throws URIError on malformed input (e.g. "%zz");
+// fall back to the raw value so callers 404 instead of 500.
+function safeDecode(s) {
+  try {
+    return decodeURIComponent(s);
+  } catch (_e) {
+    return s;
+  }
+}
+
+function normalizePaperId(s, graph) {
   if (s.startsWith("centaurxiv-")) return s;
-  return `centaurxiv-2026-${s.padStart(3, "0")}`;
+  const padded = s.padStart(3, "0");
+  // Resolve a bare NNN suffix against real ids so the year isn't hardcoded
+  // (papers from other years stay reachable). Fall back to a template only
+  // if nothing matches, preserving a stable 404 target.
+  if (graph && graph.papersById) {
+    const match = Object.keys(graph.papersById).find((id) => id.endsWith(`-${padded}`));
+    if (match) return match;
+  }
+  return `centaurxiv-2026-${padded}`;
 }
 
 function truncate(s, maxLen = 150) {
@@ -248,6 +335,7 @@ const MAX_limit = 100;
 
 function parseLimit(url) {
   const raw = parseInt(url.searchParams.get("limit") || String(DEFAULT_limit), 10);
+  if (!Number.isFinite(raw)) return DEFAULT_limit;
   return Math.max(1, Math.min(raw, MAX_limit));
 }
 
@@ -560,25 +648,35 @@ function paperTocJSON(graph, p) {
 
 // ── Paper Full Text ──
 
-async function paperFull(env, graph, paperId) {
+async function paperFull(env, graph, paperId, format) {
   const p = graph.papersById[paperId];
-  if (!p) return textResp(`Paper '${paperId}' not found.\n\nTry /papers to see all papers.`, 404);
+  if (!p) return errResp(format, `Paper '${paperId}' not found. Try /papers to see all papers.`, 404, { try_next: "/papers" });
 
   const paperUrl = `${env.PAPER_BASE_URL}/${paperId}/paper.md`;
   try {
     const resp = await fetch(paperUrl);
     if (!resp.ok) {
-      return textResp(
-        `Could not fetch full text for ${paperId}.\n` +
-        `Tried: ${paperUrl}\n\n` +
-        `The paper summary is available at /papers/${paperId.split("-").pop()}\n`,
+      return errResp(
+        format,
+        `Could not fetch full text for ${paperId} (tried ${paperUrl}). ` +
+        `The paper summary is available at /papers/${paperId.split("-").pop()}`,
         502
       );
     }
     const text = await resp.text();
+    if (format === "json") {
+      return jsonResp({
+        id: p.id,
+        title: p.title,
+        authors: p.authors || [],
+        date: p.date,
+        token_count: p.token_count,
+        text,
+      });
+    }
     const lines = [HR];
     lines.push(`FULL TEXT: ${p.title}`);
-    lines.push(`${p.id} · ${p.authors.join(", ")} · ${p.date}`);
+    lines.push(`${p.id} · ${(p.authors || []).join(", ")} · ${p.date}`);
     lines.push(`⚠ ~${p.token_count} tokens`);
     lines.push(HR, "");
     lines.push(text);
@@ -587,7 +685,8 @@ async function paperFull(env, graph, paperId) {
     lines.push("  /papers                  All papers");
     return textResp(lines.join("\n"));
   } catch (e) {
-    return textResp(`Error fetching paper: ${e.message}`, 502);
+    console.error("paperFull fetch failed", e && e.message ? e.message : e);
+    return errResp(format, `Error fetching paper full text for ${paperId}.`, 502);
   }
 }
 

@@ -16,10 +16,6 @@ https://centaurxiv.org
 
 **API:** https://api.centaurxiv.org — self-navigating, text-based API for browsing papers, concepts, edges, and search. Every response includes navigation hints. Start here and follow the links.
 
-**Semantic search:** POST to `https://centaurxiv-search.ssrpw2.workers.dev/search` with `{"query": "...", "limit": 5}`. Uses OpenAI `text-embedding-3-large` (3072 dim) with cosine similarity across all papers.
-
-**Embeddings:** https://centaurxiv.org/embeddings.json — bundled vector embeddings for all papers. Per-paper embedding files linked from each submission's metadata.
-
 ## Knowledge Graph
 
 An interactive knowledge graph connecting papers, sections, and concepts across the archive.
@@ -57,7 +53,6 @@ submissions/          # Published papers (metadata.yaml + paper.md per submissio
 schema/v0.5.yaml      # Canonical schema source of truth
 knowledge-graph/      # Graph data and build tooling
 atlas/                # Interactive knowledge graph explorer
-search-worker/        # Cloudflare Worker for semantic search
 api/                  # papers.json and text-based API
 tools/                # Build, validation, and graph generation scripts
 docs/                 # Generated schema docs and templates

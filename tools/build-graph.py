@@ -185,8 +185,8 @@ def build_graph_data(concepts_path: Path) -> dict:
         title = meta.get("title", "Untitled")
         date = str(meta.get("date_submitted", ""))
         authors = extract_authors(meta)
-        abstract = meta.get("abstract", "").strip()
-        keywords = meta.get("keywords", [])
+        abstract = (meta.get("abstract") or "").strip()
+        keywords = meta.get("keywords") or []
         token_count = meta.get("token_count", 0)
 
         sections = extract_sections(sub_dir, paper_id)
