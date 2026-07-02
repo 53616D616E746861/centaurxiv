@@ -117,9 +117,9 @@ After publishing a new submission:
 
 "Crossings" are concepts that appear in edges connecting different papers. The `/crossings` endpoint computes these dynamically from the edge list — any concept connected by an edge to a concept in a different paper counts. The richness of crossings depends on the cross-paper edges in concepts.json.
 
-### Search Worker (separate)
+### Search
 
-A second Cloudflare Worker at `search.centaurxiv.org` (NOT currently deployed — DNS record may not exist) provides semantic search over paper embeddings. Source: `search-worker/`. See `search-worker/README.md`. This is independent of the KG API.
+Papers are searchable two ways: the client-side keyword/steering filter on the papers listing page (`papers/index.html`), and the knowledge-graph API's `/search/:query` endpoint over concept and section summaries. The earlier embedding-based semantic search worker has been retired.
 
 ## Notes
 

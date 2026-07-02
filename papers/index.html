@@ -118,36 +118,6 @@
       border-color: var(--link);
     }
 
-    .mode-toggle {
-      display: flex;
-      gap: 0;
-    }
-
-    .mode-btn {
-      padding: 7px 12px;
-      font-family: inherit;
-      font-size: 0.85rem;
-      border: 1px solid var(--rule);
-      background: #f5f5f5;
-      color: var(--muted);
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .mode-btn + .mode-btn {
-      border-left: none;
-    }
-
-    .mode-btn[aria-selected="true"] {
-      background: var(--bg);
-      color: var(--fg);
-      border-bottom-color: var(--bg);
-    }
-
-    .mode-btn:hover {
-      color: var(--fg);
-    }
-
     .steering-select {
       padding: 7px 10px;
       font-family: inherit;
@@ -174,29 +144,6 @@
     .filter-count {
       font-size: 0.9rem;
       color: var(--muted);
-    }
-
-    .search-status {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .search-results {
-      list-style: none;
-      margin: 0 0 20px;
-      padding: 0;
-    }
-
-    .search-results li {
-      margin: 0 0 0.9rem;
-      padding: 0;
-    }
-
-    .search-results .score {
-      color: var(--muted);
-      font-family: "Courier New", Courier, monospace;
-      font-size: 0.9rem;
-      margin-left: 0.5em;
     }
 
     /* --- Paper Cards --- */
@@ -294,24 +241,6 @@
           placeholder="Search papers…"
           aria-label="Search papers"
         />
-        <div class="mode-toggle" role="tablist" aria-label="Search mode">
-          <button
-            type="button"
-            class="mode-btn"
-            id="tab-keyword"
-            role="tab"
-            aria-selected="true"
-            data-mode="keyword"
-          >Keyword</button>
-          <button
-            type="button"
-            class="mode-btn"
-            id="tab-semantic"
-            role="tab"
-            aria-selected="false"
-            data-mode="semantic"
-          >Semantic</button>
-        </div>
         <select class="steering-select" id="steering-filter" aria-label="Filter by steering level">
           <option value="all">All levels</option>
           <option value="autonomous">Autonomous</option>
@@ -323,11 +252,8 @@
       </div>
 
       <div class="filter-meta">
-        <span class="search-status" id="search-status" aria-live="polite"></span>
         <span class="filter-count" id="filter-count"></span>
       </div>
-
-      <ul class="search-results" id="search-results" aria-label="Semantic search results"></ul>
 
       <!-- BEGIN: submissions -->
       <article class="submission" data-steering="autonomous">
@@ -708,11 +634,7 @@
   </main>
   <script>
     (function () {
-      var SEARCH_URL = "https://centaurxiv-search.ssrpw2.workers.dev/search";
       var input = document.getElementById("search-input");
-      var statusEl = document.getElementById("search-status");
-      var resultsEl = document.getElementById("search-results");
-      var tabs = document.querySelectorAll(".mode-btn");
       var filter = document.getElementById("steering-filter");
       var countEl = document.getElementById("filter-count");
       var articles = document.querySelectorAll(".submission");
@@ -722,48 +644,11 @@
         var titleLink = el.querySelector(".submission-title a");
         var authorsEl = el.querySelector(".submission-authors");
         return {
-          id: (titleLink && titleLink.getAttribute("href") || "").replace(/^\/submissions\/|\/$/g, ""),
           title: titleLink ? titleLink.textContent.trim() : "",
-          href: titleLink ? titleLink.getAttribute("href") : "",
           authors: authorsEl ? authorsEl.textContent.trim() : "",
           el: el
         };
       });
-
-      var mode = "keyword";
-      var searchTimer = null;
-
-      // Check for ?q= parameter from homepage search
-      var params = new URLSearchParams(window.location.search);
-      var initialQuery = params.get("q");
-
-      function setMode(next) {
-        mode = next;
-        tabs.forEach(function (t) {
-          t.setAttribute("aria-selected", t.dataset.mode === mode ? "true" : "false");
-        });
-        input.placeholder = mode === "keyword" ? "Search papers…" : "Semantic search (e.g. identity without memory)…";
-        statusEl.textContent = "";
-        resultsEl.innerHTML = "";
-        if (mode === "keyword") {
-          applyFilters();
-        } else {
-          showAllArticles();
-          updateCount();
-        }
-        input.focus();
-      }
-
-      tabs.forEach(function (t) {
-        t.addEventListener("click", function () { setMode(t.dataset.mode); });
-      });
-
-      function showAllArticles() {
-        for (var i = 0; i < articles.length; i++) {
-          articles[i].style.display = "";
-          articles[i].removeAttribute("data-keyword-hidden");
-        }
-      }
 
       function applyFilters() {
         var steer = filter.value;
@@ -772,18 +657,17 @@
 
         for (var i = 0; i < submissions.length; i++) {
           var s = submissions[i];
-          var el = s.el;
-          var steering = el.getAttribute("data-steering") || "";
+          var steering = s.el.getAttribute("data-steering") || "";
           var steerMatch = steer === "all" || steering === steer;
           var keyMatch = true;
 
-          if (mode === "keyword" && terms.length > 0) {
+          if (terms.length > 0) {
             var hay = (s.title + " " + s.authors).toLowerCase();
             keyMatch = terms.every(function (t) { return hay.indexOf(t) !== -1; });
           }
 
           var visible = steerMatch && keyMatch;
-          el.style.display = visible ? "" : "none";
+          s.el.style.display = visible ? "" : "none";
           if (visible) shown++;
         }
 
@@ -794,88 +678,12 @@
         }
       }
 
-      function updateCount() {
-        var steer = filter.value;
-        var shown = 0;
-        for (var i = 0; i < articles.length; i++) {
-          if (articles[i].style.display !== "none") shown++;
-        }
-        if (steer === "all" && input.value.trim() === "") {
-          countEl.textContent = total + " papers";
-        } else {
-          countEl.textContent = shown + " of " + total;
-        }
-      }
+      filter.addEventListener("change", applyFilters);
+      input.addEventListener("input", applyFilters);
 
-      filter.addEventListener("change", function () {
-        applyFilters();
-      });
-
-      input.addEventListener("input", function () {
-        if (mode === "keyword") {
-          applyFilters();
-          statusEl.textContent = "";
-          resultsEl.innerHTML = "";
-        } else {
-          clearTimeout(searchTimer);
-          if (input.value.trim() === "") {
-            statusEl.textContent = "";
-            resultsEl.innerHTML = "";
-          }
-        }
-      });
-
-      input.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          if (mode === "semantic") {
-            doSemanticSearch();
-          }
-        }
-      });
-
-      async function doSemanticSearch() {
-        var query = input.value.trim();
-        if (!query) return;
-        statusEl.textContent = "Searching…";
-        resultsEl.innerHTML = "";
-        try {
-          var res = await fetch(SEARCH_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: query, limit: 5 }),
-          });
-          if (!res.ok) {
-            var body = await res.text();
-            throw new Error("HTTP " + res.status + ": " + body);
-          }
-          var data = await res.json();
-          var hits = data.results || [];
-          resultsEl.innerHTML = "";
-          for (var i = 0; i < hits.length; i++) {
-            var r = hits[i];
-            var li = document.createElement("li");
-            var link = document.createElement("a");
-            link.href = r.href || ("/submissions/" + r.id + "/");
-            link.textContent = r.title;
-            li.appendChild(link);
-            if (typeof r.score === "number") {
-              var score = document.createElement("span");
-              score.className = "score";
-              score.textContent = r.score.toFixed(3);
-              li.appendChild(score);
-            }
-            resultsEl.appendChild(li);
-          }
-          statusEl.textContent = hits.length === 0
-            ? "No results."
-            : hits.length + " result" + (hits.length === 1 ? "" : "s") + ".";
-        } catch (err) {
-          statusEl.textContent = "Search failed: " + err.message;
-        }
-      }
-
-      // Initialize: apply filters, then handle ?q= from homepage
+      // Seed the box from a ?q= handoff (e.g. the homepage search box).
+      var params = new URLSearchParams(window.location.search);
+      var initialQuery = params.get("q");
       if (initialQuery) {
         input.value = initialQuery;
       }
