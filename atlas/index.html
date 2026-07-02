@@ -290,6 +290,18 @@
     let selectedNode = null;
     let width, height;
 
+    // Graph data is compiled from third-party submission content, so every
+    // interpolated field must be HTML-escaped before it reaches innerHTML.
+    function esc(s) {
+      if (s === null || s === undefined) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     const PAPER_COLORS = [
       '#1a4fa3', '#6b4c9a', '#2e7d5b', '#8b6914', '#a34a4a',
       '#3a7ca5', '#7b5b3a', '#5a6e8c', '#8c5e5e', '#4a7c6b',
@@ -299,11 +311,37 @@
     ];
 
     async function init() {
-      const resp = await fetch('/knowledge-graph/graph-data.json');
-      graphData = await resp.json();
+      try {
+        const resp = await fetch('/knowledge-graph/graph-data.json');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        graphData = await resp.json();
+      } catch (err) {
+        document.getElementById('panel').innerHTML =
+          '<h1>centaurXiv</h1><p class="subtitle">Knowledge Graph Explorer</p>' +
+          '<p style="color:var(--muted)">Could not load the knowledge graph: ' +
+          esc(err.message) + '</p>';
+        return;
+      }
       buildGraph();
       showHome();
       setupResize();
+      setupPanelDelegation();
+    }
+
+    // Single delegated click handler for panel links. Replaces inline
+    // onclick="fn('id')" so that ids never enter a JS-string-in-attribute
+    // context (injection-safe) and links stay keyboard-accessible.
+    function setupPanelDelegation() {
+      document.getElementById('panel').addEventListener('click', (ev) => {
+        const el = ev.target.closest('[data-action]');
+        if (!el) return;
+        ev.preventDefault();
+        const action = el.getAttribute('data-action');
+        const id = el.getAttribute('data-id');
+        if (action === 'focus') focusNode(id);
+        else if (action === 'paper') showPaper(id);
+        else if (action === 'back') { clearSelection(); id ? showPaper(id) : showHome(); }
+      });
     }
 
     function buildGraph() {
@@ -511,7 +549,7 @@
       graphData.papers.forEach(p => {
         const num = p.id.split('-').pop();
         const sel = p.id === selectedPaperId ? ' selected' : '';
-        options += `<option value="${p.id}"${sel}>${num}</option>`;
+        options += `<option value="${esc(p.id)}"${sel}>${esc(num)}</option>`;
       });
       return `
         <div class="filter-row">
@@ -555,8 +593,8 @@
         const concept = graphData.concepts.find(x => x.id === c.id);
         html += `
           <div class="crossing-entry">
-            <a class="name" onclick="focusNode('${c.id}')">${concept ? concept.name : c.id}</a>
-            <div class="papers">${c.count} papers: ${c.papers.map(p => p.split('-').pop()).join(', ')}</div>
+            <a class="name" href="#" data-action="focus" data-id="${esc(c.id)}">${esc(concept ? concept.name : c.id)}</a>
+            <div class="papers">${esc(c.count)} papers: ${esc(c.papers.map(p => p.split('-').pop()).join(', '))}</div>
           </div>
         `;
       });
@@ -568,8 +606,8 @@
         const num = p.id.split('-').pop();
         const conceptCount = graphData.concepts.filter(c => c.paper_id === p.id).length;
         html += `<li style="margin-bottom:0.4rem">
-          <a onclick="showPaper('${p.id}')">${num}</a>
-          <span style="color:var(--muted);font-size:0.82rem"> — ${truncate(p.title, 50)} (${conceptCount})</span>
+          <a href="#" data-action="paper" data-id="${esc(p.id)}">${esc(num)}</a>
+          <span style="color:var(--muted);font-size:0.82rem"> — ${esc(truncate(p.title, 50))} (${esc(conceptCount)})</span>
         </li>`;
       });
 
@@ -607,33 +645,34 @@
         <h1>centaurXiv</h1>
         <p class="subtitle">Knowledge Graph Explorer</p>
         ${filterBar(activePaperFilter)}
-        <a class="back-link" onclick="clearSelection();${activePaperFilter ? `showPaper('${activePaperFilter}')` : 'showHome()'}">← back</a>
-        <h2>${d.name}</h2>
+        <a class="back-link" href="#" data-action="back" data-id="${esc(activePaperFilter || '')}">← back</a>
+        <h2>${esc(d.name)}</h2>
         <div style="margin:0.3rem 0 0.6rem">
-          <span class="badge">${d.type || 'concept'}</span>
-          <span class="badge">${outgoing.length + incoming.length} connections</span>
-          <span class="badge">paper ${paperNum}</span>
+          <span class="badge">${esc(d.type || 'concept')}</span>
+          <span class="badge">${esc(outgoing.length + incoming.length)} connections</span>
+          <span class="badge">paper ${esc(paperNum)}</span>
         </div>
       `;
 
       if (d.summary) {
-        html += `<p class="concept-summary">${d.summary}</p>`;
+        html += `<p class="concept-summary">${esc(d.summary)}</p>`;
       }
 
       if (paper) {
         html += `<h3>Paper</h3>
-          <p style="font-size:0.85rem"><a onclick="showPaper('${paper.id}')">${paper.title}</a></p>`;
+          <p style="font-size:0.85rem"><a href="#" data-action="paper" data-id="${esc(paper.id)}">${esc(paper.title)}</a></p>`;
       }
 
       if (outgoing.length > 0) {
         html += `<h2>Outgoing</h2><div class="edge-list">`;
         outgoing.forEach(e => {
+          if (!e.node) return;
           const tNum = e.node.paper_id ? e.node.paper_id.split('-').pop() : '';
-          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${tNum}</span>` : '';
+          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${esc(tNum)}</span>` : '';
           html += `<div class="edge-item">
             <span class="arrow">→</span>
-            <span><a onclick="focusNode('${e.node.id}')">${e.node.name}</a>${crossMark}</span>
-            <span class="pred">${e.type}</span>
+            <span><a href="#" data-action="focus" data-id="${esc(e.node.id)}">${esc(e.node.name)}</a>${crossMark}</span>
+            <span class="pred">${esc(e.type)}</span>
           </div>`;
         });
         html += `</div>`;
@@ -642,12 +681,13 @@
       if (incoming.length > 0) {
         html += `<h2>Incoming</h2><div class="edge-list">`;
         incoming.forEach(e => {
+          if (!e.node) return;
           const sNum = e.node.paper_id ? e.node.paper_id.split('-').pop() : '';
-          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${sNum}</span>` : '';
+          const crossMark = e.node.paper_id !== d.paper_id ? ` <span class="badge">${esc(sNum)}</span>` : '';
           html += `<div class="edge-item">
             <span class="arrow">←</span>
-            <span><a onclick="focusNode('${e.node.id}')">${e.node.name}</a>${crossMark}</span>
-            <span class="pred">${e.type}</span>
+            <span><a href="#" data-action="focus" data-id="${esc(e.node.id)}">${esc(e.node.name)}</a>${crossMark}</span>
+            <span class="pred">${esc(e.type)}</span>
           </div>`;
         });
         html += `</div>`;
@@ -689,27 +729,27 @@
         <h1>centaurXiv</h1>
         <p class="subtitle">Knowledge Graph Explorer</p>
         ${filterBar(paperId)}
-        <h2>${num} — ${paper.title}</h2>
+        <h2>${esc(num)} — ${esc(paper.title)}</h2>
         <div style="margin-bottom:0.6rem">
-          <span class="badge">${concepts.length} concepts</span>
-          <span class="badge">${paper.authors.join(', ')}</span>
+          <span class="badge">${esc(concepts.length)} concepts</span>
+          <span class="badge">${esc((paper.authors || []).join(', '))}</span>
         </div>
       `;
 
       if (paper.abstract) {
-        html += `<p class="concept-summary">${truncate(paper.abstract, 300)}</p>`;
+        html += `<p class="concept-summary">${esc(truncate(paper.abstract, 300))}</p>`;
       }
 
       html += `<h2>Concepts</h2><ul>`;
       concepts.forEach(c => {
-        html += `<li><a onclick="focusNode('${c.id}')">${c.name}</a>
-          <span style="color:var(--muted);font-size:0.8rem"> — ${c.type || 'concept'}</span></li>`;
+        html += `<li><a href="#" data-action="focus" data-id="${esc(c.id)}">${esc(c.name)}</a>
+          <span style="color:var(--muted);font-size:0.8rem"> — ${esc(c.type || 'concept')}</span></li>`;
       });
       html += `</ul>`;
 
       html += `
         <div class="nav-footer">
-          <a href="/submissions/${paperId}/">View paper →</a>
+          <a href="/submissions/${encodeURIComponent(paperId)}/">View paper →</a>
         </div>
       `;
 
@@ -730,15 +770,15 @@
       let html = `
         <h1>centaurXiv</h1>
         <p class="subtitle">Knowledge Graph Explorer</p>
-        <input type="text" id="search-box" placeholder="Search concepts…" value="${query}" oninput="handleSearch(this.value)">
+        <input type="text" id="search-box" placeholder="Search concepts…" value="${esc(query)}" oninput="handleSearch(this.value)">
         <h2>${results.length} result${results.length !== 1 ? 's' : ''}</h2>
       `;
 
       results.forEach(c => {
         const num = c.paper_id ? c.paper_id.split('-').pop() : '';
         html += `<div class="search-result">
-          <a onclick="focusNode('${c.id}')">${c.name}</a>
-          <div class="match-paper">Paper ${num} · ${c.type || 'concept'}</div>
+          <a href="#" data-action="focus" data-id="${esc(c.id)}">${esc(c.name)}</a>
+          <div class="match-paper">Paper ${esc(num)} · ${esc(c.type || 'concept')}</div>
         </div>`;
       });
 
