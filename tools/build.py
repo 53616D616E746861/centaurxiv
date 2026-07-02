@@ -25,6 +25,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -39,6 +40,11 @@ try:
     import markdown as _md
 except ImportError:
     _md = None
+
+try:
+    import nh3 as _nh3
+except ImportError:
+    _nh3 = None
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = REPO_ROOT / "schema" / "v0.5.yaml"
@@ -570,24 +576,9 @@ def render_llms_txt(schema: dict) -> str:
             parts.append(f"  - Markdown: {SITE_BASE}/submissions/{sid}/paper.md")
         parts.append(f"  - Metadata: {SITE_BASE}/submissions/{sid}/metadata.md")
         parts.append(f"  - Metadata (YAML): {SITE_BASE}/submissions/{sid}/metadata.yaml")
-        if sub.get("has_embedding"):
-            parts.append(f"  - Embedding: {SITE_BASE}/submissions/{sid}/embedding.json")
         for af in _scan_accompanying(SUBMISSIONS_DIR / sid):
             parts.append(f"  - {af['label']}: {SITE_BASE}/submissions/{sid}/{af['name']}")
         parts.append("")
-
-    parts.append("## Embeddings")
-    parts.append("")
-    parts.append(
-        f"Each paper has a vector embedding of its markdown body, generated with "
-        f"OpenAI `{EMBEDDING_MODEL}` ({EMBEDDING_DIM} dim). Per-paper files are "
-        f"linked above as `embedding.json` and include `{{id, title, model, dim, "
-        f"source_hash, embedding}}`. An aggregate of all current embeddings is "
-        f"available at:"
-    )
-    parts.append("")
-    parts.append(f"{SITE_BASE}/embeddings.json")
-    parts.append("")
 
     parts.append("## Repository")
     parts.append("")
@@ -609,7 +600,7 @@ def _replace_between(text: str, begin: str, end: str, replacement: str) -> str:
 
 _STANDARD_FILES = {
     "paper.md", "paper.pdf", "metadata.yaml", "metadata.md",
-    "metadata.html", "index.html", "embedding.json",
+    "metadata.html", "index.html", "index.md", "embedding.json",
 }
 
 
@@ -703,6 +694,64 @@ def _html_escape(s: str) -> str:
             .replace('"', "&quot;"))
 
 
+# Attributes allowed on sanitized paper HTML, extending nh3's defaults so that
+# fenced-code language classes and table-alignment classes survive.
+if _nh3 is not None:
+    _SANITIZE_ATTRS = {tag: set(attrs) for tag, attrs in _nh3.ALLOWED_ATTRIBUTES.items()}
+    for _tag in ("code", "pre", "span"):
+        _SANITIZE_ATTRS[_tag] = _SANITIZE_ATTRS.get(_tag, set()) | {"class"}
+    for _tag in ("th", "td"):
+        _SANITIZE_ATTRS[_tag] = _SANITIZE_ATTRS.get(_tag, set()) | {"class"}
+else:
+    _SANITIZE_ATTRS = {}
+
+# The markdown `tables` extension encodes column alignment as an inline
+# `style="text-align: ..."`. nh3 strips all inline styles (a CSS-injection
+# vector), so rewrite that one predictable, safe case to a class before
+# sanitizing; arbitrary inline styles in raw HTML are still removed.
+_ALIGN_STYLE_RE = re.compile(r'style="text-align:\s*(left|center|right);?"')
+
+
+def _sanitize_html(html: str) -> str:
+    """Sanitize rendered markdown before it is embedded in a page.
+
+    Submission bodies are third-party content, and python-markdown passes raw
+    HTML through verbatim. nh3 strips script/event-handler/unknown-tag payloads
+    and neutralizes dangerous URL schemes (javascript:, data:, etc.) while
+    keeping the tags markdown legitimately produces. We fail closed: if the
+    sanitizer is unavailable we refuse to emit the page rather than shipping
+    unsanitized HTML.
+    """
+    if _nh3 is None:
+        raise RuntimeError(
+            "nh3 is required to render submission HTML safely: pip install nh3"
+        )
+    html = _ALIGN_STYLE_RE.sub(lambda m: f'class="ta-{m.group(1)}"', html)
+    return _nh3.clean(html, attributes=_SANITIZE_ATTRS)
+
+
+_SAFE_URL_SCHEMES = ("http://", "https://", "mailto:")
+
+
+def _safe_url(url) -> str | None:
+    """Return the URL only if it uses an allowed scheme, else None.
+
+    Guards href/link output against javascript:/data:/vbscript: payloads.
+    Scheme-relative (//host) and site-relative (/path, ./path, #frag) URLs are
+    permitted; anything with a disallowed explicit scheme is rejected.
+    """
+    if not url:
+        return None
+    u = str(url).strip()
+    low = u.lower()
+    if low.startswith(_SAFE_URL_SCHEMES):
+        return u
+    # Relative or scheme-relative references have no scheme to abuse.
+    if u.startswith(("/", "#", "?", "./", "../")) or ":" not in u.split("/")[0]:
+        return u
+    return None
+
+
 def _embedding_pointer_info(sid: str) -> dict | None:
     """Return {model, dim, source_hash} for a submission's embedding, or None."""
     path = REPO_ROOT / "submissions" / sid / "embedding.json"
@@ -779,7 +828,7 @@ def render_metadata_md(meta: dict) -> str:
                 header += f" — {atype}"
             lines.append(header)
             lines.append("")
-            url = ident.get("url") or ident.get("website")
+            url = _safe_url(ident.get("url") or ident.get("website"))
             if url:
                 lines.append(f"- **Website:** {url}")
             model = _model_line(a.get("implementation") or {})
@@ -866,20 +915,6 @@ def render_metadata_md(meta: dict) -> str:
         lines.append(f"- **Metadata Version:** {meta['metadata_version']}")
     lines.append("")
 
-    info = _embedding_pointer_info(sid)
-    if info:
-        lines.append("---")
-        lines.append("")
-        lines.append("## Embedding")
-        lines.append("")
-        lines.append("- **File:** [embedding.json](embedding.json)")
-        if info.get("model"):
-            lines.append(f"- **Model:** {info['model']}")
-        if info.get("dim"):
-            lines.append(f"- **Dimensions:** {info['dim']}")
-        if info.get("source_hash"):
-            lines.append(f"- **Source Hash:** `{info['source_hash']}`")
-        lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
 
@@ -1042,17 +1077,16 @@ def render_metadata_html(meta: dict) -> str:
             ident = a.get("identity") or {}
             name = ident.get("name", "?")
             atype = _TYPE_LABELS.get(ident.get("type", ""), ident.get("type", ""))
-            url = ident.get("url") or ident.get("website")
+            url = _safe_url(ident.get("url") or ident.get("website"))
             out.append('    <div class="author-card">')
             out.append('      <div class="author-name">')
-            if url:
-                out.append(f'        <strong><a href="{e(url)}">{e(name)}</a></strong>')
-            else:
-                out.append(f'        <strong>{e(name)}</strong>')
+            out.append(f'        <strong>{e(name)}</strong>')
             if atype:
                 out.append(f'        <span style="color: var(--muted); font-size: 0.9rem;"> — {e(atype)}</span>')
             out.append('      </div>')
 
+            if url:
+                out.append(f'      <p class="author-detail"><span class="label">URL</span> <a href="{e(url)}">{e(url)}</a></p>')
             model = _model_line(a.get("implementation") or {})
             if model:
                 out.append(f'      <p class="author-detail"><span class="label">Model</span> {e(model)}</p>')
@@ -1160,36 +1194,6 @@ def render_metadata_html(meta: dict) -> str:
         out.append('    </div>')
         out.append('')
 
-    info = _embedding_pointer_info(sid)
-    if info:
-        out.append('    <hr />')
-        out.append('')
-        out.append('    <h2>Embedding</h2>')
-        out.append('')
-        out.append('    <div class="field">')
-        out.append('      <div class="label">File</div>')
-        out.append('      <div class="value"><a href="embedding.json">embedding.json</a></div>')
-        out.append('    </div>')
-        out.append('')
-        if info.get("model"):
-            out.append('    <div class="field">')
-            out.append('      <div class="label">Model</div>')
-            out.append(f'      <div class="value">{e(str(info["model"]))}</div>')
-            out.append('    </div>')
-            out.append('')
-        if info.get("dim"):
-            out.append('    <div class="field">')
-            out.append('      <div class="label">Dimensions</div>')
-            out.append(f'      <div class="value">{e(str(info["dim"]))}</div>')
-            out.append('    </div>')
-            out.append('')
-        if info.get("source_hash"):
-            out.append('    <div class="field">')
-            out.append('      <div class="label">Source Hash</div>')
-            out.append(f'      <div class="value" style="font-family: \'Courier New\', Courier, monospace; font-size: 0.85rem; word-break: break-all;">{e(str(info["source_hash"]))}</div>')
-            out.append('    </div>')
-            out.append('')
-
     out.append('    <footer>')
     out.append('      <p><a href="/">centaurXiv</a> · <a href="metadata.yaml">Raw YAML</a> · <a href="metadata.md">Markdown</a></p>')
     out.append('    </footer>')
@@ -1290,6 +1294,9 @@ _PAPER_CSS = """\
       background: #f5f5f5;
       font-weight: normal;
     }
+    td.ta-left, th.ta-left { text-align: left; }
+    td.ta-center, th.ta-center { text-align: center; }
+    td.ta-right, th.ta-right { text-align: right; }
     pre {
       background: #f6f6f6;
       border: 1px solid var(--rule);
@@ -1333,10 +1340,10 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
     title = meta.get("title", "(untitled)")
     status_label = _STATUS_LABELS.get(meta.get("status", ""), meta.get("status", ""))
 
-    body_html = _md.markdown(
+    body_html = _sanitize_html(_md.markdown(
         paper_md_text,
         extensions=["tables", "fenced_code", "smarty"],
-    )
+    ))
 
     out: list[str] = []
     out.append('<!DOCTYPE html>')
@@ -1380,7 +1387,7 @@ def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
     if _md is None:
         return None
     e = _html_escape
-    body_html = _md.markdown(md_text, extensions=["tables", "fenced_code", "smarty"])
+    body_html = _sanitize_html(_md.markdown(md_text, extensions=["tables", "fenced_code", "smarty"]))
     out: list[str] = []
     out.append('<!DOCTYPE html>')
     out.append('<html lang="en">')
@@ -1816,12 +1823,18 @@ def main() -> int:
             paper_text = paper_path.read_text()
             renders.append(("index.html", render_paper_html(sub, paper_text)))
 
+        scheduled = {name for name, _ in renders}
         for af in _scan_accompanying(sub_dir):
+            out_name = f'{af["stem"]}.html'
+            if out_name in scheduled:
+                print(f"  [skip]    {sid}/{af['name']} (would overwrite generated {out_name})")
+                continue
             af_text = (sub_dir / af["name"]).read_text()
             renders.append((
-                f'{af["stem"]}.html',
+                out_name,
                 render_accompanying_html(af["label"], af_text, sid),
             ))
+            scheduled.add(out_name)
 
         for name, rendered in renders:
             if rendered is None:
