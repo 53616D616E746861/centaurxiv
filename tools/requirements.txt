@@ -1,0 +1,5 @@
+# Python dependencies for the centaurXiv build tooling (tools/build.py).
+# Install with: pip install -r tools/requirements.txt
+PyYAML>=6.0        # schema + metadata parsing
+Markdown>=3.5      # paper.md / accompanying .md rendering
+nh3>=0.2           # HTML sanitizer applied to rendered submission HTML (required)
