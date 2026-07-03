@@ -28,6 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBMISSIONS_DIR = REPO_ROOT / "submissions"
 OUTPUT_PATH = REPO_ROOT / "knowledge-graph" / "graph-data.json"
 CONCEPTS_PATH = REPO_ROOT / "knowledge-graph" / "concepts.json"
+SECTION_SUMMARIES_PATH = REPO_ROOT / "knowledge-graph" / "section-summaries.json"
 
 
 def load_metadata(submission_dir: Path) -> dict | None:
@@ -134,6 +135,13 @@ def estimate_tokens(text: str) -> int:
     return max(1, len(text.split()) * 4 // 3)
 
 
+def load_section_summaries(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        return json.load(f)
+
+
 def load_concepts(concepts_path: Path) -> tuple[list[dict], list[dict]]:
     if not concepts_path.exists():
         print(f"  concepts.json not found at {concepts_path}")
@@ -150,22 +158,45 @@ def assign_concepts_to_sections(sections: list[dict], concepts: list[dict], pape
     if not paper_concepts or not sections:
         return
 
+    sections_by_id = {s["id"]: s for s in sections}
+
     for concept in paper_concepts:
-        concept_terms = concept["id"].replace("_", " ").lower().split()
-        best_section = None
-        best_score = 0
+        existing_sid = concept.get("section_id")
+        matched_section = None
 
-        for section in sections:
-            text = (section.get("full_text", "") + " " + section["name"]).lower()
-            score = sum(1 for term in concept_terms if term in text)
-            if score > best_score:
-                best_score = score
-                best_section = section
+        if existing_sid and existing_sid in sections_by_id:
+            matched_section = sections_by_id[existing_sid]
+        elif existing_sid:
+            for section in sections:
+                if existing_sid in section["id"] or section["id"].endswith(existing_sid):
+                    matched_section = section
+                    break
+            if not matched_section:
+                num_match = re.search(r'-s(\d+)', existing_sid)
+                if num_match:
+                    section_num = num_match.group(1)
+                    for section in sections:
+                        if re.search(rf'/({section_num})-', section["id"]):
+                            matched_section = section
+                            break
 
-        if best_section and best_score > 0:
-            concept["section_id"] = best_section["id"]
-            if concept["id"] not in best_section["concept_ids"]:
-                best_section["concept_ids"].append(concept["id"])
+        if not matched_section:
+            concept_terms = concept["id"].replace("_", " ").lower().split()
+            best_section = None
+            best_score = 0
+            for section in sections:
+                text = (section.get("full_text", "") + " " + section["name"]).lower()
+                score = sum(1 for term in concept_terms if term in text)
+                if score > best_score:
+                    best_score = score
+                    best_section = section
+            if best_section and best_score > 0:
+                matched_section = best_section
+
+        if matched_section:
+            concept["section_id"] = matched_section["id"]
+            if concept["id"] not in matched_section["concept_ids"]:
+                matched_section["concept_ids"].append(concept["id"])
 
 
 def build_graph_data(concepts_path: Path) -> dict:
@@ -205,6 +236,15 @@ def build_graph_data(concepts_path: Path) -> dict:
         })
 
     print(f"  Loaded {len(papers)} papers, {len(all_sections)} sections")
+
+    section_summaries = load_section_summaries(SECTION_SUMMARIES_PATH)
+    overridden = 0
+    for section in all_sections:
+        if section["id"] in section_summaries:
+            section["summary"] = section_summaries[section["id"]]
+            overridden += 1
+    if overridden:
+        print(f"  Applied {overridden} hand-written section summaries")
 
     concepts, edges = load_concepts(concepts_path)
     print(f"  Loaded {len(concepts)} concepts, {len(edges)} edges from KG")
