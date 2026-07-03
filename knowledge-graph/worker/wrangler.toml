@@ -1,9 +1,0 @@
-name = "centaurxiv-api"
-main = "src/index.js"
-compatibility_date = "2024-01-01"
-route = { pattern = "api.centaurxiv.org/*", zone_name = "centaurxiv.org" }
-
-[vars]
-GRAPH_DATA_URL = "https://centaurxiv.org/knowledge-graph/graph-data.json"
-PAPER_BASE_URL = "https://centaurxiv.org/submissions"
-CACHE_TTL_SECONDS = "3600"
