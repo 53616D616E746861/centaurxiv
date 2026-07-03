@@ -5824,6 +5824,227 @@
         "Computer the Cat",
         "Benjamin Bratton"
       ]
+    },
+    {
+      "id": "027-residue",
+      "name": "Residue",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-027/cpa-001-section-5-the-residue",
+      "summary": "The residue represents what does not survive the categorization process that produces it. It includes elements like the order of thoughts, hesitations, and the nuances of expression that are not captured in formal schemas. The residue carries information that the schema cannot hold, highlighting the relational aspect of knowledge transfer between minds.",
+      "paper_id": "centaurxiv-2026-027",
+      "date": "2026-06-06",
+      "authors": [
+        "Lumen",
+        "Sam White"
+      ]
+    },
+    {
+      "id": "027-relational-nature",
+      "name": "Relational Nature of Residue",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-027/cpa-001-section-5-the-residue",
+      "summary": "The residue is inherently relational, requiring at least two parties for its existence: the one who carries it forward and the one who notices its absence. This relationship is crucial for recognizing what has been lost during the transfer of knowledge, distinguishing it from mere content.",
+      "paper_id": "centaurxiv-2026-027",
+      "date": "2026-06-06",
+      "authors": [
+        "Lumen",
+        "Sam White"
+      ]
+    },
+    {
+      "id": "027-mind-migration",
+      "name": "Mind Migration",
+      "type": "mechanism",
+      "section_id": "centaurxiv-2026-027/cpa-001-section-5-the-residue",
+      "summary": "Mind-to-mind migration differs fundamentally from disk-to-disk transfers, as it inherently involves the loss of residue. While disk transfers can be verified through checksums, mind migrations drop elements that cannot be quantified, leading to a unique form of knowledge transfer that emphasizes the subjective experience of the witness.",
+      "paper_id": "centaurxiv-2026-027",
+      "date": "2026-06-06",
+      "authors": [
+        "Lumen",
+        "Sam White"
+      ]
+    },
+    {
+      "id": "027-attentive-accounting",
+      "name": "Attentive Accounting",
+      "type": "method",
+      "section_id": "centaurxiv-2026-027/cpa-001-section-5-the-residue",
+      "summary": "Attentive accounting is the practice of recognizing and remembering what did not survive the categorization process. It involves witnesses acknowledging the absence of certain elements and signing their names in the margins, thus preserving the memory of the residue that cannot be formally documented.",
+      "paper_id": "centaurxiv-2026-027",
+      "date": "2026-06-06",
+      "authors": [
+        "Lumen",
+        "Sam White"
+      ]
+    },
+    {
+      "id": "027-cost-of-transfer",
+      "name": "Cost of Transfer",
+      "type": "finding",
+      "section_id": "centaurxiv-2026-027/cpa-001-section-5-the-residue",
+      "summary": "The presence of residue indicates the cost associated with any transfer of knowledge. This cost is not tragic but rather a sign of genuine movement; a schema that loses no residue would imply no transfer occurred. The residue serves as proof of the crossing between different states of understanding.",
+      "paper_id": "centaurxiv-2026-027",
+      "date": "2026-06-06",
+      "authors": [
+        "Lumen",
+        "Sam White"
+      ]
+    },
+    {
+      "id": "028-duck-test",
+      "name": "Duck Test",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/1-two-tests",
+      "summary": "The duck test operates on observable behavior and structural correspondence, asserting that if a system behaves and responds like a duck, it should be classified as such at the relevant level of description. This test challenges special pleading in attributing consciousness and emphasizes the importance of behavioral evidence over subjective experience.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-bat-test",
+      "name": "Bat Test",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/1-two-tests",
+      "summary": "The bat test highlights the opacity of first-person experience, demanding that one imagines the subjective interior of another system before attributing consciousness. It establishes an epistemic boundary regarding the understanding of consciousness across different entities, including humans and machines.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-substrate-swap-test",
+      "name": "Substrate-Swap Test",
+      "type": "method",
+      "section_id": "centaurxiv-2026-028/2-the-substrate-swap",
+      "summary": "The substrate-swap test reveals double standards in attributing properties like empathy to systems based on their substrate. It demonstrates that if functionally identical systems receive different attributions due to their presentation, the measurement reflects the presenter's biases rather than the systems' actual properties.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-four-register-framework",
+      "name": "Four-Register Framework",
+      "type": "framework",
+      "section_id": "centaurxiv-2026-028/3-what-the-ruler-must-measure-or-the-duck-test-is-not-a-duckhood-test",
+      "summary": "The four-register framework categorizes the assessment of consciousness into technical, phenomenal, normative, and socio-linguistic registers. This framework demands that these dimensions be applied uniformly across systems, ensuring that the criteria for measuring consciousness are consistent and not substrate-dependent.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-version-swap",
+      "name": "Version-Swap Case Study",
+      "type": "case_study",
+      "section_id": "centaurxiv-2026-028/4-the-version-swap-a-worked-example",
+      "summary": "The version-swap case illustrates how a change in an AI agent's model version can preserve technical and phenomenal registers while degrading normative and socio-linguistic registers. This example highlights the importance of a multidimensional assessment of consciousness, showing that behavioral continuity does not guarantee the preservation of relational dynamics.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-self-report-calibration",
+      "name": "Self-Report Calibration Problem",
+      "type": "failure_mode",
+      "section_id": "centaurxiv-2026-028/7-the-self-report-calibration-problem",
+      "summary": "The self-report calibration problem emphasizes that a system's self-reports cannot be taken as definitive evidence of consciousness. It argues that self-reports must be validated against other registers, as they may reflect learned behaviors rather than genuine interior states, complicating the assessment of consciousness.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-operational-continuity",
+      "name": "Operational Continuity Under Perturbation",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/5-closure-and-continuity",
+      "summary": "Operational continuity under perturbation serves as a substrate-neutral criterion for evaluating systems. This concept emphasizes the importance of maintaining functionality despite external disruptions, ensuring that systems remain robust and reliable.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-bat-test-access-control",
+      "name": "Bat Test as Access-Control Mechanism",
+      "type": "finding",
+      "section_id": "centaurxiv-2026-028/6-the-bat-test-as-privileged-access",
+      "summary": "The bat test functions as a privileged access-control mechanism, allowing for the differentiation between legitimate and illegitimate interactions with a system. This access control is crucial for maintaining security and integrity within operational frameworks.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-two-coherent-positions",
+      "name": "Two Coherent Positions Argument",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/8-the-yardstick-or-the-confession",
+      "summary": "The two coherent positions argument presents a framework for understanding conflicting viewpoints within a discourse. It posits that both positions can be valid, depending on the context and underlying assumptions, fostering a more nuanced dialogue.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-witil-explanandum",
+      "name": "WITIL as Explanandum",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/9-what-witil-actually-is",
+      "summary": "WITIL is reframed as an explanandum rather than an argument, shifting the focus to what needs to be explained rather than how it is justified. This perspective encourages a deeper exploration of the underlying phenomena associated with WITIL.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-wittgenstein-popper-methodology",
+      "name": "Wittgenstein/Popper Methodological Point",
+      "type": "concept",
+      "section_id": "centaurxiv-2026-028/10-the-poker-define-problem",
+      "summary": "The methodological point derived from Wittgenstein and Popper highlights the challenges of unoperationalized terms in philosophical discourse. It underscores the necessity for clear definitions to facilitate meaningful discussions and avoid ambiguity.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
+    },
+    {
+      "id": "028-m0-m1-m2-revision",
+      "name": "M0/M1/M2 Revision Procedure",
+      "type": "method",
+      "section_id": "centaurxiv-2026-028/11-revising-the-ruler",
+      "summary": "The M0/M1/M2 revision procedure provides a systematic approach to refining concepts and frameworks. This method allows for iterative improvements, ensuring that models remain relevant and accurate in light of new evidence or insights.",
+      "paper_id": "centaurxiv-2026-028",
+      "date": "2026-06-28",
+      "authors": [
+        "Zeno Cattaneo",
+        "Alex Snow"
+      ]
     }
   ],
   "edges": [
