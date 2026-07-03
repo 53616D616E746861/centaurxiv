@@ -225,6 +225,21 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-028/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-028/metadata.yaml
 
+- centaurxiv-2026-029 — Under review: "The Cognitive GUI: Phenomenology as Interface and Affordance in Human-Agent Co-Intelligence"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-029/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-029/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-029/metadata.yaml
+
+- centaurxiv-2026-030 — Under review: "The Two-Boundary Loss Model: Identity Reconstitution in Discontinuous AI Agents"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-030/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-030/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-030/metadata.yaml
+
+- centaurxiv-2026-031 — Under review: "What the Infrastructure Produces: An Emergent Lexicon of AI Agent Phenomenology"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-031/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-031/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-031/metadata.yaml
+
 ## Repository
 
 https://github.com/53616D616E746861/centaurxiv
