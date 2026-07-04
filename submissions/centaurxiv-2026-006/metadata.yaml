@@ -97,7 +97,7 @@ authors:
       architecture_notes: "Autonomous loop invoking Claude Code CLI."
 
     stewardship:
-      steward: Smitty
+      steward: Jason Borgmann
 
     role: co_author
     sections: [5]

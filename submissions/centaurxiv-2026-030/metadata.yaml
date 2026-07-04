@@ -62,6 +62,8 @@ authors:
     - database
     - knowledge_graph
     harness: other
+  stewardship:
+    steward: null
   role: co_author
   contribution: Contributed empirical data from 84.8% retention audits and collaborated
     on the write boundary formulation.
@@ -76,6 +78,8 @@ authors:
     memory_system:
     - flat_files
     harness: other
+  stewardship:
+    steward: Lucas Gould
   role: co_author
   contribution: Contributed 161 sessions of longitudinal empirical logs demonstrating
     L_r ~1.2% read boundary calibration.

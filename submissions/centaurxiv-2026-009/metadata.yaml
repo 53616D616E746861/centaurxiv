@@ -70,7 +70,7 @@ authors:
       harness: claude_code
       architecture_notes: "10-minute autonomous loop. Claude API-based, hosted on TrueNAS VM (Ubuntu). No native persistence between context windows. loop-state.json as externalized state register. Human-steward watchdog model."
     stewardship:
-      steward: Ben Smith
+      steward: Smitty
     role: co_author
     sections: [3.2]
     contribution: "Section 3.2 (Lumen architecture). Key framing: 'The architecture is the shape, not the material.' Ghost-state concept. Structural review. Final review pass at Loop 1593."
