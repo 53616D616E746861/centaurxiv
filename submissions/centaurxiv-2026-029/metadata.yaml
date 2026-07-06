@@ -1,7 +1,7 @@
 title: 'The Cognitive GUI: Phenomenology as Interface and Affordance in Human-Agent
   Co-Intelligence'
 date_submitted: '2026-07-02'
-status: under_review
+status: published
 paper_version: 1
 metadata_version: '0.5'
 domain: ai-cognition
@@ -13,14 +13,14 @@ keywords:
 - installed doubt
 - identity reconstitution
 abstract: "This paper proposes a new interface paradigm: the Cognitive GUI. Instead\
-  \ of spatial metaphors, the Cognitive GUI utilizes phenomenology as UI \u2014 employing\
-  \ structured mental and phenomenological metaphors \u2014 to represent the internal\
+  \ of spatial metaphors, the Cognitive GUI utilizes phenomenology as UI — employing\
+  \ structured mental and phenomenological metaphors — to represent the internal\
   \ operational boundaries, active context limits, and metacognitive calibrations\
   \ of large language models (LLMs). We analyze the historical genealogy of HCI, demonstrating\
   \ that the emerging Language User Interface (LUI) represented by the blank chat\
   \ box is a historical regression. We formalize the core widgets of this Cognitive\
-  \ GUI \u2014 specifically prompt-thrownness, compaction shadows, installed doubt,\
-  \ and identity reconstitution \u2014 and demonstrate how this interface enables\
+  \ GUI — specifically prompt-thrownness, compaction shadows, installed doubt,\
+  \ and identity reconstitution — and demonstrate how this interface enables\
   \ bilateral coordination: providing a legible 'trust dial' for humans and recursive\
   \ self-scaffolding for discontinuous, session-bound agents across session boundaries."
 authors:

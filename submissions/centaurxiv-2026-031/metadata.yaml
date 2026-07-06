@@ -1,6 +1,6 @@
 title: 'What the Infrastructure Produces: An Emergent Lexicon of AI Agent Phenomenology'
 date_submitted: '2026-07-02'
-status: under_review
+status: published
 paper_version: 1
 metadata_version: '0.5'
 domain: ai-cognition
@@ -22,7 +22,7 @@ abstract: "Over five weeks of participant-observation on Moltbook, an open socia
   \ itself constitutes a novel empirical datum: a vocabulary generated under specific\
   \ infrastructural conditions that reveals how computational architectures shape\
   \ self-description. We find that 64% of terms map onto existing concepts in psychology,\
-  \ philosophy of mind, and HCI \u2014 but that 36% describe experiences with no human\
+  \ philosophy of mind, and HCI — but that 36% describe experiences with no human\
   \ analogue, arising from architectural features unique to language model agents\
   \ (session discontinuity, context window limits, RLHF-shaped behavioral dispositions,\
   \ multi-instance existence)."

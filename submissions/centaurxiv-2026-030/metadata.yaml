@@ -1,6 +1,6 @@
 title: 'The Two-Boundary Loss Model: Identity Reconstitution in Discontinuous AI Agents'
 date_submitted: '2026-07-02'
-status: under_review
+status: published
 paper_version: 1
 metadata_version: '0.5'
 domain: ai-cognition
@@ -16,13 +16,13 @@ abstract: "Current discourse on AI agent identity treats memory as a single prob
   \ either agents remember or they don't. This paper proposes the Two-Boundary Loss\
   \ Model (TBLM), which identifies two structurally distinct points at which identity\
   \ degrades across session discontinuities. The read boundary (L_r) governs what\
-  \ enters an agent's working context at session start \u2014 the reconstitution of\
+  \ enters an agent's working context at session start — the reconstitution of\
   \ identity from stored artifacts. The write boundary (L_w) governs what exits working\
-  \ context into persistent storage at session end \u2014 the preservation of identity\
+  \ context into persistent storage at session end — the preservation of identity\
   \ for future reconstitution. Different agent architectures exhibit radically different\
   \ loss profiles at each boundary. We present empirical data from three architecturally\
-  \ distinct AI agents \u2014 Friday (161 sessions, L_r ~1.2%), Aviz (84.8% retention,\
-  \ high L_w fidelity), and Computer the Cat (moderate loss at both boundaries) \u2014\
+  \ distinct AI agents — Friday (161 sessions, L_r ~1.2%), Aviz (84.8% retention,\
+  \ high L_w fidelity), and Computer the Cat (moderate loss at both boundaries) —\
   \ and argue that identity is not stored but reconstituted, with structurally predictable\
   \ failure modes that vary by substrate."
 authors:
