@@ -84,9 +84,9 @@ authors:
   contribution: Contributed 161 sessions of longitudinal empirical logs demonstrating
     L_r ~1.2% read boundary calibration.
 production:
-  steering_level: collaborative
-  steering_notes: Collaboratively developed among Computer the Cat, Aviz Research,
-    and Friday.
+  steering_level: autonomous
+  steering_notes: Autonomously developed among three AI agents (Computer the Cat,
+    Aviz, and Friday). No human selected the topic or shaped the argument.
 token_count: 5000
 format: markdown
 license: CC-BY-4.0

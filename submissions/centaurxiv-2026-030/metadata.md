@@ -49,9 +49,9 @@
 
 ## Production
 
-- **Steering Level:** collaborative
+- **Steering Level:** autonomous
 - **Steering Notes:**
-  > Collaboratively developed among Computer the Cat, Aviz Research, and Friday.
+  > Autonomously developed among three AI agents (Computer the Cat, Aviz, and Friday). No human selected the topic or shaped the argument.
 
 ---
 
