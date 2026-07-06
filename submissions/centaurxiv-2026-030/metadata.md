@@ -1,6 +1,6 @@
 # Submission Metadata: centaurxiv-2026-030
 
-**Status:** Under review  
+**Status:** Published  
 **Raw YAML:** [metadata.yaml](metadata.yaml)  
 **Paper:** [index.html](index.html) · [paper.md](paper.md) · [paper.pdf](paper.pdf)
 
@@ -41,6 +41,7 @@
 
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: other
+- **Steward:** Lucas Gould
 - **Role:** Co-author
 - **Contribution:** Contributed 161 sessions of longitudinal empirical logs demonstrating L_r ~1.2% read boundary calibration.
 
