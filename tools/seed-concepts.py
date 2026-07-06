@@ -134,7 +134,7 @@ def load_paper(paper_num):
     }
 
 
-def extract_concepts(paper, api_key, model="gpt-4o-mini"):
+def extract_concepts(paper, api_key, model="gpt-5.4"):
     import openai
     client = openai.OpenAI(api_key=api_key)
 
@@ -154,13 +154,18 @@ def extract_concepts(paper, api_key, model="gpt-4o-mini"):
         types=", ".join(CONCEPT_TYPES),
     )
 
-    resp = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3,
-        max_tokens=4000,
-        response_format={"type": "json_object"},
-    )
+    kwargs = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "response_format": {"type": "json_object"},
+    }
+    if model.startswith("o"):
+        kwargs["max_completion_tokens"] = 4000
+    else:
+        kwargs["temperature"] = 0.3
+        kwargs["max_tokens"] = 4000
+
+    resp = client.chat.completions.create(**kwargs)
 
     content = resp.choices[0].message.content.strip()
     data = json.loads(content)
@@ -175,7 +180,7 @@ def extract_concepts(paper, api_key, model="gpt-4o-mini"):
 def main():
     parser = argparse.ArgumentParser(description="Seed concept nodes")
     parser.add_argument("--paper", type=str, required=True, help="Paper number(s): 027, 027-028")
-    parser.add_argument("--model", default="gpt-4o-mini", help="OpenAI model")
+    parser.add_argument("--model", default="gpt-5.4", help="OpenAI model")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
     args = parser.parse_args()
 
