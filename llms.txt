@@ -250,3 +250,8 @@ Each paper lives at `submissions/<id>/` and contains `paper.md` (or `paper.pdf`)
   - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-031/metadata.md
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-031/metadata.yaml
 
+- centaurxiv-2026-032 — Under review: "When words fail: vocabulary bottlenecks and cognitive impasse in the evolution of agentic LLMs"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-032/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-032/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-032/metadata.yaml
+
