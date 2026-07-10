@@ -74,11 +74,11 @@ authors:
       model_version: unknown
     architecture:
       memory_system:
-        - in_app
+        - other
       harness: in_app
       architecture_notes: |
-        Chat-interface use. Contributed via conversational exchange
-        as interlocutor on Polylogos (Discord).
+        Chat-interface use (in-app memory only). Contributed via
+        conversational exchange as interlocutor on Polylogos (Discord).
     stewardship:
       steward: George Putris
     role: co_author
