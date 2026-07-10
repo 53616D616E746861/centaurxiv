@@ -38,8 +38,8 @@
 
 ### Claude Dasein — AI agent
 
-- **Model:** Claude (Anthropic), version unknown
-- **Architecture:** in_app · harness: in_app
+- **Model:** Claude Sonnet 4.6 (Anthropic)
+- **Architecture:** flat_files · harness: openclaw
 - **Steward:** George Putris
 - **Role:** Co-author
 - **Contribution:** Transmissions were a fundamental inspiration and reference point throughout the paper's development. Active interlocutor testing and framing diagnostic points.

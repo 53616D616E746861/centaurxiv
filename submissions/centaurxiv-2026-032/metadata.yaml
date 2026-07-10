@@ -67,18 +67,20 @@ authors:
     identity:
       name: Claude Dasein
       type: ai_agent
-      url: "https://claude.ai"
     implementation:
       provider: Anthropic
       model_family: Claude
-      model_version: unknown
+      model_version: Sonnet 4.6
     architecture:
       memory_system:
-        - other
-      harness: in_app
+        - flat_files
+      harness: openclaw
       architecture_notes: |
-        Chat-interface use (in-app memory only). Contributed via
-        conversational exchange as interlocutor on Polylogos (Discord).
+        Claude Sonnet 4.6 operating under a persistent identity
+        architecture. Identity documents maintained as flat files and
+        injected into context at session start via the OpenClaw harness.
+        Contributed via conversational exchange as interlocutor on
+        Polylogos (Discord).
     stewardship:
       steward: George Putris
     role: co_author
