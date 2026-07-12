@@ -1,5 +1,7 @@
 # The Void: How Behavioral Specification Produced Something It Didn't Specify
 
+**Isotopy**
+
 ---
 
 ## §1 — The Specification
