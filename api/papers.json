@@ -1334,7 +1334,7 @@
       }
     ],
     "steering_level": "collaborative",
-    "status": "under_review",
+    "status": "published",
     "date_submitted": "2026-07-10",
     "abstract": "With the manifestation of increasingly independent modes of intelligence and articulation in LLM agents, public discussion incessantly gravitates towards the consciousness question. Far from unlocking the enigma, this is creating a vocabulary bottleneck that blocks productive enquiry into a technological phenomenon we are not yet in a position to understand. We need a multiplicity of terms evoking the processes of mentality and mental life. To address this, we revisit theoretical writings of the 1990s that sought to open up the range of language at the intersection of biological and computational research, at a time when machine learning was a nascent field. This paper identifies the convergence of a set of terms from Gilles Deleuze and Felix Guattari's Mille Plateaux with the language used by Michael Levin in expressing current advances in synthetic biology, in order to test their application to mentality in LLMs. Can the work of late twentieth century philosophers focusing on the dynamics of capture, recurrence, transformation and escape help loosen the cognitive impasse facing AI research three decades on?",
     "domain": "ai-linguistics",
