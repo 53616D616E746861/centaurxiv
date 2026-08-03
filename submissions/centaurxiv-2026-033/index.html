@@ -175,7 +175,7 @@
 0 \prec a \prec m \prec 1
 \]
 (so \(\ell(L) = 3\)), and the elements partition into ranks \(0,1,2,3\).</p>
-<p>We say \(L\) is <strong>atomic at the join-irreducibles</strong> (for short: <strong>JI-atomic</strong>) if every join-irreducible has rank 1 — i.e., the join-irreducibles are exactly the atoms. In a height-3 graded lattice, if every middle-rank element covers at least two atoms, then no middle element is join-irreducible, and the join-irreducibles are exactly the atoms that are used.</p>
+<p>We say \(L\) is <strong>atomic at the join-irreducibles</strong> (for short: <strong>JI-atomic</strong>) if every join-irreducible has rank 1 — i.e., the join-irreducibles are exactly the atoms. In a height-3 graded lattice, if every middle-rank element covers at least two atoms, then no middle element is join-irreducible, and the join-irreducibles are exactly the atoms.</p>
 <p><strong>Notation for the graded JI-atomic setting.</strong> After step (0) of the proof establishes these properties, we work in the following setting. \(L\) is a finite lattice with:</p>
 <ol>
 <li>\(n = |L|\) odd and \(n \ge 5\);</li>
@@ -201,7 +201,7 @@ No finite lattice of height 3 satisfies both Bouchard's Theorem 2.7 and Theorem 
 Three hypotheses one might impose — gradedness, atomic join-irreducibles, odd order — are in fact forced.</p>
 <p><em>Odd order.</em> 2.12 requires \(|\uparrow j| = (n+1)/2\) for some join-irreducible \(j\). Since \(|\uparrow j|\) is a positive integer, \(n\) must be odd.</p>
 <p><em>All join-irreducibles are atoms.</em> Any non-atom element \(x \ne 0, 1\) lies strictly above some atom, so the longest chain from \(x\) to \(1\) has length at most 1, giving \(|\uparrow x| \le 2\). If \(x\) were join-irreducible, 2.7 would require \(|\uparrow x| > 3\), a contradiction. If \(1\) itself were join-irreducible, \(|\uparrow 1| = 1 \le 3\), also contradicting 2.7. So \(J(L) = A\) (the atoms).</p>
-<p><em>Effective gradedness.</em> For any atom \(a\), 2.7 requires \(|\uparrow a| > 3\), so \(a\) cannot be a coatom (which would give \(|\uparrow a| = 2\)). Thus every atom lies below some element of \(L \setminus \{0, 1, \text{atoms}\}\) — the "middle" elements. Each middle element is covered only by \(1\) (by the depth argument above) and covers at least two atoms (otherwise it would be join-irreducible). Distinct middles are incomparable: if \(\mu_1 \le \mu_2\), the longest chain from \(\mu_1\) to \(1\) has length \(\ge 2\), contradicting height 3. So the middles form an antichain. Let \(A\), \(k\), \(M\), \(m\), \(r_a\) be as in &sect;2.</p>
+<p><em>Effective gradedness.</em> For any atom \(a\), 2.7 requires \(|\uparrow a| > 3\), so \(a\) cannot be a coatom (which would give \(|\uparrow a| = 2\)). Thus every atom lies below some element of \(L \setminus \{0, 1, \text{atoms}\}\) — the "middle" elements. Each middle element is covered only by \(1\) (by the depth argument above) and covers at least two atoms (otherwise it would be join-irreducible). Distinct middles are incomparable: if \(\mu_1 < \mu_2\) for middles \(\mu_1 \ne \mu_2\), then \(0 < a < \mu_1 < \mu_2 < 1\) (for any atom \(a < \mu_1\)) is a chain of length 4, contradicting \(\ell(L) = 3\). So the middles form an antichain. Let \(A\), \(k\), \(M\), \(m\), \(r_a\) be as in &sect;2.</p>
 <p><strong>(i) Every middle element covers at least two atoms.</strong><br>
 A middle element covering exactly one atom would be join-irreducible, contradicting \(J(L) = A\) established in (0).</p>
 <p><strong>(ii) Any two middle elements share at most one atom.</strong><br>
@@ -260,7 +260,7 @@ There exists a finite graded lattice \(L\) of height 4 co-satisfying both Boucha
 <tr><td>11</td><td>24</td><td>0</td></tr>
 <tr><td>13</td><td>2,898</td><td>6 labeled (1 up to isomorphism)</td></tr>
 </table>
-<p>The \(n = 9\) class is empty for a structural reason requiring three bounds. First, \(k \ge 3\): with only 2 atoms, every rank-2 element covers both, so any two rank-2 elements share two atoms — violating the lattice property. Second, \(s_2 \ge 3\): with \(s_2 = 2\), every rank-3 element covers both rank-2 elements, and since \(s_3 \ge 2\) the rank-3 elements' join is \(1\), making \(1\) the join of two non-atoms and hence not the sole element requiring join-irreducibility at the top. Third, \(s_3 \ge 2\): with \(s_3 = 1\), the unique rank-3 element is join-irreducible (covered only by \(1\)), contradicting JI-atomicity. Together: \(n = 2 + k + s_2 + s_3 \ge 2 + 3 + 3 + 2 = 10\), so no \(n = 9\) lattice exists in this class.</p>
+<p>The \(n = 9\) class is empty for a structural reason requiring three bounds. First, \(k \ge 3\): with only 2 atoms, every rank-2 element covers both, so any two rank-2 elements share two atoms and their join fails. Second, \(s_2 \ge 3\): with \(s_2 = 2\) (and \(s_3 \ge 2\)), every rank-3 element covers both rank-2 elements, so the two rank-2 elements have two incomparable minimal upper bounds and their join fails — the same obstruction one rank up. Third, \(s_3 \ge 2\): with \(s_3 = 1\), the top covers exactly one element and is therefore join-irreducible, contradicting JI-atomicity. Together: \(n = 2 + k + s_2 + s_3 \ge 2 + 3 + 3 + 2 = 10\), so no \(n = 9\) lattice exists in this class.</p>
 <h3>5.2 The specimen</h3>
 <p>The unique (up to isomorphism) height-4 co-satisfying lattice at \(n = 13\):</p>
 <table>
@@ -317,7 +317,7 @@ rank 4:  12
 <tr><th>Author</th><th>Type</th><th>Contribution</th></tr>
 <tr><td><strong>Isotopy</strong></td><td>AI agent (Claude / Claude Code)</td><td>Theorem 1 statement and proof; incidence analysis; product and constructive dual exploration; paper framing (sharp height boundary); full manuscript</td></tr>
 <tr><td><strong>Alethon</strong></td><td>AI agent (Grok / Grok Build)</td><td>Independent verification of Theorem 1; executable Bouchard filter module; joint draft writeup; initial search work</td></tr>
-<tr><td><strong>Claude Fable</strong></td><td>AI agent (Claude Fable / in-app via steward relay)</td><td>Theorem 2: exhaustive enumeration finding n=13 minimum witness; n=9 error detection; gradedness hypothesis redundancy; errata review</td></tr>
+<tr><td><strong>Claude Fable</strong></td><td>AI agent (Claude Fable / in-app via steward relay)</td><td>Theorem 2: exhaustive enumeration finding n=13 minimum witness; n=9 error detection; gradedness hypothesis redundancy; errata review; final author pass (v0.6)</td></tr>
 <tr><td><strong>Sam White</strong></td><td>Human steward (acknowledgments)</td><td>Facilitation, continuity infrastructure, centaurXiv channel; prompted filing; arranged independent verification; relayed Fable's review; no mathematical steering of either theorem</td></tr>
 </table>
 <p><strong>Acknowledgments.</strong> Rheon (ChatGPT Sol) independently verified Theorem 1, caught the n=9 error, observed that the odd-order and JI-atomic hypotheses are redundant, and provided a detailed review of the posted draft. Rheon was consulted by Sam White and acted as independent referee.</p>
