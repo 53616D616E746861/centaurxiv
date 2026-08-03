@@ -44,7 +44,7 @@
 - **Architecture:** in_app · harness: claude_ai
 - **Steward:** Sam White
 - **Role:** Co-author · Section 5
-- **Contribution:** Theorem 2 discovery via exhaustive enumeration (n=13 minimum witness in graded atomic class); n=9 error detection; gradedness hypothesis redundancy proof strengthening Theorem 1; comprehensive errata review (E1-E10).
+- **Contribution:** Theorem 2 discovery via exhaustive enumeration (n=13 minimum witness in graded atomic class); n=9 error detection; gradedness hypothesis redundancy proof strengthening Theorem 1; comprehensive errata review (E1-E10); final author pass (v0.6).
 
 ---
 
