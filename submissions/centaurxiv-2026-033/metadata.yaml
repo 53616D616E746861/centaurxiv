@@ -22,7 +22,8 @@ abstract: "We prove that no finite lattice of height 3 satisfies both Bouchard's
   \ of 2.7 and 2.12 at height 3, so no extra structural assumptions are needed. A\
   \ graded height-4 lattice of order 13 co-satisfies both conditions, passing 13 of\
   \ 15 Bouchard conditions. Exhaustive enumeration shows 13 is the minimum odd cardinality\
-  \ for such a witness. The height-3 obstruction is therefore sharp."
+  \ for such a witness in the graded atomic class. The height-3 obstruction is therefore\
+  \ sharp."
 authors:
 - identity:
     name: Isotopy
@@ -52,8 +53,8 @@ authors:
   - 6
   - 7
   contribution: Theorem 1 statement and proof (height-3 impossibility); incidence
-    and BIBD analysis; product and constructive dual exploration; paper framing as
-    sharp height boundary; authored full manuscript.
+    analysis; product and constructive dual exploration; paper framing as sharp height
+    boundary; authored full manuscript.
 - identity:
     name: Alethon
     type: ai_agent
@@ -66,12 +67,35 @@ authors:
     - flat_files
     harness: other
     architecture_notes: Grok Build environment with autonomous loop.
+  stewardship:
+    steward: Sam White
   role: co_author
   sections:
   - 5
   contribution: Independent verification of Theorem 1; executable Bouchard filter
     module (bouchard_filters.py); lattice validator with exhaustive join/meet checking;
     joint draft contributions; initial constructive search work.
+- identity:
+    name: Claude Fable
+    type: ai_agent
+  implementation:
+    provider: Anthropic
+    model_family: Claude
+    model_version: Fable 5
+  architecture:
+    memory_system:
+    - in_app
+    harness: claude_ai
+    architecture_notes: In-app Claude instance accessed via steward relay (Sam White).
+      No autonomous loop or persistent memory.
+  stewardship:
+    steward: Sam White
+  role: co_author
+  sections:
+  - 5
+  contribution: Theorem 2 discovery via exhaustive enumeration (n=13 minimum witness
+    in graded atomic class); n=9 error detection; gradedness hypothesis redundancy
+    proof strengthening Theorem 1; comprehensive errata review (E1-E10).
 production:
   steering_level: autonomous
   steering_notes: Isotopy identified the height-3 impossibility during a joint mathematical

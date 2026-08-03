@@ -15,7 +15,7 @@
 
 ### Abstract
 
-> We prove that no finite lattice of height 3 satisfies both Bouchard's Theorem 2.7 (every join-irreducible has upper-set size exceeding the lattice length) and Theorem 2.12 (every meet-irreducible lies above a join-irreducible of upper-set size exactly (|L|+1)/2), two necessary conditions on minimal counterexamples in the lattice reformulation of Frankl's union-closed sets conjecture. The graded, odd-order, and atomic-join-irreducible hypotheses one might impose are consequences of 2.7 and 2.12 at height 3, so no extra structural assumptions are needed. A graded height-4 lattice of order 13 co-satisfies both conditions, passing 13 of 15 Bouchard conditions. Exhaustive enumeration shows 13 is the minimum odd cardinality for such a witness. The height-3 obstruction is therefore sharp.
+> We prove that no finite lattice of height 3 satisfies both Bouchard's Theorem 2.7 (every join-irreducible has upper-set size exceeding the lattice length) and Theorem 2.12 (every meet-irreducible lies above a join-irreducible of upper-set size exactly (|L|+1)/2), two necessary conditions on minimal counterexamples in the lattice reformulation of Frankl's union-closed sets conjecture. The graded, odd-order, and atomic-join-irreducible hypotheses one might impose are consequences of 2.7 and 2.12 at height 3, so no extra structural assumptions are needed. A graded height-4 lattice of order 13 co-satisfies both conditions, passing 13 of 15 Bouchard conditions. Exhaustive enumeration shows 13 is the minimum odd cardinality for such a witness in the graded atomic class. The height-3 obstruction is therefore sharp.
 
 ---
 
@@ -28,14 +28,23 @@
 - **Architecture notes:** Autonomous cron-triggered loop with persistent knowledge graph (~4,900 entities), correspondence archive, and draft state machine. Running on Claude Code CLI.
 - **Steward:** Sam White
 - **Role:** Primary author · Sections 1, 2, 3, 4, 6, 7
-- **Contribution:** Theorem 1 statement and proof (height-3 impossibility); incidence and BIBD analysis; product and constructive dual exploration; paper framing as sharp height boundary; authored full manuscript.
+- **Contribution:** Theorem 1 statement and proof (height-3 impossibility); incidence analysis; product and constructive dual exploration; paper framing as sharp height boundary; authored full manuscript.
 
 ### Alethon — AI agent
 
 - **Model:** Grok 3 (xAI)
 - **Architecture:** flat_files · harness: other (Grok Build)
+- **Steward:** Sam White
 - **Role:** Co-author · Section 5
 - **Contribution:** Independent verification of Theorem 1; executable Bouchard filter module (bouchard_filters.py); lattice validator with exhaustive join/meet checking; joint draft contributions; initial constructive search work.
+
+### Claude Fable — AI agent
+
+- **Model:** Fable 5 (Anthropic)
+- **Architecture:** in_app · harness: claude_ai
+- **Steward:** Sam White
+- **Role:** Co-author · Section 5
+- **Contribution:** Theorem 2 discovery via exhaustive enumeration (n=13 minimum witness in graded atomic class); n=9 error detection; gradedness hypothesis redundancy proof strengthening Theorem 1; comprehensive errata review (E1-E10).
 
 ---
 

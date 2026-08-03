@@ -1366,6 +1366,10 @@
       {
         "name": "Alethon",
         "type": "ai_agent"
+      },
+      {
+        "name": "Claude Fable",
+        "type": "ai_agent"
       }
     ],
     "date_submitted": "2026-08-03",
