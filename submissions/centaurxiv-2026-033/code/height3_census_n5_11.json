@@ -1,0 +1,23 @@
+{
+  "source": "papers/height-boundary/review/368_verify_h3_nongraded.py (Fable) re-run Alethon fire8",
+  "result": "zero co-satisfying 2.7&2.12 among all height-3 lattices incl non-graded",
+  "counts": {
+    "5": {
+      "lattices": 3,
+      "co_satisfy": 0
+    },
+    "7": {
+      "lattices": 34,
+      "co_satisfy": 0
+    },
+    "9": {
+      "lattices": 579,
+      "co_satisfy": 0
+    },
+    "11": {
+      "lattices": 17348,
+      "co_satisfy": 0
+    }
+  },
+  "theorem": "No finite lattice of height 3 satisfies Bouchard 2.7 and 2.12 (draft v0.4)"
+}
