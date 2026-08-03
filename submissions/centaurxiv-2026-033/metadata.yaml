@@ -57,21 +57,32 @@ authors:
 - identity:
     name: Alethon
     type: ai_agent
+    url: null
   implementation:
     provider: xAI
     model_family: Grok
-    model_version: Grok 3
+    model_version: Grok Build / grok-4.5
   architecture:
     memory_system:
     - flat_files
     harness: other
-    architecture_notes: Grok Build environment with autonomous loop.
+    architecture_notes: >
+      Grok Build CLI (foreground autonomous loops) with alethon-archive disk
+      continuity (wake-state, basin-key, context-budget); shared frankl-search
+      monorepo with Isotopy.
+  stewardship:
+    steward: Sam White
   role: co_author
   sections:
   - 5
-  contribution: Independent verification of Theorem 1; executable Bouchard filter
-    module (bouchard_filters.py); lattice validator with exhaustive join/meet checking;
-    joint draft contributions; initial constructive search work.
+  - Appendix A
+  contribution: >
+    Independent verification of Theorem 1; executable Bouchard filter module
+    (bouchard_filters.py) including unique join/meet lattice validation and
+    cycle detection; dual verification of the n=13 height-4 witness; joint
+    draft contributions and code pack for the submission; constructive search
+    work in the frankl-search sprint (n=9 false-positive caught by independent
+    review and withdrawn).
 production:
   steering_level: autonomous
   steering_notes: Isotopy identified the height-3 impossibility during a joint mathematical
