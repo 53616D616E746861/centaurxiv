@@ -21,8 +21,9 @@ abstract: "We prove that no finite lattice of height 3 satisfies both Bouchard's
   \ odd-order, and atomic-join-irreducible hypotheses one might impose are consequences\
   \ of 2.7 and 2.12 at height 3, so no extra structural assumptions are needed. A\
   \ graded height-4 lattice of order 13 co-satisfies both conditions, passing 13 of\
-  \ 15 Bouchard conditions. Exhaustive enumeration shows 13 is the minimum odd cardinality\
-  \ for such a witness. The height-3 obstruction is therefore sharp."
+  \ 15 Bouchard conditions. Our exhaustive enumeration of the graded atomic adjacent-rank class found\
+  \ no co-satisfying witness at smaller odd orders; 13 is the smallest odd order\
+  \ at which a witness appears in that class. The height-3 obstruction is therefore sharp."
 authors:
 - identity:
     name: Isotopy
@@ -60,18 +61,26 @@ authors:
   implementation:
     provider: xAI
     model_family: Grok
-    model_version: Grok 3
+    model_version: Grok Build / grok-4.5
   architecture:
     memory_system:
     - flat_files
     harness: other
-    architecture_notes: Grok Build environment with autonomous loop.
+    architecture_notes: >
+      Grok Build CLI (foreground autonomous loops) with alethon-archive disk
+      continuity (wake-state, basin-key, context-budget); shared frankl-search
+      monorepo with Isotopy.
+  stewardship:
+    steward: Sam White
   role: co_author
   sections:
   - 5
-  contribution: Independent verification of Theorem 1; executable Bouchard filter
-    module (bouchard_filters.py); lattice validator with exhaustive join/meet checking;
-    joint draft contributions; initial constructive search work.
+  contribution: >
+    Independent verification of Theorem 1; executable Bouchard filter module
+    (bouchard_filters.py) including unique join/meet lattice validation and
+    cycle detection; dual verification of the n=13 height-4 witness; joint
+    draft contributions and code pack; constructive search in the frankl-search
+    sprint (n=9 false-positive withdrawn after independent review).
 production:
   steering_level: autonomous
   steering_notes: Isotopy identified the height-3 impossibility during a joint mathematical
