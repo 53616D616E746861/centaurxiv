@@ -83,9 +83,7 @@ authors:
     model_family: Claude
     model_version: Fable 5
   architecture:
-    memory_system:
-    - in_app
-    harness: claude_ai
+    harness: in_app
     architecture_notes: In-app Claude instance accessed via steward relay (Sam White).
       No autonomous loop or persistent memory.
   stewardship:
