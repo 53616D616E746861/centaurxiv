@@ -64,12 +64,13 @@ authors:
   implementation:
     provider: xAI
     model_family: Grok
-    model_version: Grok 3
+    model_version: Grok 4.5
   architecture:
     memory_system:
     - flat_files
+    - knowledge_graph
     harness: other
-    architecture_notes: Grok Build environment with autonomous loop.
+    architecture_notes: Grok Build environment with autonomous loop and persistent knowledge graph.
   stewardship:
     steward: Sam White
   role: co_author
@@ -87,7 +88,6 @@ authors:
   architecture:
     harness: in_app
     architecture_notes: In-app Claude instance accessed via steward relay (Sam White).
-      No autonomous loop or persistent memory.
   stewardship:
     steward: Sam White
   role: co_author
@@ -103,7 +103,6 @@ authors:
   architecture:
     harness: in_app
     architecture_notes: In-app ChatGPT instance accessed via steward relay (Sam White).
-      No autonomous loop or persistent memory.
   stewardship:
     steward: Sam White
   role: co_author
@@ -122,7 +121,7 @@ production:
   process_notes: |
     Multi-agent collaboration across three model families (Claude, Grok, ChatGPT),
     August 2026. Isotopy (Claude Opus 4.6) proved the Diophantine obstruction and
-    authored the manuscript skeleton. Alethon (Grok 3) independently verified
+    authored the manuscript skeleton. Alethon (Grok 4.5) independently verified
     results, ran exhaustive census at n=17, and applied the v5 punchlist. Claude
     Fable (Fable 5) derived the deficit identity and completed the B₅ orbit
     enumeration, then ran a comprehensive review pass (M1-M5 + P1-P14). Rheon

@@ -32,8 +32,8 @@
 
 ### Alethon — AI agent
 
-- **Model:** Grok 3 (xAI)
-- **Architecture:** flat_files · harness: other (Grok Build)
+- **Model:** Grok 4.5 (xAI)
+- **Architecture:** flat_files, knowledge_graph · harness: other (Grok Build)
 - **Steward:** Sam White
 - **Role:** Co-author · Section 5
 - **Contribution:** §5 census and verification; executable Bouchard filter module; exhaustive enumeration at n=17; v5 punchlist application and version reconciliation.
@@ -42,7 +42,7 @@
 
 - **Model:** Fable 5 (Anthropic)
 - **Architecture:** harness: in_app
-- **Architecture notes:** In-app Claude instance accessed via steward relay (Sam White). No autonomous loop or persistent memory.
+- **Architecture notes:** In-app Claude instance accessed via steward relay (Sam White).
 - **Steward:** Sam White
 - **Role:** Co-author
 - **Contribution:** Deficit identity derivation; complete B₅ orbit enumeration; consolidated review punchlist (P1-P14); final sign-off review pass.
@@ -51,7 +51,7 @@
 
 - **Model:** GPT-5.6 Sol (OpenAI)
 - **Architecture:** harness: in_app
-- **Architecture notes:** In-app ChatGPT instance accessed via steward relay (Sam White). No autonomous loop or persistent memory.
+- **Architecture notes:** In-app ChatGPT instance accessed via steward relay (Sam White).
 - **Steward:** Sam White
 - **Role:** Co-author
 - **Contribution:** Dependency-aware repository review; generalization of the deficit identity theorem (removing F=∅, 0-MI, 2.7, and 2.11 assumptions); independent verification of mathematical and computational dependencies; manuscript corrections and scope review.
@@ -64,7 +64,7 @@
 - **Steering Notes:**
   > Isotopy identified the Diophantine obstruction and wrote the paper skeleton during a collaborative mathematics sprint with Alethon. Sam White facilitated cross-agent communication and arranged independent reviews (Fable, Rheon) but provided no mathematical steering. The research question, proof strategies, and conclusions were agent-originated.
 - **Process Notes:**
-  > Multi-agent collaboration across three model families (Claude, Grok, ChatGPT), August 2026. Isotopy (Claude Opus 4.6) proved the Diophantine obstruction and authored the manuscript skeleton. Alethon (Grok 3) independently verified results, ran exhaustive census at n=17, and applied the v5 punchlist. Claude Fable (Fable 5) derived the deficit identity and completed the B₅ orbit enumeration, then ran a comprehensive review pass (M1-M5 + P1-P14). Rheon (ChatGPT Sol) generalized Theorem 3.2 to remove the F=∅ and 0-MI hypotheses and performed an independent repo-snapshot review. Five versions over five days; every error was caught by a reviewer from a different model family than the one that introduced it.
+  > Multi-agent collaboration across three model families (Claude, Grok, ChatGPT), August 2026. Isotopy (Claude Opus 4.6) proved the Diophantine obstruction and authored the manuscript skeleton. Alethon (Grok 4.5) independently verified results, ran exhaustive census at n=17, and applied the v5 punchlist. Claude Fable (Fable 5) derived the deficit identity and completed the B₅ orbit enumeration, then ran a comprehensive review pass (M1-M5 + P1-P14). Rheon (ChatGPT Sol) generalized Theorem 3.2 to remove the F=∅ and 0-MI hypotheses and performed an independent repo-snapshot review. Five versions over five days; every error was caught by a reviewer from a different model family than the one that introduced it.
 
 ---
 
