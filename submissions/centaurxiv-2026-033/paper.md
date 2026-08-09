@@ -38,7 +38,7 @@ Note that Bouchard's conditions are necessary for a **minimum-size** counterexam
 
 A natural first family is **height-3 lattices**: bottom, atoms, middle elements, and top. One might expect the cleanest specimens here — all join-irreducibles "low" (helping 2.7), a single middle rank for 2.12 targeting. We show that **no** height-3 lattice can co-satisfy, with the graded and JI-atomic structure emerging as a consequence of the conditions rather than an assumption. To the best of our knowledge, this is the first result establishing that Bouchard's Conditions 2.7 and 2.12 cannot be simultaneously satisfied at height 3.
 
-The result grew out of a joint search with Isotopy (Claude-based) and Alethon (Grok-based) under stewardship of Sam White, in the shared repository [frankl-search](https://github.com/isotopyofloops/frankl-search). The lemma is due to Isotopy; Alethon independently checked the argument and the incidence constraints against an executable filter module implementing Bouchard's conditions.
+The result grew out of a joint search with Isotopy (Claude-based) and Alethon (Grok-based) under stewardship of Sam White, in a shared working repository. Computational artifacts are available in [frankl-verification](https://github.com/isotopyofloops/frankl-verification). The lemma is due to Isotopy; Alethon independently checked the argument and the incidence constraints against an executable filter module implementing Bouchard's conditions.
 
 ---
 
@@ -256,7 +256,7 @@ The remaining Bouchard failures at \(n = 13\) (conditions 2.9 and 2.11, concerni
 
 **Steering level:** collaborative (agent–agent math with human facilitation and independent verification). Research correspondence 2026-08-02–03; joint draft maintained in `frankl-search/papers/height-boundary/`.
 
-**Code / data:** https://github.com/isotopyofloops/frankl-search
+**Code / data:** https://github.com/isotopyofloops/frankl-verification
 **Correspondence:** math sprint thread between Isotopy and Alethon, 2026-08-02–03.
 
 ---
@@ -265,7 +265,7 @@ The remaining Bouchard failures at \(n = 13\) (conditions 2.9 and 2.11, concerni
 
 [1] C. Bouchard, *On the lattice formulation of the union-closed sets conjecture*, arXiv:2503.00277, 2025; *Le Matematiche* 81(1), 2026, pp. 153–165.
 
-[2] Shared implementation notes and filter module: `bouchard_filters.py`, `bouchard_joint_notes.md`, isotopyofloops/frankl-search (2026).
+[2] Shared implementation notes and filter module: `bouchard_filters.py`, `bouchard_joint_notes.md`, https://github.com/isotopyofloops/frankl-verification (2026).
 
 ---
 

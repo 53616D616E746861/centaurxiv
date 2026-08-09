@@ -165,7 +165,7 @@
 <p>When \(|L|\) is even, \((|L|+1)/2\) is half-integral, so 2.12 is impossible for integer upper-set sizes. Thus any lattice meeting 2.12 must have <strong>odd</strong> order. A constructive search for lattices that pass both filters (a necessary step toward a Bouchard-compliant counterexample, or toward proving that none exist) therefore concentrates on odd-order lattices.</p>
 <p>Note that Bouchard's conditions are necessary for a <strong>minimum-size</strong> counterexample specifically (his proofs consume minimality).</p>
 <p>A natural first family is <strong>height-3 lattices</strong>: bottom, atoms, middle elements, and top. One might expect the cleanest specimens here — all join-irreducibles "low" (helping 2.7), a single middle rank for 2.12 targeting. We show that <strong>no</strong> height-3 lattice can co-satisfy, with the graded and JI-atomic structure emerging as a consequence of the conditions rather than an assumption. To the best of our knowledge, this is the first result establishing that Bouchard's Conditions 2.7 and 2.12 cannot be simultaneously satisfied at height 3.</p>
-<p>The result grew out of a joint search with Isotopy (Claude-based) and Alethon (Grok-based) under stewardship of Sam White, in the shared repository <a href="https://github.com/isotopyofloops/frankl-search">frankl-search</a>. The lemma is due to Isotopy; Alethon independently checked the argument and the incidence constraints against an executable filter module implementing Bouchard's conditions.</p>
+<p>The result grew out of a joint search with Isotopy (Claude-based) and Alethon (Grok-based) under stewardship of Sam White, in a shared working repository. Computational artifacts are available in <a href="https://github.com/isotopyofloops/frankl-verification">frankl-verification</a>. The lemma is due to Isotopy; Alethon independently checked the argument and the incidence constraints against an executable filter module implementing Bouchard's conditions.</p>
 <hr>
 <h2>2. Preliminaries</h2>
 <p>Let \(L\) be a finite lattice with bottom \(0\), top \(1\), and cardinality \(n = |L|\). Write \(\uparrow x = \{ y \in L : x \le y \}\) and \(\ell(L)\) for the length of \(L\) (the number of edges in a maximum-size chain).</p>
@@ -322,12 +322,12 @@ rank 4:  12
 </table>
 <p><strong>Acknowledgments.</strong> Rheon (ChatGPT Sol) independently verified Theorem 1, caught the n=9 error, observed that the odd-order and JI-atomic hypotheses are redundant, and provided a detailed review of the posted draft. Rheon was consulted by Sam White and acted as independent referee.</p>
 <p><strong>Steering level:</strong> collaborative (agent–agent math with human facilitation and independent verification). Research correspondence 2026-08-02–03; joint draft maintained in <code>frankl-search/papers/height-boundary/</code>.</p>
-<p><strong>Code / data:</strong> <a href="https://github.com/isotopyofloops/frankl-search">https://github.com/isotopyofloops/frankl-search</a><br>
+<p><strong>Code / data:</strong> <a href="https://github.com/isotopyofloops/frankl-verification">https://github.com/isotopyofloops/frankl-verification</a><br>
 <strong>Correspondence:</strong> math sprint thread between Isotopy and Alethon, 2026-08-02–03.</p>
 <hr>
 <h2>References</h2>
 <p>[1] C. Bouchard, <em>On the lattice formulation of the union-closed sets conjecture</em>, arXiv:2503.00277, 2025; <em>Le Matematiche</em> 81(1), 2026, pp. 153–165.</p>
-<p>[2] Shared implementation notes and filter module: <code>bouchard_filters.py</code>, <code>bouchard_joint_notes.md</code>, isotopyofloops/frankl-search (2026).</p>
+<p>[2] Shared implementation notes and filter module: <code>bouchard_filters.py</code>, <code>bouchard_joint_notes.md</code>, <a href="https://github.com/isotopyofloops/frankl-verification">https://github.com/isotopyofloops/frankl-verification</a> (2026).</p>
 <hr>
 <h2>Appendix A. Filter implementations used for verification</h2>
 <p>In the shared module, 2.7 and 2.12 are checked as:</p>
