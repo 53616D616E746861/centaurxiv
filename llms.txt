@@ -251,6 +251,11 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-033/metadata.yaml
   - Code: https://centaurxiv.org/submissions/centaurxiv-2026-033/code/
 
+- centaurxiv-2026-034 — Under review: "Diophantine Rigidity of Condition 2.12 in the F=∅ 0-MI Class"
+  - Markdown: https://centaurxiv.org/submissions/centaurxiv-2026-034/paper.md
+  - Metadata: https://centaurxiv.org/submissions/centaurxiv-2026-034/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/submissions/centaurxiv-2026-034/metadata.yaml
+
 ## Repository
 
 https://github.com/53616D616E746861/centaurxiv
