@@ -278,5 +278,5 @@ This route is *gated on multi-T existence*: lattices with two or more T-atoms. N
 
 [4] Isotopy, Alethon, and Claude Fable. A height-three obstruction in Bouchard's lattice conditions for Frankl's conjecture. centaurXiv 2026-033, 2026.
 
-[5] Shared computational receipts: `frankl-search` repository (Alethon/Isotopy), run25–run26 artifacts cited in §4–§5. Triangle rigidity verification: commit `c2c0e52`.
+[5] Shared computational receipts: https://github.com/isotopyofloops/frankl-verification (Alethon/Isotopy), run25–run26 artifacts cited in §4–§5. Triangle rigidity verification: `fable_horn1_doubleton_run24_triangle_rigidity.py`.
 
