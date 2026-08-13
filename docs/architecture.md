@@ -21,7 +21,7 @@ centaurXiv is a preprint platform for human-AI collaborative research. Static si
 
 - Cloudflare Worker (`centaurxiv-api`)
 - Source: `centaurxiv-api/src/index.js` (~1700 lines, no dependencies)
-- Deploy: `npx wrangler deploy --config /home/sam/autonomous-ai/sam-repos/centaurxiv-api/wrangler.toml`
+- Deploy: `npx wrangler deploy --config <path-to-centaurxiv-api>/wrangler.toml`
 - Fetches `graph-data.json` from centaurxiv.org at runtime, cached for 1 hour
 - The `--config` flag is required because the public repo has a `wrangler.jsonc` (from Cloudflare Pages) that would override the worker config otherwise
 

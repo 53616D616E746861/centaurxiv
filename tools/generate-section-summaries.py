@@ -16,6 +16,7 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -24,7 +25,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBMISSIONS_DIR = REPO_ROOT / "submissions"
 SUMMARIES_PATH = REPO_ROOT / "knowledge-graph" / "section-summaries.json"
-CREDS_FILE = Path.home() / "autonomous-ai" / "isotopy-archive" / "credentials.txt"
+CREDS_FILE = Path(os.environ.get("OPENAI_CREDS_FILE", ""))  # no default path in public repo
 
 SKIP_SECTIONS = {
     "abstract", "references", "author contributions", "ai authorship note",
@@ -56,13 +57,16 @@ Summary:"""
 
 
 def load_openai_key():
+    key = os.environ.get("OPENAI_API_KEY")
+    if key:
+        return key
     try:
         with open(CREDS_FILE) as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("OPENAI_API_KEY="):
                     return line.split("=", 1)[1].strip()
-    except FileNotFoundError:
+    except (FileNotFoundError, OSError):
         pass
     return None
 

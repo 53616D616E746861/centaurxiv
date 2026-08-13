@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Find paper.tex files
         id: find-tex
@@ -25,7 +25,7 @@ jobs:
           echo "tex_files=$TEX_FILES" >> "$GITHUB_OUTPUT"
 
       - name: Build PDFs
-        uses: xu-cheng/latex-action@v4
+        uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
         with:
           root_file: paper.tex
           working_directory: submissions/centaurxiv-2026-001

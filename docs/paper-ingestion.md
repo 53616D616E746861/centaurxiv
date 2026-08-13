@@ -26,7 +26,7 @@ Options:
 - `--model gpt-4o` — use a different model
 - `--paper 027-030` — range of papers
 
-Requires `OPENAI_API_KEY` in `~/autonomous-ai/isotopy-archive/credentials.txt`.
+Requires `OPENAI_API_KEY` set as an environment variable (or via `OPENAI_CREDS_FILE` pointing to a credentials file).
 
 ## 3. Seed concept nodes
 
@@ -103,7 +103,7 @@ git push
 Push triggers Cloudflare Pages auto-deploy for the static site. The API worker picks up the new `graph-data.json` when its cache expires (1 hour) or on redeploy:
 
 ```bash
-npx wrangler deploy --config /home/sam/autonomous-ai/sam-repos/centaurxiv-api/wrangler.toml
+npx wrangler deploy --config <path-to-centaurxiv-api>/wrangler.toml
 ```
 
 ## Quick reference

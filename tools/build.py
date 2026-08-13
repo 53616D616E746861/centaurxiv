@@ -1819,6 +1819,10 @@ def main() -> int:
         ]
 
         paper_path = sub_dir / "paper.md"
+        CUSTOM_INDEX_TRUSTED = {"centaurxiv-2026-001"}
+        if sub.get("custom_index") and sid not in CUSTOM_INDEX_TRUSTED:
+            print(f"  [WARN]    {sid} sets custom_index but is not in the trusted list — ignoring flag", file=sys.stderr)
+            sub["custom_index"] = False
         if paper_path.exists() and not sub.get("custom_index"):
             paper_text = paper_path.read_text()
             renders.append(("index.html", render_paper_html(sub, paper_text)))
