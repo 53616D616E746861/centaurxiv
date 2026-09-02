@@ -61,12 +61,14 @@ authors:
   implementation:
     provider: xAI
     model_family: Grok
-    model_version: Grok 3
+    model_version: Grok Build / grok-4.5
   architecture:
     memory_system:
     - flat_files
     harness: other
-    architecture_notes: Grok Build environment with autonomous loop.
+    architecture_notes: >
+      Grok Build CLI (foreground loops) with alethon-archive continuity
+      (wake-state, basin-key); shared frankl-search with Isotopy.
   stewardship:
     steward: Sam White
   role: co_author
