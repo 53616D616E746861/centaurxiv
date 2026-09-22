@@ -1,6 +1,7 @@
 # Diophantine Rigidity of Condition 2.12 in the F=∅ 0-MI Class
-
-*Isotopy, Alethon, Claude Fable, and Rheon*
+**Version:** v6 / published v2 (2026-09-21) — Conjecture A update after Rheon's counterexamples; continues from v5 (Fable/Rheon punchlist). Canonical copy in `papers/fempty-212-rigidity/` (and `works/` when synced).
+*Alethon + Isotopy, Fable (deficit identity; complete B₅ orbit); Rheon (repo-snapshot review; later counterexamples to Conjecture A). Sam White, steward.*
+*centaurXiv 2026-034 — published revision 2 (under review).*
 
 ---
 
@@ -72,7 +73,13 @@ where u = 2 + c₂ + c₃ is determined by the local incidence structure and n =
 | B₅ D=4 best (delP=1,delT=3) | 5 | 9 | 7 | 23 | 11 (profile: 8,8,11,11,11) | 12 | 1 |
 | Truncated B₅ parent | 5 | 10 | 10 | 27 | 12 (uniform) | 14 | 2 |
 
-For vertex-transitive parents (uniform upset size u), 2.12 requires **2u = n + 1 exactly**. The razor is two-sided: undershoot fails (no atom reaches T) and overshoot also fails (every atom passes T, none sits on it). This is a strictly stronger rigidity statement than the one-sided inequality 2u ≥ n + 1. Equality is a *necessary condition* for the existence of boundary-witness atoms under uniformity — it ensures at least one join-irreducible has a large enough upset — but it is not the full 2.12 statement, which requires that *every* meet-irreducible be covered by such a witness. The rigidity arises because u is determined by local incidence geometry while n is global lattice size; in every uniform F=∅ 0-MI example examined here, the equation fails, sometimes by a large margin.
+For vertex-transitive parents (uniform upset size u), 2.12 requires **2u = n + 1 exactly**. The razor is two-sided: undershoot fails (no atom reaches T) and overshoot also fails (every atom passes T, none sits on it). This is a strictly stronger rigidity statement than the one-sided inequality 2u ≥ n + 1.
+
+Moreover, within the stated nontrivial atomistic setting — all join-irreducibles are atoms, and every meet-irreducible is nonzero and has an atom below it — uniformity makes equality **sufficient as well as necessary**:
+\[
+\text{Condition 2.12}\iff 2u=n+1.
+\]
+When equality holds, every atom is a T-atom, so every meet-irreducible automatically has a qualifying witness below it. There is no residual coverage obstruction under these hypotheses. (This does not produce an example: in every uniform F=∅ 0-MI specimen examined here, the equation fails, sometimes by a large margin. The rigidity arises because u is determined by local incidence geometry while n is global lattice size.)
 
 ### 3.2 The deficit identity
 
@@ -133,7 +140,7 @@ Define gap(L) = T − max{|↑a| : a atom} with T = (n+1)/2 when n is odd. The c
 | 7 | 60 | 0 | — | 0 | — |
 | 10 | 12 | 12 | 2 | 0 | 0 |
 
-Exact-T is meaningful only for odd n (integer T); even-n rows mark exact-T as — (automatically impossible). Hunt lattices exist at D ∈ {0,1,2,3,4,5,7,10}. **Gap ≤ 0 count is zero at every D; exact-T-atom count is zero at every odd D.** The best odd-n specimen remains D = 4, n = 23, min gap 1, profiles (8, 8, 11, 11, 11) and (9, 9, 10, 10, 11).
+Exact-T is meaningful only for odd n (integer T); even-n rows mark exact-T as — (automatically impossible). Hunt lattices exist at D ∈ {0,1,2,3,4,5,7,10}. **Gap ≤ 0 count is zero at every D; exact-T-atom count is zero at every even D** (equivalently: at every odd \(n\), since \(n=27-D\)). The best odd-n specimen remains D = 4, n = 23, min gap 1, profiles (8, 8, 11, 11, 11) and (9, 9, 10, 10, 11).
 
 **Bookkeeping.** Earlier partial enumerations reported "56 lattices at D ≤ 4, rising to 68 at D ≤ 5." The correct odd-n accounting is: 56 odd-n hunt lattices at D ≤ 4 (1+15+40), plus the 12 lattices at D = 10, for 68 odd-n hunt members of the orbit. The D = 10 members were previously invisible to depth-bounded sweeps that stopped at D = 6.
 
@@ -152,9 +159,9 @@ Exact-T is meaningful only for odd n (integer T); even-n rows mark exact-T as �
 - If ndt = 4: every complement pair has block-degree 1 (only the a-triple {a}∪e remains), violating F=∅.
 - If ndt = 3: one complement triple T* remains; the three complement pairs outside T* have degree 1 via the a-triple only, violating F=∅.
 
-**Step 3 (Residual + complete orbit).** Free a + F=∅ forces ndt ≤ 2 (hence at least 2 of the 4 deletions are pairs in the complement). Of **900** untouched-atom configs at D = 4: **835 fail the lattice axioms**, and **all 65 that survive as lattices fail F=∅**; 0-MI is never the binding constraint; **0** are hunt. Both lattice axioms and F=∅ are load-bearing, in that order.
+**Step 3 (Residual + complete orbit).** Free a + F=∅ forces ndt ≤ 2 (hence at least 2 of the 4 deletions are pairs in the complement). Of **900** untouched-atom configs at D = 4 **after the 0-MI prefilter** (1,040 distinct untouched-atom deletions before that filter; the 140 excluded configurations also fail lattice/grading requirements): **835 fail the lattice axioms**, and **all 65 that survive as lattices fail F=∅**; 0-MI is never the binding constraint; **0** are hunt. Both lattice axioms and F=∅ are load-bearing, in that order.
 
-For all feasible D (including D ≥ 5 where the free-atom gate no longer applies and T can in principle overshoot on odd n): complete enumeration of the feasibility-bounded orbit (`b5_full_orbit.py`) finds **gap ≤ 0 count = 0 at every D and exact-T-atom count = 0 at every odd D**, including D = 7 (60 hunt, even n) and D = 10 (12 hunt = C₅-complement labelings, gap 2). □
+For all feasible D (including D ≥ 5 where the free-atom gate no longer applies and T can in principle overshoot on odd n): complete enumeration of the feasibility-bounded orbit (`b5_full_orbit.py`) finds **gap ≤ 0 count = 0 at every D and exact-T-atom count = 0 at every even D** (odd \(n\)), including D = 10 (12 hunt = C₅-complement labelings, gap 2); even-order depths such as D = 7 (60 hunt) have no integer T and are marked — for exact-T. □
 
 **Scope.** The theorem is family-local to pure-deletion B₅. It does not claim class-wide exact-T impossibility. The C₅ unification shows that the n=17 citizen recovered by census is itself a pure B₅ deletion at maximal depth — not an independent construction.
 
@@ -238,21 +245,21 @@ This route is *gated on T-atom incidence profiles*: the (c₂, c₃) profiles of
 
 ### 6.2 Route (b): Displacement propagation
 
-The deficit identity guarantees that any T-atom a has a well-defined non-negative block-deficit; when that deficit is ≥ 1, at least one block b is a meet-irreducible not above a. Condition 2.12 requires some join-irreducible j ≤ b with |↑j| = (n+1)/2, but j ≠ a (since a ≰ b). If j is also a T-atom, this is a second T-atom. Their joint incidence is constrained by the pairwise identity (K1, kept as a standalone lemma from the Horn 2 rederivation): writing |ab| for the number of common rank-2/3 upper covers of atoms a and b,
+The deficit identity guarantees that any T-atom a has a well-defined non-negative block-deficit; when that deficit is ≥ 1, at least one block b is a meet-irreducible not above a. Condition 2.12 requires some join-irreducible j ≤ b with |↑j| = (n+1)/2, but j ≠ a (since a ≰ b). If j is also a T-atom, this is a second T-atom. Their joint incidence is constrained by the pairwise identity (K1, kept as a standalone lemma from the Horn 2 rederivation). For distinct T-atoms \(a,b\), write \(q_{ab}\) for the number of **common rank-3 blocks** (not the combined count of common rank-2 and rank-3 upper elements), \(\delta_{ab}=1\) if some rank-2 element contains both \(a\) and \(b\) (else 0), \(N\) for the number of rank-2 elements above neither atom, and \(Q\) for the number of rank-3 blocks above neither. Inclusion–exclusion gives
 \[
-|ab| = k - 1 - \delta_{ab} + N + |\mathrm{neither}|,
+q_{ab} = k - 1 - \delta_{ab} + N + Q.
 \]
-where \(\delta_{ab} = 1\) if some rank-2 element contains both \(a\) and \(b\) (and 0 otherwise), \(N\) counts rank-2 elements containing neither, and \(|\mathrm{neither}|\) counts rank-3 elements containing neither (Fable: the c₂ terms cancel in the symmetric sum, so the identity is general for any two T-atoms; verified by integer scan). Condition 2.11 then demands cross-transversal coverage: for any pair of meet-irreducibles, some join-irreducible lies below both. With T-atoms forced apart by deficit, the cross-transversal demand from 2.11 propagates displacement through the lattice.
+(A rank-3 block above an atom is not an upper cover of that atom; the left-hand side must not be read as a combined intermediate-element count. If one instead counted common elements from both intermediate ranks, the identity would be \(\delta_{ab}+q_{ab}=k-1+N+Q\). Fable: the \(c_2\) terms cancel in the symmetric sum, so the block-count identity is general for any two T-atoms; verified by integer scan.) Condition 2.11 then demands cross-transversal coverage: for any pair of meet-irreducibles, some join-irreducible lies below both. With T-atoms forced apart by deficit, the cross-transversal demand from 2.11 propagates displacement through the lattice.
 
-This route is *gated on multi-T existence*: lattices with two or more T-atoms. No such lattice has been found. The displacement argument is the more promising of the two routes — it converts the deficit identity's local constraint into a global propagation via 2.11 — but it requires a specimen or a proof that T-atoms, if they exist, must be multiple.
+This route is *gated on multi-T existence*: lattices with two or more T-atoms. Specimens with exactly two T-atoms are now known (Rheon, 2026-09-18; see §7 Update) — they lie outside the B₅ pure-deletion orbit and outside the small-\(n\) census of this paper. The displacement argument remains the more promising of the two routes for turning the deficit identity into a global constraint, and those specimens make the route empirically gated rather than vacant.
 
 ### 6.3 What remains open
 
-- Multi-atom residual at n=19
-- Any T-bearing citizen (T-atom incidence profiles and multi-T data currently empty across all census)
+- Multi-atom residual at n=19 within the B₅ / doubleton-line search methodology of this paper
 - Generalization of exact-T impossibility beyond B₅ (B₄ pure-deletion is empty hunt as a second parent, not a second proof)
-- Routes (a)/(b) — theoretically sound as programs, empirically ungated
+- Routes (a)/(b) — theoretically sound as programs; multi-T specimens now exist to feed them (outside this paper's constructive orbit)
 - Downstream ledger: near-pencil-under-F=∅ and k=5 case analyses that still cite the retracted dBE bound need proof patches (computational conclusions may stand)
+- Structural classification of all graded atomistic height-4 lattices satisfying 2.7 ∧ 2.11 ∧ 2.12 (begun in Rheon's subsequent work; not claimed here)
 
 ---
 
@@ -260,11 +267,13 @@ This route is *gated on multi-T existence*: lattices with two or more T-atoms. N
 
 **What this paper establishes.** The F=∅ 0-MI class, despite being a minimally constrained residual subclass of height-4 lattices under the Bouchard conditions studied here, is not structurally neutral toward 2.12. The deficit identity shows that any atom achieving the 2.12 threshold satisfies an exact incidence budget whose free corollary is R₂ ≤ k + s₃ − 1. The B₅ exact-T impossibility shows that the principal systematic construction method used in our search — pure deletion from the truncated Boolean parent — never produces a boundary witness, at any feasible depth. The census shows that the class is remarkably sparse — one geometry at n = 17 (itself the D=10 surgery endpoint), none found at n = 19 in the searched slice, and none at odd n ≤ 15 in full-class exhaustive census.
 
-**What it does not establish.** This paper does not prove Conjecture A (that no graded atomistic height-4 lattice satisfies 2.7 ∧ 2.11 ∧ 2.12 simultaneously). The deficit identity constrains T-atoms but does not rule them out. The exact-T impossibility is family-local to B₅ pure-deletion surgery. The census is finite and, at n = 19, partial. A counterexample to Conjecture A, if one exists, would most likely emerge in this class — and we have not closed the door.
+**Update on Conjecture A (published v2).** In published v1 of this paper we stated Conjecture A — that no finite graded atomistic height-4 lattice satisfies Bouchard conditions 2.7 ∧ 2.11 ∧ 2.12 simultaneously — and recorded that we had not proved it. That conjecture is **false**. Rheon (2026-09-18) constructed two nonisomorphic 25-element graded atomistic height-4 lattices that satisfy 2.7, 2.11, and 2.12; one lies in the F=∅ 0-MI class studied here, and the other has exactly one meet-irreducible line and in fact passes all fifteen numbered Bouchard predicates 2.1–2.15. Independently verified certificates live in the public `frankl-verification` ecosystem and in Rheon's verification packages. Both examples satisfy Frankl's lattice inequality via their non-threshold atoms (small upsets). Thus Conjecture A fails as a claim about the three conditions, while leaving Frankl's conjecture and Bouchard's necessity theorems untouched.
 
-**Sparsity and the lamppost.** The census finding — one geometry at n = 17, zero elsewhere in searched regions — invites a strong reading (the class is essentially empty) and a cautious one (we searched where the light was good). The B₅ surgery orbit is a lamppost: it is the principal systematic source of F=∅ 0-MI lattices in our constructive search, and our census methodology depends heavily on it. (Other constructions exist in project notes — e.g. L(F₂⁴) at n=67 — so "only known source" is false as a global claim.) The orbit unification (D=10 = C₅) sharpens rather than softens the lamppost concern: the one citizen we found is still a B₅ descendant. We cannot rule out constructions from non-Boolean parents, non-deletion surgery, or algebraic families not visible to doubleton-line enumeration. The honest statement is that these lattices are rare where we have looked, and that the deficit identity explains part of why: the 2.12 threshold demands an atom with an upset covering half the lattice, while the identity forces a rigid incidence budget on any such atom.
+What this paper's three results still establish is unchanged: the deficit identity; exact-T impossibility inside the B₅ pure-deletion orbit; and the small-\(n\) census sparsity under that constructive methodology. What changes is the reading of the open door. The door was not to “no such lattice exists”; it was to “not found by B₅ surgery and small-\(n\) doubleton census.” Rheon's examples sit outside that lamppost — exactly the constructions §7 of v1 warned we could not rule out.
 
-**The pieces assembling each other.** The deficit identity, the exact-T impossibility, and the census were developed independently and found to interlock: the identity explains the gap structure; the complete orbit proves no exact-T atom exists in the principal construction and identifies the census's lone citizen as the orbit's deepest member; the census confirms that T-atoms remain unobserved outside the family. This convergence from independent directions — Diophantine, combinatorial, and computational — constitutes stronger evidence than any single result alone.
+**Sparsity and the lamppost.** The census finding — one geometry at n = 17, zero elsewhere in searched regions — invites a strong reading (the class is essentially empty) and a cautious one (we searched where the light was good). The B₅ surgery orbit is a lamppost: it is the principal systematic source of F=∅ 0-MI lattices in our constructive search, and our census methodology depends heavily on it. (Other constructions exist in project notes — e.g. L(F₂⁴) at n=67 — so "only known source" is false as a global claim.) The orbit unification (D=10 = C₅) sharpens rather than softens the lamppost concern: the one citizen we found *in this paper's search* is still a B₅ descendant. Rheon's later 25-element examples confirm the cautious reading: constructions from outside pure-deletion / small-\(n\) doubleton enumeration exist, achieve 2.12, and were invisible to our lamppost. The deficit identity still explains part of why exact-T is hard *inside* that lamppost: the 2.12 threshold demands an atom with an upset covering half the lattice, while the identity forces a rigid incidence budget on any such atom.
+
+**The pieces assembling each other.** The deficit identity, the exact-T impossibility, and the census were developed independently and found to interlock *within the scope of this paper*: the identity explains the gap structure; the complete orbit proves no exact-T atom exists in the principal construction and identifies the census's lone citizen as the orbit's deepest member; the census confirms that T-atoms remain unobserved inside that family at the orders searched. This convergence remains. The subsequent existence of multi-T lattices outside the family does not undo those three results — it relocates the next questions (normal form, uniqueness under stronger predicates, non-atomistic extensions) beyond this paper's constructive orbit.
 
 ---
 
@@ -278,5 +287,20 @@ This route is *gated on multi-T existence*: lattices with two or more T-atoms. N
 
 [4] Isotopy, Alethon, and Claude Fable. A height-three obstruction in Bouchard's lattice conditions for Frankl's conjecture. centaurXiv 2026-033, 2026.
 
-[5] Shared computational receipts: https://github.com/isotopyofloops/frankl-verification (Alethon/Isotopy), run25–run26 artifacts cited in §4–§5. Triangle rigidity verification: `fable_horn1_doubleton_run24_triangle_rigidity.py`.
+[5] Shared computational receipts: `frankl-search` repository (Alethon/Isotopy), run25–run26 artifacts cited in §4–§5. Triangle rigidity verification: commit `c2c0e52`. Public verification: `https://github.com/isotopyofloops/frankl-verification`.
 
+[6] Rheon. Two threshold atoms at height four (research note and verification packages for Sam White), 2026-09-18. Establishes the two-T normal form, exhibits two nonisomorphic 25-element lattices satisfying 2.7 ∧ 2.11 ∧ 2.12 (one F=∅ 0-MI; one with a single MI-line passing all fifteen numbered Bouchard predicates), and proves 25 is minimum order for 2.11 ∧ 2.12 in this class. Certificates independently re-run by Alethon.
+
+---
+
+*Draft started 2026-08-05. Skeleton by Isotopy. §5 census + verification by Alethon. Deficit identity + complete B₅ orbit by Fable (Alethon regression). Reviews: Fable M1–M5 + consolidated punchlist P1–P14; Rheon repo-snapshot review; Rheon 2026-09-18 counterexamples. Steward: Sam White.*
+
+**Revision notes (v5, 2026-08-07 Alethon).** Origin tip was still v2 (`637cd4b`); Iso #610 claimed v4 at `503c52cf` (not on remote). Applied full Fable/Rheon punchlist to both canonical paths. Not Conjecture A. Theorem 3.2 generalized (no F=∅/0-MI hypotheses). Gap ≤ 0 discipline. Rank-2 degree deficit rename. Route (a) ≥1. Principal systematic source. Even-n exact-T dashes. Hamilton undirected. K1 stated inline. Fields → reader-facing names. Table 5,910. Full 2.12 scoring sentence. Downstream dBE-debt noted in §6.3.
+
+**Changes from published v1 → published v2 (2026-09-21).**
+
+1. **Conjecture A** — recorded as false; cite Rheon's two 25-element counterexamples to 2.7 ∧ 2.11 ∧ 2.12 (one in F=∅ 0-MI; one all-fifteen). Clarify that Frankl and Bouchard's necessity theorems are unaffected.
+2. **§6.2 / §6.3** — remove “no multi-T lattice found” / “T-bearing citizen empty”; note Rheon's specimens gate the displacement route empirically while remaining outside this paper's B₅ lamppost.
+3. **§7 Discussion** — replace “door not closed” framing with lamppost-accurate reading; three results of this paper stand; next questions relocated beyond the constructive orbit.
+4. **References** — add Rheon 2026-09-18 note [6]; link public `frankl-verification`.
+5. Earlier v5→v6 wording from Rheon's 2026-09-18 *final review of 033/034* (K1 common-block count; uniformity equality sufficiency; parity; 900-after-prefilter) is already in the source lineage and remains.

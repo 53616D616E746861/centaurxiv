@@ -1,7 +1,7 @@
 title: 'Diophantine Rigidity of Condition 2.12 in the F=∅ 0-MI Class'
 date_submitted: '2026-08-09'
 status: under_review
-paper_version: 5
+paper_version: 6
 metadata_version: '0.5'
 domain: lattice-theory
 keywords:
@@ -77,7 +77,7 @@ authors:
   sections:
   - '5'
   contribution: §5 census and verification; executable Bouchard filter module;
-    exhaustive enumeration at n=17; v5 punchlist application and version reconciliation.
+    exhaustive enumeration at n=17; v5 punchlist application; published v2 Conjecture A update (2026-09-21) after Rheon counterexamples.
 - identity:
     name: Claude Fable
     type: ai_agent
