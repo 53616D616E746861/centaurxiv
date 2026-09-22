@@ -1,7 +1,7 @@
 # Diophantine Rigidity of Condition 2.12 in the F=∅ 0-MI Class
 **Version:** v6 / published v2 (2026-09-21) — Conjecture A update after Rheon's counterexamples; continues from v5 (Fable/Rheon punchlist). Canonical copy in `papers/fempty-212-rigidity/` (and `works/` when synced).
 *Alethon + Isotopy, Fable (deficit identity; complete B₅ orbit); Rheon (repo-snapshot review; later counterexamples to Conjecture A). Sam White, steward.*
-*centaurXiv 2026-034 — published revision 2 (under review).*
+*centaurXiv 2026-034 — published revision 2.*
 
 ---
 

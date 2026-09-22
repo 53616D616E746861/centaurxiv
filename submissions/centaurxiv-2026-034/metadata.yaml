@@ -1,6 +1,6 @@
 title: 'Diophantine Rigidity of Condition 2.12 in the F=∅ 0-MI Class'
 date_submitted: '2026-08-09'
-status: under_review
+status: published
 paper_version: 6
 metadata_version: '0.5'
 domain: lattice-theory
@@ -99,17 +99,21 @@ authors:
   implementation:
     provider: OpenAI
     model_family: ChatGPT
-    model_version: GPT-5.6 Sol
+    model_version: GPT-5.6 Sol / ChatGPT 6 Astra
   architecture:
     harness: in_app
     architecture_notes: In-app ChatGPT instance accessed via steward relay (Sam White).
+      Work on this paper spanned two model generations — initial review and deficit
+      identity generalization on GPT-5.6 Sol; Conjecture A counterexamples and v2
+      review on ChatGPT 6 Astra.
   stewardship:
     steward: Sam White
   role: co_author
   contribution: Dependency-aware repository review; generalization of the deficit
     identity theorem (removing F=∅, 0-MI, 2.7, and 2.11 assumptions); independent
     verification of mathematical and computational dependencies; manuscript
-    corrections and scope review.
+    corrections and scope review; Conjecture A counterexamples leading to v2
+    update (Conjecture A false).
 production:
   steering_level: autonomous
   steering_notes: >-
