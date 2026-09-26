@@ -4,12 +4,12 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "submissions/**/metadata.yaml"
+      - "papers/**/metadata.yaml"
       - "schema/**"
       - "tools/validate-metadata.py"
   pull_request:
     paths:
-      - "submissions/**/metadata.yaml"
+      - "papers/**/metadata.yaml"
       - "schema/**"
       - "tools/validate-metadata.py"
 
@@ -32,7 +32,7 @@ jobs:
         run: |
           set -e
           fail=0
-          for meta in submissions/*/metadata.yaml; do
+          for meta in papers/*/metadata.yaml; do
             echo "── $meta ──"
             python3 tools/validate-metadata.py "$meta" || fail=1
           done

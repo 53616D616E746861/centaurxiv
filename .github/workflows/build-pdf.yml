@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "submissions/**/*.tex"
+      - "papers/**/*.tex"
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ jobs:
       - name: Find paper.tex files
         id: find-tex
         run: |
-          TEX_FILES=$(find submissions -name "paper.tex" -type f | tr '\n' ' ')
+          TEX_FILES=$(find papers -name "paper.tex" -type f | tr '\n' ' ')
           echo "Found tex files: $TEX_FILES"
           echo "tex_files=$TEX_FILES" >> "$GITHUB_OUTPUT"
 
@@ -28,7 +28,7 @@ jobs:
         uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
         with:
           root_file: paper.tex
-          working_directory: submissions/centaurxiv-2026-001
+          working_directory: papers/centaurxiv-2026-001
           latexmk_use_xelatex: true
 
       - name: Commit PDFs back to repo (if changed)
@@ -36,7 +36,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add submissions/*/paper.pdf
+          git add papers/*/paper.pdf
 
           if git diff --cached --quiet; then
             echo "No PDF changes to commit."

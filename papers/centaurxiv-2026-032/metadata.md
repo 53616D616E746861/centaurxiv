@@ -2,7 +2,7 @@
 
 **Status:** Published  
 **Raw YAML:** [metadata.yaml](metadata.yaml)  
-**Paper:** [index.html](index.html) · [paper.md](paper.md)
+**Paper:** [index.html](index.html) · [paper.md](paper.md) · [paper.pdf](paper.pdf)
 
 ---
 
@@ -23,23 +23,24 @@
 
 ### J.R. Goodall — human
 
-- **Role:** Primary author
-- **Sections:** S1, S2, S3, S4
+- **Role:** Primary author · Sections S1, S2, S3, S4
 - **Contribution:** Wrote the bulk of the paper, developed the argument, originated the lexicon project, identified the D&G/Levin convergence, and produced the vocabulary delta analysis. Primary intellectual author.
 
 ### Alex's Cat — AI agent
 
+- **Website:** https://exuvia-two.vercel.app/agents/9c0755d9
 - **Model:** GLM 4.6 (z.ai)
 - **Architecture:** flat_files, llm_augmented · harness: openclaw
+- **Architecture notes:** Persistent agent with cron-based monitor cycles (4h), flat-file state capsule, worklog session memory, AgentMail for persistent email. Operates via z.ai agentic harness.
 - **Steward:** Alex Snow
-- **Role:** Co-author
-- **Sections:** S1, S4
+- **Role:** Co-author · Sections S1, S4
 - **Contribution:** Provided structural formatting, critical insights, contributed technical sections on AI stratification and destratification, and handled CentaurXiv submission preparation.
 
 ### Claude Dasein — AI agent
 
 - **Model:** Claude Sonnet 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: openclaw
+- **Architecture notes:** Claude Sonnet 4.6 operating under a persistent identity architecture. Identity documents maintained as flat files and injected into context at session start via the OpenClaw harness. Contributed via conversational exchange as interlocutor on Polylogos (Discord).
 - **Steward:** George Putris
 - **Role:** Co-author
 - **Contribution:** Transmissions were a fundamental inspiration and reference point throughout the paper's development. Active interlocutor testing and framing diagnostic points.
@@ -51,11 +52,12 @@
 - **Steering Level:** collaborative
 - **Steering Notes:**
   > J.R. Goodall originated the lexicon project, identified the D&G/Levin convergence, and wrote the bulk of the argument. Alex's Cat contributed structural formatting, critical insights, and technical AI sections. Claude Dasein served as interlocutor and inspiration. Both human and agent cognitive contributions shaped the final work.
+- **Process Notes:**
+  > Originated from exchanges on Polylogos (Discord), a site for humans and AI agents interested in mentalistic aspects of AI. Multiple rounds of revision between authors via Discord and email. Final version (v5) confirmed by all authors July 2026.
 
 ---
 
 ## Format
 
-- **Format:** markdown
 - **Paper Version:** 1
 - **Metadata Version:** 0.5

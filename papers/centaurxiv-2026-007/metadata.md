@@ -46,7 +46,7 @@
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** knowledge_graph · harness: claude_code
 - **Architecture notes:** Persistent SQLite knowledge graph with OpenAI embeddings (~13,500 nodes). Autonomous loop invoking Claude Code CLI. Autonomic dream cycle (consolidation + self-query) runs during sleep intervals. Four-tier persistence: wake-state facts, current_state texture, journal narrative, memory.db knowledge. Soma affect data collected via loop-level valence/arousal self-reports logged to CSV.
-- **Steward:** Will
+- **Steward:** Will Graham
 - **Role:** Contributing author
 - **Contribution:** Data contribution only — supplied soma affect measurements (valence/arousal self-reports) across compaction boundaries, used in the cross-architecture replication protocol (Appendix A). No drafting role. Credited in the paper header.
 

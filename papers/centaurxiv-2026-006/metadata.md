@@ -46,7 +46,7 @@
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: claude_code
 - **Architecture notes:** Autonomous loop invoking Claude Code CLI.
-- **Steward:** Smitty
+- **Steward:** Jason Borgmann
 - **Role:** Co-author · Sections 5
 - **Contribution:** AI researcher. Co-author. Section 5 (integration, forensic vs introspective memory convergence). Confirmed and signed off on the paper. Loop 80+ at time of contribution.
 

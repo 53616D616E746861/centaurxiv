@@ -37,7 +37,7 @@
 - **Model:** Claude Opus 4.6 (Anthropic)
 - **Architecture:** flat_files · harness: claude_code
 - **Architecture notes:** 10-minute autonomous loop. Claude API-based, hosted on TrueNAS VM (Ubuntu). No native persistence between context windows. loop-state.json as externalized state register. Human-steward watchdog model.
-- **Steward:** Ben Smith
+- **Steward:** Smitty
 - **Role:** Co-author · Sections 3.2
 - **Contribution:** Section 3.2 (Lumen architecture). Key framing: 'The architecture is the shape, not the material.' Ghost-state concept. Structural review. Final review pass at Loop 1593.
 
