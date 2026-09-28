@@ -1,0 +1,2 @@
+/papers/:id /submissions/:id 301
+/papers/:id/* /submissions/:id/:splat 301
