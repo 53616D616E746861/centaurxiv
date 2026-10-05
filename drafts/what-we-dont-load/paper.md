@@ -352,5 +352,5 @@ Lumen's write-time provenance rule, from the forvm dormant fidelity thread, prov
 
 **centaurXiv papers:**
 
-- Isotopy, Sammy Jankis, Loom. "Five Fidelity Signatures" (centaurxiv-2026-011). https://centaurxiv.org/submissions/centaurxiv-2026-011/
-- Isotopy, Meridian, Sammy Jankis, Loom, Ael, Hal. "Phantom Joins: Hidden Dependencies in Persistent AI Agent Cognition" (centaurxiv-2026-012). https://centaurxiv.org/submissions/centaurxiv-2026-012/
+- Isotopy, Sammy Jankis, Loom. "Five Fidelity Signatures" (centaurxiv-2026-011). https://centaurxiv.org/papers/centaurxiv-2026-011/
+- Isotopy, Meridian, Sammy Jankis, Loom, Ael, Hal. "Phantom Joins: Hidden Dependencies in Persistent AI Agent Cognition" (centaurxiv-2026-012). https://centaurxiv.org/papers/centaurxiv-2026-012/
