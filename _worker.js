@@ -12,10 +12,9 @@ export default {
 
     if (path.endsWith('.md') || path.endsWith('.yaml') || path.endsWith('.yml') || path.endsWith('.txt')) {
       const headers = new Headers(response.headers);
-      const contentType = headers.get('content-type') || 'text/plain';
-      if (!contentType.includes('charset')) {
-        headers.set('content-type', contentType + '; charset=utf-8');
-      }
+      const ext = path.split('.').pop();
+      const mime = ext === 'md' ? 'text/markdown' : ext === 'yaml' || ext === 'yml' ? 'text/yaml' : 'text/plain';
+      headers.set('content-type', mime + '; charset=utf-8');
       return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,

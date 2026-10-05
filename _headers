@@ -1,3 +1,21 @@
+/papers/*/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/papers/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/*.yaml
+  Content-Type: text/yaml; charset=utf-8
+
+/papers/*/*.yaml
+  Content-Type: text/yaml; charset=utf-8
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
