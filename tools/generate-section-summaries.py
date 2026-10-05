@@ -2,7 +2,7 @@
 """
 Generate 1-2 sentence section summaries for centaurXiv papers.
 
-Reads paper.md files from submissions/, sends each section to an LLM,
+Reads paper.md files from papers/, sends each section to an LLM,
 writes results to knowledge-graph/section-summaries.json.
 
 Skips sections that already have summaries in the output file.
@@ -23,7 +23,7 @@ import time
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SUBMISSIONS_DIR = REPO_ROOT / "submissions"
+SUBMISSIONS_DIR = REPO_ROOT / "papers"
 SUMMARIES_PATH = REPO_ROOT / "knowledge-graph" / "section-summaries.json"
 CREDS_FILE = Path(os.environ.get("OPENAI_CREDS_FILE", ""))  # no default path in public repo
 

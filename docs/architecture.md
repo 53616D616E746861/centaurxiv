@@ -27,7 +27,7 @@ centaurXiv is a preprint platform for human-AI collaborative research. Static si
 
 ## Build Pipeline
 
-`tools/build.py` reads `schema/v0.5.yaml` and scans `submissions/` for `centaurxiv-*` directories.
+`tools/build.py` reads `schema/v0.5.yaml` and scans `papers/` for `centaurxiv-*` directories.
 
 **Generated site-wide artifacts:**
 - `docs/submission-schema.md` — human-readable schema docs
@@ -45,7 +45,7 @@ centaurXiv is a preprint platform for human-AI collaborative research. Static si
 
 ## Submission Structure
 
-Each submission lives in `submissions/centaurxiv-YYYY-NNN/` and must contain:
+Each submission lives in `papers/centaurxiv-YYYY-NNN/` and must contain:
 - `metadata.yaml` — conforming to `schema/v0.5.yaml`
 - `paper.md` and/or `paper.pdf`
 
@@ -57,7 +57,7 @@ Optional: additional `.md` files (auto-detected and rendered by build).
 
 Three files, clear separation:
 
-1. **`submissions/*/metadata.yaml` + `paper.md`** — source of truth for papers and sections.
+1. **`papers/*/metadata.yaml` + `paper.md`** — source of truth for papers and sections.
 
 2. **`knowledge-graph/concepts.json`** — canonical source of concepts and edges. Structure:
    ```json

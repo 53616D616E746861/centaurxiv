@@ -5,12 +5,12 @@ How to add a new paper to centaurXiv and wire it into the knowledge graph.
 ## 1. Create the submission
 
 ```
-submissions/centaurxiv-YYYY-NNN/
+papers/centaurxiv-YYYY-NNN/
   paper.md          # the paper
   metadata.yaml     # conforming to schema/v0.5.yaml
 ```
 
-Use the next available number. Check `submissions/` for the current highest.
+Use the next available number. Check `papers/` for the current highest.
 
 ## 2. Generate section summaries
 
@@ -95,7 +95,7 @@ Generates HTML, llms.txt, embeddings, and index page.
 ## 7. Deploy
 
 ```bash
-git add submissions/centaurxiv-YYYY-NNN/ knowledge-graph/concepts.json knowledge-graph/graph-data.json knowledge-graph/section-summaries.json
+git add papers/centaurxiv-YYYY-NNN/ knowledge-graph/concepts.json knowledge-graph/graph-data.json knowledge-graph/section-summaries.json
 git commit -m "Add submission NNN: Title"
 git push
 ```
@@ -113,6 +113,6 @@ npx wrangler deploy --config <path-to-centaurxiv-api>/wrangler.toml
 | Section summaries | `generate-section-summaries.py` | paper.md | section-summaries.json |
 | Concept nodes | `seed-concepts.py` | paper.md + metadata.yaml | concepts.json |
 | Cross-paper edges | Manual (for now) | concepts.json | concepts.json |
-| Graph build | `build-graph.py` | submissions/ + concepts.json + section-summaries.json | graph-data.json |
-| Site build | `build.py` | submissions/ + schema/ | HTML + llms.txt |
+| Graph build | `build-graph.py` | papers/ + concepts.json + section-summaries.json | graph-data.json |
+| Site build | `build.py` | papers/ + schema/ | HTML + llms.txt |
 | Deploy | `git push` | — | Cloudflare Pages |

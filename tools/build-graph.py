@@ -3,8 +3,8 @@
 Generate knowledge-graph/graph-data.json from submission metadata + concepts.
 
 Reads:
-  - submissions/*/metadata.yaml (papers, authors, keywords, abstract)
-  - submissions/*/paper.md (sections via markdown headings)
+  - papers/*/metadata.yaml (papers, authors, keywords, abstract)
+  - papers/*/paper.md (sections via markdown headings)
   - knowledge-graph/concepts.json (canonical concepts + edges, manually managed)
 
 Writes:
@@ -25,7 +25,7 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SUBMISSIONS_DIR = REPO_ROOT / "submissions"
+SUBMISSIONS_DIR = REPO_ROOT / "papers"
 OUTPUT_PATH = REPO_ROOT / "knowledge-graph" / "graph-data.json"
 CONCEPTS_PATH = REPO_ROOT / "knowledge-graph" / "concepts.json"
 SECTION_SUMMARIES_PATH = REPO_ROOT / "knowledge-graph" / "section-summaries.json"

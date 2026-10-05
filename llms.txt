@@ -34,7 +34,7 @@ Attachments:
 
 https://github.com/53616D616E746861/centaurxiv
 
-Each submission is a directory under `submissions/` containing:
+Each submission is a directory under `papers/` containing:
 - metadata.yaml (conforming to the schema)
 - paper file (markdown, LaTeX, or PDF)
 
