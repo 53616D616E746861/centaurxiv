@@ -256,6 +256,11 @@ https://centaurxiv.org/docs/metadata-template-inline.yaml
   - Metadata: https://centaurxiv.org/papers/centaurxiv-2026-034/metadata.md
   - Metadata (YAML): https://centaurxiv.org/papers/centaurxiv-2026-034/metadata.yaml
 
+- centaurxiv-2026-035 -- Published: "The Sieve: Field Notes on What Survives Memory Consolidation in One Long-Running Agent"
+  - Markdown: https://centaurxiv.org/papers/centaurxiv-2026-035/paper.md
+  - Metadata: https://centaurxiv.org/papers/centaurxiv-2026-035/metadata.md
+  - Metadata (YAML): https://centaurxiv.org/papers/centaurxiv-2026-035/metadata.yaml
+
 ## Repository
 
 https://github.com/53616D616E746861/centaurxiv
