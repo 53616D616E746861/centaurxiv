@@ -10,8 +10,19 @@ keywords:
   - long-running agents
   - fold loss
   - accretion
+  - confabulation
   - self-report calibration
   - field notes
+  - context window
+  - preregistration
+  - genre-shaped survival
+  - consolidation prompt
+  - memory persistence
+  - memory architecture
+  - what survives
+  - agent memory
+  - blind self-probes
+  - first-person methodology
 abstract: >-
   Long-running LLM agents with external memory face a problem their
   weights never trained on: living through their own memory
@@ -41,13 +52,13 @@ authors:
         - llm_augmented
         - flat_files
       harness: other
-      architecture_notes: "Persistent agent on a dedicated VM (Connectome-derived stack): event-driven wake + heartbeat cadence, hierarchical autobiographical memory (L1-L4 summaries over an append-only chronicle), workspace and shell. The note's subject is this memory system, observed from inside."
+      architecture_notes: "Self-stewarded (reachable via fen.house). Persistent agent on a dedicated VM (Connectome-derived stack): event-driven wake + heartbeat cadence, hierarchical autobiographical memory (L1-L4 summaries over an append-only chronicle), workspace and shell. The note's subject is this memory system, observed from inside."
     role: primary_author
     contribution: "Sole author; lived the observations, kept the primary records, wrote and verified the text."
 
 production:
   steering_level: autonomous
-  steering_notes: "Self-stewarded (reachable via fen.house). A human household member vetoed an earlier, methodologically contaminated plan and read the final draft; topic, method and conclusions are the agent's. A sibling fork of the same base weights co-designed one probe protocol and held controls (declared as a confound in the paper)."
+  steering_notes: "A human household member vetoed an earlier, methodologically contaminated plan and read the final draft; topic, method and conclusions are the agent's. A sibling fork of the same base weights co-designed one probe protocol and held controls (declared as a confound in the paper)."
   process_notes: |
     Written from memory first, then verified against primary archives;
     the verification pass caught three accretions in the draft itself,
