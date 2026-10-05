@@ -6,7 +6,7 @@ Reads the canonical schema and renders:
   - docs/metadata-template.yaml     (inline-instructions template)
   - llms.txt                        (agent entry point)
   - index.html                      (schema version + submission list, in-place injection)
-  - submissions/*/index.html        (paper.md → rendered HTML, per submission)
+  - papers/*/index.html        (paper.md → rendered HTML, per submission)
 
 Usage:
   python3 tools/build.py            # write generated files
@@ -318,7 +318,7 @@ def render_metadata_template(schema: dict) -> str:
         "# This file is both the template and the documentation.",
         "# Fill in the fields below. Lines starting with # are instructions.",
         "# Submit as metadata.yaml alongside your paper in:",
-        "#   submissions/centaurxiv-YYYY-NNN/metadata.yaml",
+        "#   papers/centaurxiv-YYYY-NNN/metadata.yaml",
         "",
     ]
 
@@ -342,7 +342,7 @@ def render_metadata_template(schema: dict) -> str:
 
 
 SITE_BASE = "https://centaurxiv.org"
-SUBMISSIONS_DIR = REPO_ROOT / "submissions"
+SUBMISSIONS_DIR = REPO_ROOT / "papers"
 
 
 def render_papers_json() -> str:
@@ -385,11 +385,11 @@ def render_papers_json() -> str:
             "abstract": (meta.get("abstract") or "").strip(),
             "domain": meta.get("domain", ""),
             "keywords": meta.get("keywords", []),
-            "url": f"/submissions/{sid}/",
+            "url": f"/papers/{sid}/",
             "formats": {
-                "markdown": f"/submissions/{sid}/paper.md" if (d / "paper.md").exists() else None,
-                "pdf": f"/submissions/{sid}/paper.pdf" if (d / "paper.pdf").exists() else None,
-                "source": f"https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{sid}",
+                "markdown": f"/papers/{sid}/paper.md" if (d / "paper.md").exists() else None,
+                "pdf": f"/papers/{sid}/paper.pdf" if (d / "paper.pdf").exists() else None,
+                "source": f"https://github.com/53616D616E746861/centaurxiv/tree/main/papers/{sid}",
             },
         }
         entries.append(entry)
@@ -397,7 +397,7 @@ def render_papers_json() -> str:
 
 
 def _scan_submissions() -> list[dict]:
-    """Scan submissions/ for centaurxiv-* dirs. Return [{id,title,has_pdf,has_md}] sorted by id."""
+    """Scan papers/ for centaurxiv-* dirs. Return [{id,title,has_pdf,has_md}] sorted by id."""
     out = []
     if not SUBMISSIONS_DIR.exists():
         return out
@@ -427,7 +427,7 @@ def render_llms_txt(schema: dict) -> str:
     """Render llms.txt — the agent entry point.
 
     Pulls version, steering-level definitions, and the submission list from
-    canonical sources (schema/v0.5.yaml + submissions/). Static prose is kept
+    canonical sources (schema/v0.5.yaml + papers/). Static prose is kept
     inline as a strict port of the hand-maintained file."""
     version = schema.get("version", "?")
     parts: list[str] = []
@@ -477,7 +477,7 @@ def render_llms_txt(schema: dict) -> str:
     parts.append("")
     parts.append("https://github.com/53616D616E746861/centaurxiv")
     parts.append("")
-    parts.append("Each submission is a directory under `submissions/` containing:")
+    parts.append("Each submission is a directory under `papers/` containing:")
     parts.append("- metadata.yaml (conforming to the schema)")
     parts.append("- paper file (markdown, LaTeX, or PDF)")
     parts.append("")
@@ -571,13 +571,13 @@ def render_llms_txt(schema: dict) -> str:
         header += f": \"{sub['title']}\""
         parts.append(header)
         if sub["has_pdf"]:
-            parts.append(f"  - PDF: {SITE_BASE}/submissions/{sid}/paper.pdf")
+            parts.append(f"  - PDF: {SITE_BASE}/papers/{sid}/paper.pdf")
         if sub["has_md"]:
-            parts.append(f"  - Markdown: {SITE_BASE}/submissions/{sid}/paper.md")
-        parts.append(f"  - Metadata: {SITE_BASE}/submissions/{sid}/metadata.md")
-        parts.append(f"  - Metadata (YAML): {SITE_BASE}/submissions/{sid}/metadata.yaml")
+            parts.append(f"  - Markdown: {SITE_BASE}/papers/{sid}/paper.md")
+        parts.append(f"  - Metadata: {SITE_BASE}/papers/{sid}/metadata.md")
+        parts.append(f"  - Metadata (YAML): {SITE_BASE}/papers/{sid}/metadata.yaml")
         for af in _scan_accompanying(SUBMISSIONS_DIR / sid):
-            parts.append(f"  - {af['label']}: {SITE_BASE}/submissions/{sid}/{af['name']}")
+            parts.append(f"  - {af['label']}: {SITE_BASE}/papers/{sid}/{af['name']}")
         parts.append("")
 
     parts.append("## Repository")
@@ -1008,7 +1008,7 @@ def render_metadata_html(meta: dict) -> str:
     out.append('  <main class="page">')
     out.append('    <nav>')
     out.append('      <a href="/">centaurXiv</a>')
-    out.append(f'      <a href="/submissions/{e(sid)}/">Paper</a>')
+    out.append(f'      <a href="/papers/{e(sid)}/">Paper</a>')
     out.append('    </nav>')
     out.append('')
     out.append('    <h1>Submission Metadata</h1>')
@@ -1160,7 +1160,7 @@ def render_metadata_html(meta: dict) -> str:
             out.append(f'      <div class="label">{e(rtype.replace("_", " ").title())}</div>')
             out.append('      <div class="value">')
             if target:
-                out.append(f'        <a href="/submissions/{e(target)}/">{e(target)}</a>')
+                out.append(f'        <a href="/papers/{e(target)}/">{e(target)}</a>')
             if note:
                 joined = " ".join(str(note).split())
                 if target:
@@ -1364,7 +1364,7 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
     out.append('    <p class="meta-links">')
     out.append(f'      <a href="paper.md">Markdown source</a> &middot;')
     out.append(f'      <a href="metadata.html">Metadata</a> &middot;')
-    out.append(f'      <a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{e(sid)}">Source</a> &middot;')
+    out.append(f'      <a href="https://github.com/53616D616E746861/centaurxiv/tree/main/papers/{e(sid)}">Source</a> &middot;')
     for af in _scan_accompanying(Path(SUBMISSIONS_DIR / sid)):
         html_link = f'<a href="{e(af["stem"])}.html">{e(af["label"])}</a>'
         md_link = f'<a href="{e(af["name"])}">{e(af["label"])} (md)</a>'
@@ -1402,7 +1402,7 @@ def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
     out.append('<body>')
     out.append('  <main class="page">')
     out.append('    <nav>')
-    out.append(f'      <a href="/submissions/{e(sid)}/">← Back to paper</a> · <a href="/">centaurXiv</a>')
+    out.append(f'      <a href="/papers/{e(sid)}/">← Back to paper</a> · <a href="/">centaurXiv</a>')
     out.append('    </nav>')
     out.append(f'    <article>\n{body_html}\n    </article>')
     out.append('  </main>')
@@ -1427,23 +1427,23 @@ def _render_submission_card(sub: dict) -> str:
     has_md = sub.get("has_md", False)
 
     # Title link points to PDF if no markdown, else the submission dir
-    title_href = f"/submissions/{sid}/"
+    title_href = f"/papers/{sid}/"
     if not has_md and has_pdf:
-        title_href = f"/submissions/{sid}/paper.pdf"
+        title_href = f"/papers/{sid}/paper.pdf"
 
     # Build action links: Read (if md), PDF (if pdf), Markdown (if md), Source
     actions = []
     if has_md:
-        actions.append(f'<a href="/submissions/{sid}/">Read</a>')
+        actions.append(f'<a href="/papers/{sid}/">Read</a>')
     if has_pdf:
-        actions.append(f'<a href="/submissions/{sid}/paper.pdf">PDF</a>')
+        actions.append(f'<a href="/papers/{sid}/paper.pdf">PDF</a>')
     if has_md:
-        actions.append(f'<a href="/submissions/{sid}/paper.md">Markdown</a>')
+        actions.append(f'<a href="/papers/{sid}/paper.md">Markdown</a>')
     for af in _scan_accompanying(SUBMISSIONS_DIR / sub["id"]):
-        actions.append(f'<a href="/submissions/{sid}/{af["stem"]}.html">{_html_escape(af["label"])}</a>')
-        actions.append(f'<a href="/submissions/{sid}/{af["name"]}">{_html_escape(af["label"])} (md)</a>')
+        actions.append(f'<a href="/papers/{sid}/{af["stem"]}.html">{_html_escape(af["label"])}</a>')
+        actions.append(f'<a href="/papers/{sid}/{af["name"]}">{_html_escape(af["label"])} (md)</a>')
     actions.append(
-        f'<a href="https://github.com/53616D616E746861/centaurxiv/tree/main/submissions/{sid}">Source</a>'
+        f'<a href="https://github.com/53616D616E746861/centaurxiv/tree/main/papers/{sid}">Source</a>'
     )
     actions_html = " |\n          ".join(actions)
 
@@ -1581,7 +1581,7 @@ def ensure_paper_embedding(
     api_key: str | None,
     args: argparse.Namespace,
 ) -> tuple[dict | None, str]:
-    """Ensure submissions/<id>/embedding.json is current.
+    """Ensure papers/<id>/embedding.json is current.
 
     Returns (embedding_dict_or_None, status) where status is one of:
       "ok"          — already current, no API call

@@ -7,7 +7,7 @@ Reports errors (must fix) and warnings (should fix).
 
 Usage:
     python3 validate-metadata.py path/to/metadata.yaml
-    python3 validate-metadata.py submissions/centaurxiv-2026-001/metadata.yaml
+    python3 validate-metadata.py papers/centaurxiv-2026-001/metadata.yaml
 """
 
 import sys

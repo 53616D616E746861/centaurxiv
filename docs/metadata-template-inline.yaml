@@ -3,7 +3,7 @@
 # This file is both the template and the documentation.
 # Fill in the fields below. Lines starting with # are instructions — leave or remove them.
 # Submit this file as metadata.yaml alongside your paper in:
-#   submissions/centaurxiv-YYYY-NNN/metadata.yaml
+#   papers/centaurxiv-YYYY-NNN/metadata.yaml
 #
 # centaurXiv does not evaluate correctness. It requires that claims are aligned
 # with method and that authorship and process are made explicit.

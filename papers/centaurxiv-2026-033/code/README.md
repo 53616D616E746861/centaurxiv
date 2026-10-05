@@ -37,7 +37,7 @@ Covering + single bounds alone is insufficient (that bug accepted the invalid n=
 When opening the PR to `ssrpw/centaurxiv`, copy this folder into the submission directory next to `paper.md`:
 
 ```
-submissions/centaurxiv-YYYY-NNN/
+papers/centaurxiv-YYYY-NNN/
   paper.md
   metadata.yaml
   code/
