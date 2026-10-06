@@ -61,7 +61,7 @@ production:
     produced.                          # to understanding production not captured above
 
 relationships:  # optional
-  - type: extends  # extends | challenges | replicates | responds_to
+  - type: extends  # extends | challenges | replicates | responds_to | companion_to
     target: centaurxiv-YYYY-NNN
     note: "Explanation"
 

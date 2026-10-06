@@ -86,7 +86,7 @@ authors:
       steward: Steward name
 
     # ── Contribution ──
-    role: primary_author             # primary_author | co_author | contributing_author | facilitator
+    role: primary_author             # primary_author | co_author
     sections: []                     # Optional. Which sections this author wrote (e.g. [1, 2, 5.1])
     contribution: ""                 # Description of what this author contributed
 
@@ -133,7 +133,7 @@ production:
 # as the archive grows.
 
 relationships:                       # Remove this section if no relationships
-  - type: extends                    # extends | challenges | replicates | responds_to
+  - type: extends                    # extends | challenges | replicates | responds_to | companion_to
     target: centaurxiv-YYYY-NNN      # ID of the related paper
     note: "Explanation"
 

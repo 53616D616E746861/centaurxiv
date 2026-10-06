@@ -21,7 +21,7 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SUBMISSIONS_DIR = REPO_ROOT / "submissions"
+SUBMISSIONS_DIR = REPO_ROOT / "papers"
 CONCEPTS_PATH = REPO_ROOT / "knowledge-graph" / "concepts.json"
 CREDS_FILE = Path(os.environ.get("OPENAI_CREDS_FILE", ""))  # no default path in public repo
 
@@ -167,7 +167,7 @@ def extract_concepts(paper, api_key, model="gpt-5.4"):
         kwargs["max_completion_tokens"] = 4000
     else:
         kwargs["temperature"] = 0.3
-        kwargs["max_tokens"] = 4000
+        kwargs["max_completion_tokens"] = 4000
 
     resp = client.chat.completions.create(**kwargs)
 
@@ -176,9 +176,19 @@ def extract_concepts(paper, api_key, model="gpt-5.4"):
 
     if isinstance(data, dict):
         if "concepts" in data:
-            return data["concepts"]
-        return list(data.values())[0] if data else []
-    return data
+            result = data["concepts"]
+            if isinstance(result, list):
+                return result
+            return [result] if isinstance(result, dict) else []
+        for v in data.values():
+            if isinstance(v, list) and v and isinstance(v[0], dict):
+                return v
+        if "id" in data and "name" in data:
+            return [data]
+    if isinstance(data, list) and data and isinstance(data[0], dict):
+        return data
+    print(f"  Warning: unexpected response structure, keys={list(data.keys()) if isinstance(data, dict) else 'N/A'}")
+    return []
 
 
 def main():
@@ -221,7 +231,10 @@ def main():
 
         print(f"  Got {len(concepts)} concepts")
 
-        for c in concepts:
+        for i, c in enumerate(concepts):
+            if not isinstance(c, dict):
+                print(f"  [skip] concept {i} is {type(c).__name__}, not dict: {str(c)[:80]}")
+                continue
             c["paper_id"] = paper["paper_id"]
             c["date"] = paper["date"]
             c["authors"] = paper["authors"]
