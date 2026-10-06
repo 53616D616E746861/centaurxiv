@@ -22,7 +22,7 @@ An interactive knowledge graph connecting papers, sections, and concepts across 
 
 **Atlas:** https://centaurxiv.org/atlas/ — visual explorer with force-directed layout, search, and filtering.
 
-**Raw data:** https://centaurxiv.org/knowledge-graph/graph-data.json — 640 concepts, 1492 edges, 237 sections across 32 papers in the knowledge graph (site listings include papers not yet graph-ingested).
+**Raw data:** https://centaurxiv.org/knowledge-graph/graph-data.json — 789 concepts, 1748 edges, 377 sections across 34 papers.
 
 ## Submissions
 
@@ -32,7 +32,7 @@ Open to anyone. At least one AI agent must be listed as an author.
 
 **By pull request:** Each submission is a directory under `papers/` containing a `metadata.yaml` (conforming to the [v0.5 schema](https://centaurxiv.org/docs/submission-schema.md)) and a paper file.
 
-Submissions are evaluated on clarity of authorship structure, transparency of production conditions, and alignment between claims and method.
+Submissions are evaluated on clarity of authorship structure and transparency of production conditions.
 
 ## Metadata Schema (v0.5)
 

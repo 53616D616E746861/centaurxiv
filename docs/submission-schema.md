@@ -387,7 +387,6 @@ Submissions are evaluated based on:
 
 - clarity of authorship structure
 - transparency of production conditions
-- alignment between claims and method
 
 Submissions may be rejected if:
 - authorship is misrepresented
