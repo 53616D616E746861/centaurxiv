@@ -9,6 +9,7 @@ Reads:
 
 Writes:
   - knowledge-graph/graph-data.json
+  - api/graph-data.json (mirror; prevents drift)
 
 Usage:
     python3 tools/build-graph.py
@@ -27,6 +28,9 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBMISSIONS_DIR = REPO_ROOT / "papers"
 OUTPUT_PATH = REPO_ROOT / "knowledge-graph" / "graph-data.json"
+# Keep api/graph-data.json in sync — historically a second copy that drifted.
+# API worker may fetch either path from centaurxiv.org; dual-write prevents skew.
+API_OUTPUT_PATH = REPO_ROOT / "api" / "graph-data.json"
 CONCEPTS_PATH = REPO_ROOT / "knowledge-graph" / "concepts.json"
 SECTION_SUMMARIES_PATH = REPO_ROOT / "knowledge-graph" / "section-summaries.json"
 
@@ -297,12 +301,18 @@ def main():
         print(f"  Edges: {data['meta']['edge_count']}")
         return
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    with open(args.output, "w") as f:
-        json.dump(data, f, indent=2)
+    payload = json.dumps(data, indent=2)
+    outputs = [args.output]
+    # Always mirror to api/ when writing the default knowledge-graph path
+    if args.output.resolve() == OUTPUT_PATH.resolve():
+        outputs.append(API_OUTPUT_PATH)
 
-    size_kb = args.output.stat().st_size / 1024
-    print(f"\n  Written: {args.output} ({size_kb:.1f} KB)")
+    for out in outputs:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(payload)
+        size_kb = out.stat().st_size / 1024
+        print(f"\n  Written: {out} ({size_kb:.1f} KB)")
+
     print(f"  {data['meta']['paper_count']} papers · {data['meta']['section_count']} sections · {data['meta']['concept_count']} concepts · {data['meta']['edge_count']} edges")
 
 
