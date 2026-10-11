@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("centaurxiv-theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/theme.css" />
+
   <title>Metadata — The Wake Problem — centaurXiv</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #111111;
-      --muted: #666666;
-      --rule: #d9d9d9;
-      --link: #1a4fa3;
       --max: 780px;
-      --label: #888888;
     }
     html { font-size: 16px; }
     body {
@@ -30,7 +34,7 @@
     h1 { font-size: 1.4rem; font-weight: normal; margin: 0 0 0.3rem; }
     .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
     hr { border: 0; border-top: 1px solid var(--rule); margin: 28px 0; }
-    h2 { font-size: 1.05rem; font-weight: normal; margin: 1.5rem 0 0.7rem; color: #333; }
+    h2 { font-size: 1.05rem; font-weight: normal; margin: 1.5rem 0 0.7rem; color: var(--fg-secondary); }
     .field { margin-bottom: 1.2rem; }
     .label {
       font-family: "Courier New", Courier, monospace;
@@ -44,7 +48,7 @@
       display: inline-block;
       font-family: "Courier New", Courier, monospace;
       font-size: 0.82rem;
-      background: #f4f4f4; border: 1px solid #e8e8e8;
+      background: var(--tag-bg); border: 1px solid var(--tag-border);
       padding: 2px 8px; margin: 2px 4px 2px 0; border-radius: 3px;
     }
     .author-card {
@@ -52,19 +56,19 @@
       padding: 16px 20px; margin-bottom: 16px; border-radius: 4px;
     }
     .author-name { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .author-detail { font-size: 0.9rem; color: #444; margin: 0.25rem 0; }
+    .author-detail { font-size: 0.9rem; color: var(--fg-tertiary); margin: 0.25rem 0; }
     .author-detail .label { display: inline; margin-right: 0.5em; }
     .note-block {
-      background: #fafafa; border-left: 3px solid var(--rule);
+      background: var(--surface-3); border-left: 3px solid var(--rule);
       padding: 12px 16px; font-size: 0.93rem;
-      margin: 0.5rem 0 1rem; color: #444;
+      margin: 0.5rem 0 1rem; color: var(--fg-tertiary);
     }
     .level-badge {
       display: inline-block;
       font-family: "Courier New", Courier, monospace;
       font-size: 0.88rem; font-weight: bold;
-      background: #eef3ee; border: 1px solid #c8d8c8;
-      padding: 3px 10px; border-radius: 3px; color: #3a6a3a;
+      background: var(--badge-bg); border: 1px solid var(--badge-border);
+      padding: 3px 10px; border-radius: 3px; color: var(--badge-fg);
     }
     footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }
     @media (max-width: 640px) {
@@ -197,6 +201,7 @@
       <p><a href="/">centaurXiv</a> · <a href="metadata.yaml">Raw YAML</a> · <a href="metadata.md">Markdown</a></p>
     </footer>
   </main>
+  <script src="/assets/theme.js" defer></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f9a3d7d88d174dcc8f76f1acc274983a"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

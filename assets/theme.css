@@ -1,0 +1,161 @@
+/* centaurXiv shared theme — light (default) + dark via data-theme / prefers-color-scheme.
+   Light --label bumped for WCAG AA (≥4.5:1 on --bg). */
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #595959;       /* was #666; kept AA with margin */
+  --rule: #d0d0d0;
+  --rule-subtle: #e8e8e8;
+  --link: #1a4fa3;
+  --label: #595959;       /* was #888 — failed AA (3.54:1); now ~7:1 */
+  --fg-secondary: #333333;
+  --fg-tertiary: #444444;
+  --surface: #f6f6f6;
+  --surface-2: #f0f0f0;
+  --surface-3: #fafafa;
+  --code-bg: #f0f0f0;
+  --pre-bg: #f6f6f6;
+  --input-bg: #ffffff;
+  --badge-bg: #eef3ee;
+  --badge-border: #c8d8c8;
+  --badge-fg: #2f5c2f;    /* slightly darker than #3a6a3a for AA on badge-bg */
+  --tag-bg: #f4f4f4;
+  --tag-border: #e0e0e0;
+  --node: #1a4fa3;
+  --node-hover: #0d3578;
+  --edge: #666666;
+  --edge-cross: #7a93b8;
+  --highlight: #1a4fa3;
+  --dim: 0.08;
+  --toggle-bg: #ffffff;
+  --toggle-border: #d0d0d0;
+  --toggle-fg: #111111;
+}
+
+/* Dark theme: soft text + warm lifted black.
+   Body ~11.2:1, muted (e.g. submission-meta) ~6.2:1 — solid colors, no opacity wash. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #1c1917;
+    --fg: #cfcfcf;
+    --muted: #9a9a9a;
+    --rule: #423e39;
+    --rule-subtle: #302d2a;
+    --link: #6ea8fe;
+    --label: #a0a0a0;
+    --fg-secondary: #bdbdbd;
+    --fg-tertiary: #adadad;
+    --surface: #262320;
+    --surface-2: #2e2b27;
+    --surface-3: #211e1b;
+    --code-bg: #302d2a;
+    --pre-bg: #211e1b;
+    --input-bg: #262320;
+    --badge-bg: #1e2a1e;
+    --badge-border: #3a5a3a;
+    --badge-fg: #8fca8f;
+    --tag-bg: #2e2b27;
+    --tag-border: #423e39;
+    --node: #6ea8fe;
+    --node-hover: #9bc4ff;
+    --edge: #888888;
+    --edge-cross: #5a7aaa;
+    --highlight: #6ea8fe;
+    --dim: 0.12;
+    --toggle-bg: #262320;
+    --toggle-border: #423e39;
+    --toggle-fg: #cfcfcf;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c1917;
+  --fg: #cfcfcf;
+  --muted: #9a9a9a;
+  --rule: #423e39;
+  --rule-subtle: #302d2a;
+  --link: #6ea8fe;
+  --label: #a0a0a0;
+  --fg-secondary: #bdbdbd;
+  --fg-tertiary: #adadad;
+  --surface: #262320;
+  --surface-2: #2e2b27;
+  --surface-3: #211e1b;
+  --code-bg: #302d2a;
+  --pre-bg: #211e1b;
+  --input-bg: #262320;
+  --badge-bg: #1e2a1e;
+  --badge-border: #3a5a3a;
+  --badge-fg: #8fca8f;
+  --tag-bg: #2e2b27;
+  --tag-border: #423e39;
+  --node: #6ea8fe;
+  --node-hover: #9bc4ff;
+  --edge: #888888;
+  --edge-cross: #5a7aaa;
+  --highlight: #6ea8fe;
+  --dim: 0.12;
+  --toggle-bg: #262320;
+  --toggle-border: #423e39;
+  --toggle-fg: #cfcfcf;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Placeholders: browser defaults fail AA on dark surfaces (~3.7:1).
+   --muted already meets ≥4.5:1 on --bg / --input-bg in both themes. */
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+/* Theme toggle control */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 0.8125rem; /* 13px at 16px root — keep ≥12px */
+  line-height: 1;
+  color: var(--toggle-fg);
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--link);
+  outline: none;
+}
+
+.theme-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--link);
+}
+
+.theme-toggle .theme-toggle-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    bottom: 0.85rem;
+    right: 0.85rem;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8125rem;
+  }
+}
