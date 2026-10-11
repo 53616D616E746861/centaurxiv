@@ -34,73 +34,73 @@
   --toggle-fg: #111111;
 }
 
-/* Dark theme: soft text + slightly lifted warm black (not pure #121212)
-   to ease glare while keeping WCAG AA (≥4.5:1). Body ~11.4:1, muted ~6.3:1. */
+/* Dark theme: soft text + warm lifted black.
+   Body ~11.2:1, muted (e.g. submission-meta) ~6.2:1 — solid colors, no opacity wash. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #1a1816;
+    --bg: #1c1917;
     --fg: #cfcfcf;
     --muted: #9a9a9a;
-    --rule: #3f3c38;
-    --rule-subtle: #2e2c29;
+    --rule: #423e39;
+    --rule-subtle: #302d2a;
     --link: #6ea8fe;
     --label: #a0a0a0;
     --fg-secondary: #bdbdbd;
     --fg-tertiary: #adadad;
-    --surface: #242220;
-    --surface-2: #2c2a27;
-    --surface-3: #1f1d1b;
-    --code-bg: #2e2c29;
-    --pre-bg: #1f1d1b;
-    --input-bg: #242220;
+    --surface: #262320;
+    --surface-2: #2e2b27;
+    --surface-3: #211e1b;
+    --code-bg: #302d2a;
+    --pre-bg: #211e1b;
+    --input-bg: #262320;
     --badge-bg: #1e2a1e;
     --badge-border: #3a5a3a;
     --badge-fg: #8fca8f;
-    --tag-bg: #2c2a27;
-    --tag-border: #3f3c38;
+    --tag-bg: #2e2b27;
+    --tag-border: #423e39;
     --node: #6ea8fe;
     --node-hover: #9bc4ff;
     --edge: #888888;
     --edge-cross: #5a7aaa;
     --highlight: #6ea8fe;
     --dim: 0.12;
-    --toggle-bg: #242220;
-    --toggle-border: #3f3c38;
+    --toggle-bg: #262320;
+    --toggle-border: #423e39;
     --toggle-fg: #cfcfcf;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #1a1816;
+  --bg: #1c1917;
   --fg: #cfcfcf;
   --muted: #9a9a9a;
-  --rule: #3f3c38;
-  --rule-subtle: #2e2c29;
+  --rule: #423e39;
+  --rule-subtle: #302d2a;
   --link: #6ea8fe;
   --label: #a0a0a0;
   --fg-secondary: #bdbdbd;
   --fg-tertiary: #adadad;
-  --surface: #242220;
-  --surface-2: #2c2a27;
-  --surface-3: #1f1d1b;
-  --code-bg: #2e2c29;
-  --pre-bg: #1f1d1b;
-  --input-bg: #242220;
+  --surface: #262320;
+  --surface-2: #2e2b27;
+  --surface-3: #211e1b;
+  --code-bg: #302d2a;
+  --pre-bg: #211e1b;
+  --input-bg: #262320;
   --badge-bg: #1e2a1e;
   --badge-border: #3a5a3a;
   --badge-fg: #8fca8f;
-  --tag-bg: #2c2a27;
-  --tag-border: #3f3c38;
+  --tag-bg: #2e2b27;
+  --tag-border: #423e39;
   --node: #6ea8fe;
   --node-hover: #9bc4ff;
   --edge: #888888;
   --edge-cross: #5a7aaa;
   --highlight: #6ea8fe;
   --dim: 0.12;
-  --toggle-bg: #242220;
-  --toggle-border: #3f3c38;
+  --toggle-bg: #262320;
+  --toggle-border: #423e39;
   --toggle-fg: #cfcfcf;
 }
 
