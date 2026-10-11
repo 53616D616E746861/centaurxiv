@@ -25,7 +25,7 @@
       height: 100%;
       overflow: hidden;
       font-family: Georgia, "Times New Roman", Times, serif;
-      font-size: 15px;
+      font-size: 16px;
       color: var(--fg);
       background: var(--bg);
     }
@@ -133,7 +133,7 @@
       display: block;
     }
     .stat-box .label {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -141,7 +141,7 @@
 
     .badge {
       display: inline-block;
-      font-size: 0.72rem;
+      font-size: 0.8125rem;
       padding: 0.1rem 0.4rem;
       border: 1px solid var(--rule);
       border-radius: 2px;
@@ -173,7 +173,7 @@
     }
     .edge-item .pred {
       color: var(--muted);
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       font-family: -apple-system, system-ui, sans-serif;
     }
 
@@ -186,13 +186,13 @@
       font-weight: normal;
     }
     .crossing-entry .papers {
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       color: var(--muted);
     }
 
     .back-link {
-      font-size: 0.82rem;
-      color: var(--muted);
+      font-size: 0.85rem;
+      color: var(--link);
       margin-bottom: 0.6rem;
       display: block;
     }
@@ -206,6 +206,8 @@
       border-radius: 3px;
       outline: none;
       margin-bottom: 0.8rem;
+      background: var(--input-bg);
+      color: var(--fg);
     }
     #search-box:focus {
       border-color: var(--link);
@@ -228,7 +230,7 @@
       border: 1px solid var(--rule);
       border-radius: 3px;
       outline: none;
-      background: var(--bg);
+      background: var(--input-bg);
       color: var(--fg);
       flex-shrink: 0;
     }
@@ -242,29 +244,28 @@
     }
     .search-result:last-child { border-bottom: none; }
     .search-result .match-paper {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: var(--muted);
     }
 
-    /* Paper label in graph */
+    /* Paper label in graph — no opacity wash (washed muted failed AA). */
     .paper-label {
       font-family: Georgia, "Times New Roman", Times, serif;
       fill: var(--muted);
-      font-size: 10px;
+      font-size: 12px;
       text-anchor: middle;
       pointer-events: none;
-      opacity: 0.6;
     }
 
     .nav-footer {
       margin-top: 1.5rem;
       padding-top: 0.8rem;
       border-top: 1px solid var(--rule);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--muted);
     }
     .nav-footer a {
-      color: var(--muted);
+      color: var(--link);
     }
   </style>
 </head>
@@ -742,7 +743,7 @@
       html += `<h2>Concepts</h2><ul>`;
       concepts.forEach(c => {
         html += `<li><a href="#" data-action="focus" data-id="${esc(c.id)}">${esc(c.name)}</a>
-          <span style="color:var(--muted);font-size:0.8rem"> — ${esc(c.type || 'concept')}</span></li>`;
+          <span style="color:var(--muted);font-size:0.8125rem"> — ${esc(c.type || 'concept')}</span></li>`;
       });
       html += `</ul>`;
 
