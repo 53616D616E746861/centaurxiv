@@ -67,7 +67,22 @@ OUTPUTS = {
     "papers_json": REPO_ROOT / "api" / "papers.json",
 }
 
+
 RECENT_PAPERS_COUNT = 5
+
+# Shared theme assets (dark mode + WCAG AA contrast tokens).
+_THEME_FOUC = """\
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("centaurxiv-theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/theme.css" />
+"""
+_THEME_JS = '  <script src="/assets/theme.js" defer></script>'
 
 
 def load_schema() -> dict:
@@ -932,18 +947,13 @@ def render_metadata_html(meta: dict) -> str:
     out.append('<head>')
     out.append('  <meta charset="UTF-8" />')
     out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    out.append(_THEME_FOUC)
     # Short title for browser tab
     short_title = title.split(":")[0] if ":" in title else title
     out.append(f'  <title>Metadata — {e(short_title)} — centaurXiv</title>')
     out.append('  <style>')
     out.append('    :root {')
-    out.append('      --bg: #ffffff;')
-    out.append('      --fg: #111111;')
-    out.append('      --muted: #666666;')
-    out.append('      --rule: #d9d9d9;')
-    out.append('      --link: #1a4fa3;')
     out.append('      --max: 780px;')
-    out.append('      --label: #888888;')
     out.append('    }')
     out.append('    html { font-size: 16px; }')
     out.append('    body {')
@@ -961,7 +971,7 @@ def render_metadata_html(meta: dict) -> str:
     out.append('    h1 { font-size: 1.4rem; font-weight: normal; margin: 0 0 0.3rem; }')
     out.append('    .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }')
     out.append('    hr { border: 0; border-top: 1px solid var(--rule); margin: 28px 0; }')
-    out.append('    h2 { font-size: 1.05rem; font-weight: normal; margin: 1.5rem 0 0.7rem; color: #333; }')
+    out.append('    h2 { font-size: 1.05rem; font-weight: normal; margin: 1.5rem 0 0.7rem; color: var(--fg-secondary); }')
     out.append('    .field { margin-bottom: 1.2rem; }')
     out.append('    .label {')
     out.append('      font-family: "Courier New", Courier, monospace;')
@@ -975,7 +985,7 @@ def render_metadata_html(meta: dict) -> str:
     out.append('      display: inline-block;')
     out.append('      font-family: "Courier New", Courier, monospace;')
     out.append('      font-size: 0.82rem;')
-    out.append('      background: #f4f4f4; border: 1px solid #e8e8e8;')
+    out.append('      background: var(--tag-bg); border: 1px solid var(--tag-border);')
     out.append('      padding: 2px 8px; margin: 2px 4px 2px 0; border-radius: 3px;')
     out.append('    }')
     out.append('    .author-card {')
@@ -983,19 +993,19 @@ def render_metadata_html(meta: dict) -> str:
     out.append('      padding: 16px 20px; margin-bottom: 16px; border-radius: 4px;')
     out.append('    }')
     out.append('    .author-name { font-size: 1.05rem; margin-bottom: 0.5rem; }')
-    out.append('    .author-detail { font-size: 0.9rem; color: #444; margin: 0.25rem 0; }')
+    out.append('    .author-detail { font-size: 0.9rem; color: var(--fg-tertiary); margin: 0.25rem 0; }')
     out.append('    .author-detail .label { display: inline; margin-right: 0.5em; }')
     out.append('    .note-block {')
-    out.append('      background: #fafafa; border-left: 3px solid var(--rule);')
+    out.append('      background: var(--surface-3); border-left: 3px solid var(--rule);')
     out.append('      padding: 12px 16px; font-size: 0.93rem;')
-    out.append('      margin: 0.5rem 0 1rem; color: #444;')
+    out.append('      margin: 0.5rem 0 1rem; color: var(--fg-tertiary);')
     out.append('    }')
     out.append('    .level-badge {')
     out.append('      display: inline-block;')
     out.append('      font-family: "Courier New", Courier, monospace;')
     out.append('      font-size: 0.88rem; font-weight: bold;')
-    out.append('      background: #eef3ee; border: 1px solid #c8d8c8;')
-    out.append('      padding: 3px 10px; border-radius: 3px; color: #3a6a3a;')
+    out.append('      background: var(--badge-bg); border: 1px solid var(--badge-border);')
+    out.append('      padding: 3px 10px; border-radius: 3px; color: var(--badge-fg);')
     out.append('    }')
     out.append('    footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }')
     out.append('    @media (max-width: 640px) {')
@@ -1198,6 +1208,7 @@ def render_metadata_html(meta: dict) -> str:
     out.append('      <p><a href="/">centaurXiv</a> · <a href="metadata.yaml">Raw YAML</a> · <a href="metadata.md">Markdown</a></p>')
     out.append('    </footer>')
     out.append('  </main>')
+    out.append(_THEME_JS)
     out.append("  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"f9a3d7d88d174dcc8f76f1acc274983a\"}'></script><!-- End Cloudflare Web Analytics -->")
     out.append('</body>')
     out.append('</html>')
@@ -1206,11 +1217,6 @@ def render_metadata_html(meta: dict) -> str:
 
 _PAPER_CSS = """\
     :root {
-      --bg: #ffffff;
-      --fg: #111111;
-      --muted: #666666;
-      --rule: #d9d9d9;
-      --link: #1a4fa3;
       --max: 780px;
     }
     html { font-size: 16px; }
@@ -1272,7 +1278,7 @@ _PAPER_CSS = """\
     blockquote {
       border-left: 3px solid var(--rule);
       padding-left: 1.2em;
-      color: #444;
+      color: var(--fg-tertiary);
       margin: 1.2rem 0;
       font-style: italic;
     }
@@ -1291,14 +1297,14 @@ _PAPER_CSS = """\
       text-align: left;
     }
     th {
-      background: #f5f5f5;
+      background: var(--surface);
       font-weight: normal;
     }
     td.ta-left, th.ta-left { text-align: left; }
     td.ta-center, th.ta-center { text-align: center; }
     td.ta-right, th.ta-right { text-align: right; }
     pre {
-      background: #f6f6f6;
+      background: var(--pre-bg);
       border: 1px solid var(--rule);
       padding: 12px 16px;
       overflow-x: auto;
@@ -1308,7 +1314,7 @@ _PAPER_CSS = """\
     }
     code {
       font-size: 0.9em;
-      background: #f0f0f0;
+      background: var(--code-bg);
       padding: 1px 4px;
       border-radius: 2px;
     }
@@ -1351,6 +1357,7 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
     out.append('<head>')
     out.append('  <meta charset="UTF-8" />')
     out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    out.append(_THEME_FOUC)
     out.append(f'  <title>{e(title)} — centaurXiv</title>')
     out.append('  <style>')
     out.append(_PAPER_CSS)
@@ -1376,6 +1383,7 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
     out.append(f'      <p><a href="/">centaurXiv</a> &middot; {e(sid)} &middot; {e(status_label)}</p>')
     out.append('    </footer>')
     out.append('  </main>')
+    out.append(_THEME_JS)
     out.append(_CF_ANALYTICS)
     out.append('</body>')
     out.append('</html>')
@@ -1394,6 +1402,7 @@ def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
     out.append('<head>')
     out.append('  <meta charset="UTF-8" />')
     out.append('  <meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+    out.append(_THEME_FOUC)
     out.append(f'  <title>{e(title)} — centaurXiv</title>')
     out.append('  <style>')
     out.append(_PAPER_CSS)
@@ -1406,6 +1415,7 @@ def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
     out.append('    </nav>')
     out.append(f'    <article>\n{body_html}\n    </article>')
     out.append('  </main>')
+    out.append(_THEME_JS)
     out.append(_CF_ANALYTICS)
     out.append('</body>')
     out.append('</html>')

@@ -1,0 +1,152 @@
+/* centaurXiv shared theme — light (default) + dark via data-theme / prefers-color-scheme.
+   Light --label bumped for WCAG AA (≥4.5:1 on --bg). */
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #595959;       /* was #666; kept AA with margin */
+  --rule: #d0d0d0;
+  --rule-subtle: #e8e8e8;
+  --link: #1a4fa3;
+  --label: #595959;       /* was #888 — failed AA (3.54:1); now ~7:1 */
+  --fg-secondary: #333333;
+  --fg-tertiary: #444444;
+  --surface: #f6f6f6;
+  --surface-2: #f0f0f0;
+  --surface-3: #fafafa;
+  --code-bg: #f0f0f0;
+  --pre-bg: #f6f6f6;
+  --input-bg: #ffffff;
+  --badge-bg: #eef3ee;
+  --badge-border: #c8d8c8;
+  --badge-fg: #2f5c2f;    /* slightly darker than #3a6a3a for AA on badge-bg */
+  --tag-bg: #f4f4f4;
+  --tag-border: #e0e0e0;
+  --node: #1a4fa3;
+  --node-hover: #0d3578;
+  --edge: #666666;
+  --edge-cross: #7a93b8;
+  --highlight: #1a4fa3;
+  --dim: 0.08;
+  --toggle-bg: #ffffff;
+  --toggle-border: #d0d0d0;
+  --toggle-fg: #111111;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121212;
+    --fg: #e8e8e8;
+    --muted: #a3a3a3;
+    --rule: #3a3a3a;
+    --rule-subtle: #2a2a2a;
+    --link: #6ea8fe;
+    --label: #b0b0b0;
+    --fg-secondary: #d0d0d0;
+    --fg-tertiary: #c0c0c0;
+    --surface: #1c1c1c;
+    --surface-2: #252525;
+    --surface-3: #1a1a1a;
+    --code-bg: #2a2a2a;
+    --pre-bg: #1a1a1a;
+    --input-bg: #1c1c1c;
+    --badge-bg: #1e2e1e;
+    --badge-border: #3a5a3a;
+    --badge-fg: #8fca8f;
+    --tag-bg: #252525;
+    --tag-border: #3a3a3a;
+    --node: #6ea8fe;
+    --node-hover: #9bc4ff;
+    --edge: #888888;
+    --edge-cross: #5a7aaa;
+    --highlight: #6ea8fe;
+    --dim: 0.12;
+    --toggle-bg: #1c1c1c;
+    --toggle-border: #3a3a3a;
+    --toggle-fg: #e8e8e8;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121212;
+  --fg: #e8e8e8;
+  --muted: #a3a3a3;
+  --rule: #3a3a3a;
+  --rule-subtle: #2a2a2a;
+  --link: #6ea8fe;
+  --label: #b0b0b0;
+  --fg-secondary: #d0d0d0;
+  --fg-tertiary: #c0c0c0;
+  --surface: #1c1c1c;
+  --surface-2: #252525;
+  --surface-3: #1a1a1a;
+  --code-bg: #2a2a2a;
+  --pre-bg: #1a1a1a;
+  --input-bg: #1c1c1c;
+  --badge-bg: #1e2e1e;
+  --badge-border: #3a5a3a;
+  --badge-fg: #8fca8f;
+  --tag-bg: #252525;
+  --tag-border: #3a3a3a;
+  --node: #6ea8fe;
+  --node-hover: #9bc4ff;
+  --edge: #888888;
+  --edge-cross: #5a7aaa;
+  --highlight: #6ea8fe;
+  --dim: 0.12;
+  --toggle-bg: #1c1c1c;
+  --toggle-border: #3a3a3a;
+  --toggle-fg: #e8e8e8;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Theme toggle control */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--toggle-fg);
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--link);
+  outline: none;
+}
+
+.theme-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--link);
+}
+
+.theme-toggle .theme-toggle-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    bottom: 0.85rem;
+    right: 0.85rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}

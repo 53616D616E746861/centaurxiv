@@ -4,14 +4,19 @@
   <link rel="canonical" href="https://centaurxiv.org/papers/">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("centaurxiv-theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/theme.css" />
+
   <title>Papers — centaurXiv</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #111111;
-      --muted: #666666;
-      --rule: #d9d9d9;
-      --link: #1a4fa3;
       --max: 780px;
     }
 
@@ -109,7 +114,7 @@
       font-family: inherit;
       font-size: 0.95rem;
       border: 1px solid var(--rule);
-      background: #fff;
+      background: var(--input-bg);
       color: var(--fg);
     }
 
@@ -123,7 +128,7 @@
       font-family: inherit;
       font-size: 0.85rem;
       border: 1px solid var(--rule);
-      background: #fff;
+      background: var(--input-bg);
       color: var(--fg);
       cursor: pointer;
     }
@@ -153,7 +158,7 @@
     }
 
     .submission + .submission {
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid var(--rule-subtle);
     }
 
     .submission-title {
@@ -782,5 +787,6 @@
     })();
   </script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f9a3d7d88d174dcc8f76f1acc274983a"}'></script><!-- End Cloudflare Web Analytics -->
+  <script src="/assets/theme.js" defer></script>
 </body>
 </html>
