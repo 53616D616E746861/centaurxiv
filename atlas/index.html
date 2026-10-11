@@ -155,6 +155,20 @@
       line-height: 1.55;
       margin: 0.6rem 0;
       color: var(--fg);
+      white-space: pre-wrap;
+    }
+
+    .paper-ext {
+      font-size: 0.82rem;
+      margin-left: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .show-in-graph {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
     }
 
     .edge-list {
@@ -289,6 +303,7 @@
     let paperCenters = {};
     let selectedNode = null;
     let width, height;
+    let zoomBehavior = null;
 
     // Graph data is compiled from third-party submission content, so every
     // interpolated field must be HTML-escaped before it reaches innerHTML.
@@ -300,6 +315,16 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+    }
+
+    function paperPageHref(id) {
+      return '/papers/' + encodeURIComponent(id) + '/';
+    }
+
+    function paperExtLink(id, label) {
+      label = label || 'View paper →';
+      return '<a class="paper-ext" href="' + esc(paperPageHref(id)) +
+        '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>';
     }
 
     const PAPER_COLORS = [
@@ -460,13 +485,13 @@
         showHome();
       });
 
-      // Zoom
-      const zoom = d3.zoom()
+      // Zoom (retained so showPaper can zoom-to-fit a paper cluster)
+      zoomBehavior = d3.zoom()
         .scaleExtent([0.2, 6])
         .on('zoom', (event) => {
           g.attr('transform', event.transform);
         });
-      svg.call(zoom);
+      svg.call(zoomBehavior);
 
       // Force simulation
       simulation = d3.forceSimulation(nodes)
@@ -607,7 +632,8 @@
         const conceptCount = graphData.concepts.filter(c => c.paper_id === p.id).length;
         html += `<li style="margin-bottom:0.4rem">
           <a href="#" data-action="paper" data-id="${esc(p.id)}">${esc(num)}</a>
-          <span style="color:var(--muted);font-size:0.82rem"> — ${esc(truncate(p.title, 50))} (${esc(conceptCount)})</span>
+          <span style="color:var(--muted);font-size:0.82rem"> — ${esc(truncate(p.title, 80))} (${esc(conceptCount)})</span>
+          ${paperExtLink(p.id, '↗')}
         </li>`;
       });
 
@@ -660,7 +686,10 @@
 
       if (paper) {
         html += `<h3>Paper</h3>
-          <p style="font-size:0.85rem"><a href="#" data-action="paper" data-id="${esc(paper.id)}">${esc(paper.title)}</a></p>`;
+          <p style="font-size:0.85rem">
+            <a href="${esc(paperPageHref(paper.id))}" target="_blank" rel="noopener noreferrer">${esc(paper.title)}</a>
+            <a class="show-in-graph" href="#" data-action="paper" data-id="${esc(paper.id)}">Show in graph</a>
+          </p>`;
       }
 
       if (outgoing.length > 0) {
@@ -696,6 +725,35 @@
       document.getElementById('panel').innerHTML = html;
     }
 
+    function zoomToNodeIds(idSet, padding) {
+      padding = padding == null ? 56 : padding;
+      if (!zoomBehavior || !svg || !idSet || idSet.size === 0) return;
+      const pts = nodes.filter(n => idSet.has(n.id) && Number.isFinite(n.x) && Number.isFinite(n.y));
+      if (pts.length === 0) return;
+
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      pts.forEach(n => {
+        if (n.x < minX) minX = n.x;
+        if (n.x > maxX) maxX = n.x;
+        if (n.y < minY) minY = n.y;
+        if (n.y > maxY) maxY = n.y;
+      });
+      // Single-node / tiny clusters still get a readable frame
+      if (maxX - minX < 40) { minX -= 20; maxX += 20; }
+      if (maxY - minY < 40) { minY -= 20; maxY += 20; }
+
+      const bw = maxX - minX;
+      const bh = maxY - minY;
+      const scale = Math.max(0.2, Math.min(6, 0.9 * Math.min(
+        (width - padding * 2) / (bw || 1),
+        (height - padding * 2) / (bh || 1)
+      )));
+      const tx = width / 2 - scale * (minX + maxX) / 2;
+      const ty = height / 2 - scale * (minY + maxY) / 2;
+      svg.transition().duration(650)
+        .call(zoomBehavior.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+    }
+
     function showPaper(paperId) {
       const paper = graphData.papers.find(p => p.id === paperId);
       if (!paper) return;
@@ -703,7 +761,7 @@
       const concepts = graphData.concepts.filter(c => c.paper_id === paperId);
       const num = paperId.split('-').pop();
 
-      // Highlight paper's concepts in graph
+      // Highlight paper's concepts in graph and zoom to that cluster
       clearSelection();
       const conceptIds = new Set(concepts.map(c => c.id));
 
@@ -725,6 +783,8 @@
           .attr('stroke-width', connected ? 1 : 0.3);
       });
 
+      zoomToNodeIds(conceptIds);
+
       let html = `
         <h1>centaurXiv</h1>
         <p class="subtitle">Knowledge Graph Explorer</p>
@@ -737,7 +797,7 @@
       `;
 
       if (paper.abstract) {
-        html += `<p class="concept-summary">${esc(truncate(paper.abstract, 300))}</p>`;
+        html += `<p class="concept-summary">${esc(paper.abstract)}</p>`;
       }
 
       html += `<h2>Concepts</h2><ul>`;
@@ -749,7 +809,7 @@
 
       html += `
         <div class="nav-footer">
-          <a href="/papers/${encodeURIComponent(paperId)}/">View paper →</a>
+          ${paperExtLink(paperId, 'View paper →')}
         </div>
       `;
 
