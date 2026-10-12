@@ -115,17 +115,27 @@
   opacity: 1;
 }
 
-/* Theme toggle control — desktop: corner FAB; mobile: stable top chrome
-   so it does not cover body text (safe-area aware). */
+/* Theme toggle — in-document header/nav chrome (scrolls with the page).
+   No fixed/sticky positioning on desktop or mobile. */
+.theme-toggle-chrome {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 0 0.85rem;
+}
+
+.theme-toggle-chrome--inline {
+  display: inline-flex;
+  margin: 0 0 0 0.75rem;
+  vertical-align: middle;
+}
+
 .theme-toggle {
-  position: fixed;
-  bottom: 1.25rem;
-  right: 1.25rem;
-  z-index: 1000;
+  position: static;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.4rem 0.7rem;
+  padding: 0.35rem 0.65rem;
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 0.8125rem; /* 13px at 16px root — keep ≥12px */
   line-height: 1;
@@ -134,7 +144,6 @@
   border: 1px solid var(--toggle-border);
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .theme-toggle:hover,
@@ -152,40 +161,7 @@
   line-height: 1;
 }
 
-@media (max-width: 640px) {
-  .theme-toggle {
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: auto;
-    width: 100%;
-    box-sizing: border-box;
-    justify-content: flex-end;
-    gap: 0.4rem;
-    padding: 0.55rem 0.85rem;
-    padding-top: max(0.55rem, env(safe-area-inset-top, 0px));
-    padding-right: max(0.85rem, env(safe-area-inset-right, 0px));
-    font-size: 0.8125rem;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    box-shadow: none;
-  }
-
-  /* Reserve space so page text never sits under the top chrome. */
-  body {
-    padding-top: calc(2.65rem + env(safe-area-inset-top, 0px));
-  }
-
-  /* Atlas is a full-viewport split layout — pad the sidebar instead of body. */
-  body:has(#graph) {
-    padding-top: 0;
-  }
-
-  /* Include the atlas sidebar's normal 1.5rem inset so title clears the chrome. */
-  body:has(#graph) #sidebar {
-    padding-top: calc(1.5rem + 2.65rem + env(safe-area-inset-top, 0px));
-    box-sizing: border-box;
-  }
+/* Atlas sidebar: keep chrome compact above the panel */
+#theme-toggle-chrome {
+  margin: 0 0 0.75rem;
 }
