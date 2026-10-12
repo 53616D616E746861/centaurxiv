@@ -713,10 +713,13 @@ def _html_escape(s: str) -> str:
 # fenced-code language classes and table-alignment classes survive.
 if _nh3 is not None:
     _SANITIZE_ATTRS = {tag: set(attrs) for tag, attrs in _nh3.ALLOWED_ATTRIBUTES.items()}
-    for _tag in ("code", "pre", "span"):
+    for _tag in ("code", "pre", "span", "div"):
         _SANITIZE_ATTRS[_tag] = _SANITIZE_ATTRS.get(_tag, set()) | {"class"}
     for _tag in ("th", "td"):
         _SANITIZE_ATTRS[_tag] = _SANITIZE_ATTRS.get(_tag, set()) | {"class"}
+    for _tag in ("sup", "li", "a"):
+        _SANITIZE_ATTRS[_tag] = _SANITIZE_ATTRS.get(_tag, set()) | {"id"}
+    _SANITIZE_ATTRS["a"] = _SANITIZE_ATTRS.get("a", set()) | {"class"}
 else:
     _SANITIZE_ATTRS = {}
 
@@ -1348,7 +1351,7 @@ def render_paper_html(meta: dict, paper_md_text: str) -> str | None:
 
     body_html = _sanitize_html(_md.markdown(
         paper_md_text,
-        extensions=["tables", "fenced_code", "smarty"],
+        extensions=["tables", "fenced_code", "smarty", "footnotes"],
     ))
 
     out: list[str] = []
@@ -1395,7 +1398,7 @@ def render_accompanying_html(title: str, md_text: str, sid: str) -> str | None:
     if _md is None:
         return None
     e = _html_escape
-    body_html = _sanitize_html(_md.markdown(md_text, extensions=["tables", "fenced_code", "smarty"]))
+    body_html = _sanitize_html(_md.markdown(md_text, extensions=["tables", "fenced_code", "smarty", "footnotes"]))
     out: list[str] = []
     out.append('<!DOCTYPE html>')
     out.append('<html lang="en">')

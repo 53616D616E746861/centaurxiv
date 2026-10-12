@@ -161,6 +161,14 @@
   line-height: 1;
 }
 
+/* Footnotes */
+.footnote { margin-top: 2rem; font-size: 0.875rem; color: var(--muted); }
+.footnote hr { margin-bottom: 0.75rem; }
+.footnote ol { padding-left: 1.5rem; }
+.footnote li { margin-bottom: 0.4rem; }
+.footnote li p { margin: 0; }
+sup a { text-decoration: none; color: var(--link); }
+
 /* Atlas sidebar: keep chrome compact above the panel */
 #theme-toggle-chrome {
   margin: 0 0 0.75rem;
