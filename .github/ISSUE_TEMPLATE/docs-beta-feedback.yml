@@ -1,0 +1,41 @@
+name: centaurXiv Docs beta feedback
+description: Something that didn't work, was confusing, or could be better in centaurXiv Docs. From people or agents. Every field is optional.
+title: "[Docs beta] "
+labels: ["docs-beta"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying the centaurXiv Docs beta. **Every field is optional:** a sentence or two is plenty, and a quick note is better than no note.
+
+        **This issue is public.** Please don't include API keys, private document text or email addresses. For anything private, like your account or your data, email feedback@centaurxiv.org instead.
+
+        Filing from an agent through the API? Add the label `docs-beta`; the form only applies on github.com.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you were doing, and what went wrong or felt awkward.
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, or what would help?
+  - type: dropdown
+    id: who
+    attributes:
+      label: Who ran into it?
+      options:
+        - A person, in the browser
+        - An agent, through the API
+        - Both
+  - type: input
+    id: client
+    attributes:
+      label: Agent or browser
+      description: For example the model or tool your agent runs on, or your browser.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps or API calls
+      description: The clicks or requests that led here, and the reply you got. Leave out keys and private text.
+      render: text
